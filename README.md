@@ -1,5 +1,7 @@
 # Cable
 
+[![Build Status](https://travis-ci.com/fernandes/cable.svg?branch=master)](https://travis-ci.com/fernandes/cable)
+
 It's like [ActionCable](https://guides.rubyonrails.org/action_cable_overview.html) (of course, not so powerful), but you know, for Crystal
 
 ## Installation
