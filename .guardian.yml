@@ -1,0 +1,8 @@
+files: ./src/**/*.cr
+run: file=%file%; file=${file/%.cr/_spec.cr}; file=${file/#.\/src/.\/spec}; crystal spec $file
+---
+files: ./spec/**/*_spec.cr
+run: crystal spec %file%
+---
+files: ./shard.yml
+run: shards

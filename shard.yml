@@ -6,4 +6,13 @@ authors:
 
 crystal: 0.29.0
 
+dependencies:
+  schedule:
+    github: hugoabonizio/schedule.cr
+  redis:
+    github: stefanwille/crystal-redis
+    version: ~> 2.2.1
+  habitat:
+    github: luckyframework/habitat
+
 license: MIT
