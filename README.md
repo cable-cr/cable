@@ -53,6 +53,11 @@ The most important (and needs to be named `ApplicationCable::Connection`)
 ```crystal
 module ApplicationCable
   class Connection < Cable::Connection
+    # You need to specify how you identify the class, using something like:
+    # Remembering that it must, be a String
+    # Tip: Use your `User#id` converted to String
+    identified_by identifier
+
     def connect
       # Implement your Auth logic, something like
       JWT.decode(auth_token, Lucky::Server.settings.secret_key_base, JWT::Algorithm::HS256)
@@ -177,9 +182,9 @@ App.channels["chat"].perform("status", {status: "My New Status"});
 
 After reading the docs, I realized I'm using some weird naming for variables / methods, so
 
+- [x] Need to make connection use identifier
+- [x] Add `identified_by identifier` to `Cable::Connection`
 - [ ] Add an async/local adapter (make tests, development and small deploys simpler)
-- [ ] Need to make connection use identifier
-- [ ] Add `identified_by :current_user` to `Cable::Connection`
 - [ ] Give better methods to reject a connection
 - [ ] Refactor, Connection class is soooo bloated
 

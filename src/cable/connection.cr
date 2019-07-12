@@ -12,6 +12,18 @@ module Cable
     getter socket
     getter redis
 
+    macro identified_by(name)
+      @{{name}} : String = ""
+      
+      def {{name}}=(value : String)
+        @{{name}} = value
+      end
+    
+      def {{name}}
+        @{{name}}
+      end
+    end
+
     def self.use_mock(mock, &block)
       @@mock = mock
 

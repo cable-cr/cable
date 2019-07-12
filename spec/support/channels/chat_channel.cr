@@ -11,7 +11,7 @@ class ChatChannel < ApplicationCable::Channel
     else
       broadcast_message["message"] = message["message"].to_s
     end
-    broadcast_message["current_user"] = connection.current_user
+    broadcast_message["current_user"] = connection.identifier
     ChatChannel.broadcast_to("chat_#{params["room"]}", broadcast_message)
   end
 
