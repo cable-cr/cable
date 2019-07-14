@@ -1,8 +1,8 @@
 # Cable
 
-[![Build Status](https://travis-ci.com/fernandes/cable.svg?branch=master)](https://travis-ci.com/fernandes/cable)
+[![Build Status](https://travis-ci.com/cable-cr/cable.svg?branch=master)](https://travis-ci.com/cable-cr/cable)
 
-It's like [ActionCable](https://guides.rubyonrails.org/action_cable_overview.html) (of course, not so powerful), but you know, for Crystal
+It's like [ActionCable](https://guides.rubyonrails.org/action_cable_overview.html) (100% compatible with JS Client), but you know, for Crystal
 
 ## Installation
 
@@ -11,7 +11,7 @@ It's like [ActionCable](https://guides.rubyonrails.org/action_cable_overview.htm
    ```yaml
    dependencies:
      cable:
-       github: fernandes/cable
+       github: cable-cr/cable
    ```
 
 2. Run `shards install`
@@ -199,7 +199,3 @@ Idea is create different modules, `Cable::Lucky`, `Cable::Kemal`, `Cable::Amber`
 ## Contributing
 
 You know, fork-branch-push-pr 😉 don't be shy, participate as you want!
-
-## Contributors
-
-- [Celso Fernandes](https://github.com/fernandes)
