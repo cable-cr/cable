@@ -3,49 +3,11 @@ require "../spec_helper"
 describe Cable::Handler do
   describe "basic handling" do
     it "matches the right route" do
-      handler = Cable::Handler.new
+      handler = Cable::Handler.new(ApplicationCable::Connection)
       request = HTTP::Request.new("GET", "#{Cable.settings.route}?test_token=1", headers)
 
       io_with_context = create_ws_request_and_return_io_and_context(handler, request)[0]
       io_with_context.to_s.should eq("HTTP/1.1 101 Switching Protocols\r\nSec-WebSocket-Protocol: actioncable-v1-json\r\nUpgrade: websocket\r\nConnection: Upgrade\r\nSec-WebSocket-Accept: 6x90CSU0y750nc+5Do8J0YjG7lM=\r\n\r\n\x81\u0012{\"type\":\"welcome\"}")
-    end
-
-    # Yeah, this test is a little bit bound to the implementation
-    it "forwards the message to the connection" do
-      ConnectionMock::INSTANCE.reset
-
-      ApplicationCable::Connection.use_mock(ConnectionMock::INSTANCE) do
-        address_chan = start_server
-        listen_address = address_chan.receive
-
-        ws2 = HTTP::WebSocket.new("ws://#{listen_address}/updates?test_token=1")
-
-        random = Random::Secure.hex
-        ws2.on_message do |str|
-          str.should eq("{\"type\":\"welcome\"}")
-          ws2.close
-        end
-        ws2.send("thisisateststring")
-
-        ws2.run
-        ConnectionMock::INSTANCE.received.should eq(["thisisateststring"])
-      end
-    end
-
-    # Yeah, this test is a little bit bound to the implementation
-    it "closes the connection" do
-      ConnectionMock::INSTANCE.reset
-
-      ApplicationCable::Connection.use_mock(ConnectionMock::INSTANCE) do
-        handler = Cable::Handler.new
-        request = HTTP::Request.new("GET", "#{Cable.settings.route}?test_token=1", headers)
-
-        io_with_context = create_ws_request_and_return_io_and_context(handler, request)[0]
-        io_with_context.to_s.should eq("HTTP/1.1 101 Switching Protocols\r\nSec-WebSocket-Protocol: actioncable-v1-json\r\nUpgrade: websocket\r\nConnection: Upgrade\r\nSec-WebSocket-Accept: 6x90CSU0y750nc+5Do8J0YjG7lM=\r\n\r\n\x81\u0012{\"type\":\"welcome\"}")
-
-        ConnectionMock::INSTANCE.closed.should be_truthy
-        ConnectionMock::INSTANCE.received.should be_empty
-      end
     end
 
     it "starts the web pinger" do
@@ -177,7 +139,7 @@ describe Cable::Handler do
 
   describe "the error handling" do
     it "doesn't match the wrong route" do
-      handler = Cable::Handler.new
+      handler = Cable::Handler.new(ApplicationCable::Connection)
       request = HTTP::Request.new("GET", "/unknown_route?test_token=1", headers)
 
       io_with_context = create_ws_request_and_return_io_and_context(handler, request)[0]
@@ -185,7 +147,7 @@ describe Cable::Handler do
     end
 
     it "doesn't upgrade with wrong headers (without Upgrade header)" do
-      handler = Cable::Handler.new
+      handler = Cable::Handler.new(ApplicationCable::Connection)
       headers_without_upgrade = headers
       headers_without_upgrade.delete("Upgrade")
       request = HTTP::Request.new("GET", "/unknown_route?test_token=1", headers_without_upgrade)
@@ -195,7 +157,7 @@ describe Cable::Handler do
     end
 
     it "doesn't upgrade with wrong headers (without Connection header)" do
-      handler = Cable::Handler.new
+      handler = Cable::Handler.new(ApplicationCable::Connection)
       headers_without_connection = headers
       headers_without_connection.delete("Connection")
       request = HTTP::Request.new("GET", "/unknown_route?test_token=1", headers_without_connection)
@@ -246,7 +208,7 @@ private def start_server
   spawn do
     # Make pinger real fast so we don't need to wait
     http_ref = nil
-    http_server = http_ref = HTTP::Server.new([Cable::Handler.new])
+    http_server = http_ref = HTTP::Server.new([Cable::Handler.new(ApplicationCable::Connection)])
     address = http_server.bind_unused_port
     address_chan.send(address)
     http_server.listen

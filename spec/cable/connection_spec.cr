@@ -108,9 +108,9 @@ describe Cable::Connection do
         Cable::Logger.messages.size.should eq(5)
         Cable::Logger.messages[0].should eq("ChatChannel is streaming from chat_1")
         Cable::Logger.messages[1].should eq("ChatChannel is transmitting the subscription confirmation")
-        Cable::Logger.messages[2].should eq("ChatChannel#receive({\"message\":\"Hello\"})")
-        Cable::Logger.messages[3].should eq("[ActionCable] Broadcasting to String: {\"message\" => \"Hello\", \"current_user\" => \"98\"}")
-        Cable::Logger.messages[4].should eq("ChatChannel transmitting {\"message\":\"Hello\",\"current_user\":\"98\"} (via streamed from chat_1)")
+        Cable::Logger.messages[2].should eq("ChatChannel#receive({\"message\" => \"Hello\"})")
+        Cable::Logger.messages[3].should eq("[ActionCable] Broadcasting to chat_1: {\"message\" => \"Hello\", \"current_user\" => \"98\"}")
+        Cable::Logger.messages[4].should eq("ChatChannel transmitting {\"message\" => \"Hello\", \"current_user\" => \"98\"} (via streamed from chat_1)")
       end
     end
 
@@ -127,9 +127,9 @@ describe Cable::Connection do
         Cable::Logger.messages.size.should eq(5)
         Cable::Logger.messages[0].should eq("ChatChannel is streaming from chat_1")
         Cable::Logger.messages[1].should eq("ChatChannel is transmitting the subscription confirmation")
-        Cable::Logger.messages[2].should eq("ChatChannel#perform(invite, {\"invite_id\" => \"4\"})")
-        Cable::Logger.messages[3].should eq("[ActionCable] Broadcasting to String: {\"performed\" => \"invite\", \"params\" => \"4\"}")
-        Cable::Logger.messages[4].should eq("ChatChannel transmitting {\"performed\":\"invite\",\"params\":\"4\"} (via streamed from chat_1)")
+        Cable::Logger.messages[2].should eq("ChatChannel#perform(\"invite\", {\"invite_id\" => \"4\"})")
+        Cable::Logger.messages[3].should eq("[ActionCable] Broadcasting to chat_1: {\"performed\" => \"invite\", \"params\" => \"4\"}")
+        Cable::Logger.messages[4].should eq("ChatChannel transmitting {\"performed\" => \"invite\", \"params\" => \"4\"} (via streamed from chat_1)")
       end
     end
   end
@@ -148,7 +148,7 @@ describe Cable::Connection do
         Cable::Logger.messages.size.should eq(3)
         Cable::Logger.messages[0].should eq("ChatChannel is streaming from chat_1")
         Cable::Logger.messages[1].should eq("ChatChannel is transmitting the subscription confirmation")
-        Cable::Logger.messages[2].should eq("ChatChannel transmitting {\"hello\":\"Broadcast!\"} (via streamed from chat_1)")
+        Cable::Logger.messages[2].should eq("ChatChannel transmitting {\"hello\" => \"Broadcast!\"} (via streamed from chat_1)")
       end
     end
   end
@@ -167,7 +167,7 @@ describe Cable::Connection do
         Cable::Logger.messages.size.should eq(3)
         Cable::Logger.messages[0].should eq("ChatChannel is streaming from chat_1")
         Cable::Logger.messages[1].should eq("ChatChannel is transmitting the subscription confirmation")
-        Cable::Logger.messages[2].should eq("ChatChannel transmitting {\"hello\":\"Broadcast!\"} (via streamed from chat_1)")
+        Cable::Logger.messages[2].should eq("ChatChannel transmitting {\"hello\" => \"Broadcast!\"} (via streamed from chat_1)")
       end
     end
   end

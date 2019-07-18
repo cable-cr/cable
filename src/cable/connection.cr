@@ -4,7 +4,7 @@ module Cable
   class Connection
     class UnathorizedConnectionException < Exception; end
 
-    @@mock : ApplicationCable::Connection?
+    @@mock : Cable::Connection?
 
     property internal_identifier : String = "0"
     getter token : String
@@ -72,7 +72,7 @@ module Cable
         connect
       rescue e : UnathorizedConnectionException
         socket.close
-        Logger.info("An unauthorized connection attempt was rejected")
+        Cable::Logger.info("An unauthorized connection attempt was rejected")
       end
     end
 
@@ -105,7 +105,7 @@ module Cable
       channel.subscribed
       Connection::CHANNELS[internal_identifier] ||= {} of String => Cable::Channel
       Connection::CHANNELS[internal_identifier][payload.identifier] = channel
-      Logger.info "#{payload.channel} is transmitting the subscription confirmation"
+      Cable::Logger.info "#{payload.channel} is transmitting the subscription confirmation"
       socket.send({type: "confirm_subscription", identifier: payload.identifier}.to_json)
     end
 
@@ -113,14 +113,13 @@ module Cable
       if Connection::CHANNELS[internal_identifier].has_key?(payload.identifier)
         channel = Connection::CHANNELS[internal_identifier][payload.identifier]
         if payload.action?
-          Logger.info "#{channel.class}#perform(#{payload.action}, #{payload.data})"
+          Cable::Logger.info "#{channel.class}#perform(\"#{payload.action}\", #{payload.data})"
           channel.perform(payload.action, payload.data)
         else
           begin
-            Logger.info "#{channel.class}#receive(#{payload.data.to_json})"
+            Cable::Logger.info "#{channel.class}#receive(#{payload.data})"
             channel.receive(payload.data)
           rescue e : TypeCastError
-            puts "Failed! #{payload.inspect}"
           end
         end
       end
@@ -129,7 +128,7 @@ module Cable
     def broadcast_to(channel : Cable::Channel, message : String)
       parsed_message = JSON.parse(message)
       if stream_identifier = channel.stream_identifier
-        Logger.info "#{channel.class} transmitting #{message} (via streamed from #{channel.stream_identifier})"
+        Cable::Logger.info "#{channel.class} transmitting #{parsed_message} (via streamed from #{channel.stream_identifier})"
       end
       socket.send({
         identifier: channel.identifier,

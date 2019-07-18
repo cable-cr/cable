@@ -24,7 +24,7 @@ module Cable
 
     def close
       redis.unsubscribe("cable:#{identifier}")
-      Logger.info "#{self.class.name} stopped streaming from #{identifier}"
+      Cable::Logger.info "#{self.class.name} stopped streaming from #{identifier}"
       unsubscribed
     end
 
@@ -53,16 +53,16 @@ module Cable
         rescue e : CloseRedisFiber
         end
       end
-      Logger.info "#{self.class.to_s} is streaming from #{identifier}"
+      Cable::Logger.info "#{self.class.to_s} is streaming from #{identifier}"
     end
 
     def self.broadcast_to(channel : String, message : JSON::Any)
-      Logger.info "[ActionCable] Broadcasting to #{channel.class}: #{message}"
+      Cable::Logger.info "[ActionCable] Broadcasting to #{channel}: #{message}"
       Redis::PooledClient.new.publish("cable:#{channel}", message.to_json)
     end
 
     def self.broadcast_to(channel : String, message : Hash(String, String))
-      Logger.info "[ActionCable] Broadcasting to #{channel.class}: #{message}"
+      Cable::Logger.info "[ActionCable] Broadcasting to #{channel}: #{message}"
       Redis::PooledClient.new.publish("cable:#{channel}", message.to_json)
     end
   end
