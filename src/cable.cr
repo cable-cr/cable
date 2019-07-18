@@ -1,4 +1,5 @@
 require "habitat"
+require "json"
 require "./cable/**"
 
 # TODO: Write documentation for `Cable`

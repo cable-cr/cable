@@ -14,7 +14,7 @@ module Cable
     getter redis
     getter stream_identifier : String?
 
-    def initialize(@connection : Cable::Connection, @identifier : String, @params : Hash(String, String))
+    def initialize(@connection : Cable::Connection, @identifier : String, @params : Hash(String, Cable::Payload::RESULT))
       @redis = Redis.new
     end
 

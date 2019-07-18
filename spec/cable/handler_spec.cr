@@ -79,7 +79,7 @@ describe Cable::Handler do
 
       messages = [
         %({"type":"welcome"}),
-        %({"type":"confirm_subscription","identifier":"{\\"channel\\":\\"ChatChannel\\",\\"params\\":{\\"room\\":\\"1\\"}}"}),
+        %({"type":"confirm_subscription","identifier":"{\\"channel\\":\\"ChatChannel\\",\\"room\\":\\"1\\"}"}),
       ]
       seq = 0
       ws2.on_message do |str|
@@ -88,7 +88,7 @@ describe Cable::Handler do
         ws2.close if seq >= messages.size
       end
       # App.cable.subscriptions.create({ channel: "ChatChannel", params: {room: "1"}});
-      ws2.send({"command" => "subscribe", "identifier" => "{\"channel\":\"ChatChannel\",\"params\":{\"room\":\"1\"}}"}.to_json)
+      ws2.send({"command" => "subscribe", "identifier" => "{\"channel\":\"ChatChannel\",\"room\":\"1\"}"}.to_json)
 
       ws2.run
     end
@@ -103,8 +103,8 @@ describe Cable::Handler do
 
       messages = [
         "{\"type\":\"welcome\"}",
-        "{\"type\":\"confirm_subscription\",\"identifier\":\"{\\\"channel\\\":\\\"ChatChannel\\\",\\\"params\\\":{\\\"room\\\":\\\"1\\\"}}\"}",
-        "{\"identifier\":\"{\\\"channel\\\":\\\"ChatChannel\\\",\\\"params\\\":{\\\"room\\\":\\\"1\\\"}}\",\"message\":{\"message\":\"test\",\"current_user\":\"1\"}}",
+        "{\"type\":\"confirm_subscription\",\"identifier\":\"{\\\"channel\\\":\\\"ChatChannel\\\",\\\"room\\\":\\\"1\\\"}\"}",
+        "{\"identifier\":\"{\\\"channel\\\":\\\"ChatChannel\\\",\\\"room\\\":\\\"1\\\"}\",\"message\":{\"message\":\"test\",\"current_user\":\"1\"}}",
       ]
       seq = 0
       ws2.on_message do |str|
@@ -113,9 +113,9 @@ describe Cable::Handler do
         ws2.close if seq >= messages.size
       end
       # App.cable.subscriptions.create({ channel: "ChatChannel", params: {room: "1"}});
-      ws2.send({"command" => "subscribe", "identifier" => "{\"channel\":\"ChatChannel\",\"params\":{\"room\":\"1\"}}"}.to_json)
+      ws2.send({"command" => "subscribe", "identifier" => "{\"channel\":\"ChatChannel\",\"room\":\"1\"}"}.to_json)
       # App.cable.subscriptions.subscriptions[0].send({message: "test"})
-      ws2.send({"command" => "message", "identifier" => "{\"channel\":\"ChatChannel\",\"params\":{\"room\":\"1\"}}", "data" => "{\"message\":\"test\"}"}.to_json)
+      ws2.send({"command" => "message", "identifier" => "{\"channel\":\"ChatChannel\",\"room\":\"1\"}", "data" => "{\"message\":\"test\"}"}.to_json)
 
       ws2.run
     end
@@ -130,8 +130,8 @@ describe Cable::Handler do
 
       messages = [
         "{\"type\":\"welcome\"}",
-        "{\"type\":\"confirm_subscription\",\"identifier\":\"{\\\"channel\\\":\\\"ChatChannel\\\",\\\"params\\\":{\\\"room\\\":\\\"1\\\"}}\"}",
-        "{\"identifier\":\"{\\\"channel\\\":\\\"ChatChannel\\\",\\\"params\\\":{\\\"room\\\":\\\"1\\\"}}\",\"message\":{\"message\":\"from Ruby!\",\"current_user\":\"1\"}}",
+        "{\"type\":\"confirm_subscription\",\"identifier\":\"{\\\"channel\\\":\\\"ChatChannel\\\",\\\"room\\\":\\\"1\\\"}\"}",
+        "{\"identifier\":\"{\\\"channel\\\":\\\"ChatChannel\\\",\\\"room\\\":\\\"1\\\"}\",\"message\":{\"message\":\"from Ruby!\",\"current_user\":\"1\"}}",
       ]
       seq = 0
       ws2.on_message do |str|
@@ -144,7 +144,7 @@ describe Cable::Handler do
         ws2.close if seq >= messages.size
       end
       # App.cable.subscriptions.create({ channel: "ChatChannel", params: {room: "1"}});
-      ws2.send({"command" => "subscribe", "identifier" => "{\"channel\":\"ChatChannel\",\"params\":{\"room\":\"1\"}}"}.to_json)
+      ws2.send({"command" => "subscribe", "identifier" => "{\"channel\":\"ChatChannel\",\"room\":\"1\"}"}.to_json)
       ws2.run
     end
   end
@@ -158,8 +158,8 @@ describe Cable::Handler do
 
       messages = [
         "{\"type\":\"welcome\"}",
-        "{\"type\":\"confirm_subscription\",\"identifier\":\"{\\\"channel\\\":\\\"ChatChannel\\\",\\\"params\\\":{\\\"room\\\":\\\"1\\\"}}\"}",
-        "{\"identifier\":\"{\\\"channel\\\":\\\"ChatChannel\\\",\\\"params\\\":{\\\"room\\\":\\\"1\\\"}}\",\"message\":{\"performed\":\"invite\",\"params\":\"3\"}}",
+        "{\"type\":\"confirm_subscription\",\"identifier\":\"{\\\"channel\\\":\\\"ChatChannel\\\",\\\"room\\\":\\\"1\\\"}\"}",
+        "{\"identifier\":\"{\\\"channel\\\":\\\"ChatChannel\\\",\\\"room\\\":\\\"1\\\"}\",\"message\":{\"performed\":\"invite\",\"params\":\"3\"}}",
       ]
       seq = 0
       ws2.on_message do |str|
@@ -168,9 +168,9 @@ describe Cable::Handler do
         ws2.close if seq >= messages.size
       end
       # App.cable.subscriptions.create({ channel: "ChatChannel", params: {room: "1"}});
-      ws2.send({"command" => "subscribe", "identifier" => "{\"channel\":\"ChatChannel\",\"params\":{\"room\":\"1\"}}"}.to_json)
+      ws2.send({"command" => "subscribe", "identifier" => "{\"channel\":\"ChatChannel\",\"room\":\"1\"}"}.to_json)
       # App.cable.subscriptions.subscriptions[0].perform("invite", {invite_id: "3"});
-      ws2.send({"command" => "message", "identifier" => "{\"channel\":\"ChatChannel\",\"params\":{\"room\":\"1\"}}", "data" => "{\"invite_id\":\"3\",\"action\":\"invite\"}"}.to_json)
+      ws2.send({"command" => "message", "identifier" => "{\"channel\":\"ChatChannel\",\"room\":\"1\"}", "data" => "{\"invite_id\":\"3\",\"action\":\"invite\"}"}.to_json)
       ws2.run
     end
   end

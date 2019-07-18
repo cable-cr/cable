@@ -139,33 +139,34 @@ then on your `app/assets/javascripts/channels/chat.js`
 ```js
 App.channels || (App.channels = {});
 
-App.channels["chat"] = App.cable.subscriptions.create({
-  channel: "ChatChannel",
-  params: {
+App.channels["chat"] = App.cable.subscriptions.create(
+  {
+    channel: "ChatChannel",
     room: "1"
+  },
+  {
+    connected: function() {
+      return console.log("ChatChannel connected");
+    },
+    disconnected: function() {
+      return console.log("ChatChannel disconnected");
+    },
+    received: function(data) {
+      return console.log("ChatChannel received", data);
+    },
+    rejected: function() {
+      return console.log("ChatChannel rejected");
+    },
+    away: function() {
+      return this.perform("away");
+    },
+    status: function(status) {
+      return this.perform("status", {
+        status: status
+      });
+    }
   }
-}, {
-  connected: function() {
-    return console.log("ChatChannel connected");
-  },
-  disconnected: function() {
-    return console.log("ChatChannel disconnected");
-  },
-  received: function(data) {
-    return console.log("ChatChannel received", data);
-  },
-  rejected: function() {
-    return console.log("ChatChannel rejected");
-  },
-  away: function() {
-    return this.perform("away");
-  },
-  status: function(status) {
-    return this.perform("status", {
-      status: status
-    });
-  }
-});
+);
 ```
 
 Then on your Browser console you can see the message:
@@ -190,9 +191,9 @@ After reading the docs, I realized I'm using some weird naming for variables / m
 
 - [x] Need to make connection use identifier
 - [x] Add `identified_by identifier` to `Cable::Connection`
+- [x] Give better methods to reject a connection
+- [x] Refactor, Connection class is soooo bloated
 - [ ] Add an async/local adapter (make tests, development and small deploys simpler)
-- [ ] Give better methods to reject a connection
-- [ ] Refactor, Connection class is soooo bloated
 
 ## First Class Citizen
 
