@@ -30,6 +30,27 @@ describe Cable::Connection do
     end
   end
 
+  describe ".owned_by" do
+    it "uses the right identifier name for it" do
+      connect do |connection, socket|
+        connection.current_user.not_nil!.email.should eq("user98@mail.com")
+        connection.organization.not_nil!.name.should eq("Acme Inc.")
+      end
+    end
+  end
+
+  describe "#reject_unauthorized_connection" do
+    it "rejects the unauthorized connection" do
+      connect(UnauthorizedConnectionTest) do |connection, socket|
+        socket.messages.size.should eq(0)
+
+        Cable::Logger.messages.size.should eq(1)
+        Cable::Logger.messages[0].should eq("An unauthorized connection attempt was rejected")
+        socket.closed?.should be_truthy
+      end
+    end
+  end
+
   describe "#message" do
     it "ignore a message for a non valid channel" do
       connect do |connection, socket|
@@ -143,17 +164,41 @@ private class DummySocket < HTTP::WebSocket
   end
 end
 
-private class ConnectionTest < Cable::Connection
-  identified_by :identifier
+private class Organization
+  getter name : String = "Acme Inc."
 
-  def connect
-    self.identifier = token
+  def initialize
   end
 end
 
-def connect(&block)
+private class User
+  getter email : String
+
+  def initialize(@email : String)
+  end
+end
+
+private class ConnectionTest < Cable::Connection
+  identified_by :identifier
+  owned_by current_user : User
+  owned_by organization : Organization
+
+  def connect
+    self.identifier = token
+    self.current_user = User.new("user98@mail.com")
+    self.organization = Organization.new
+  end
+end
+
+private class UnauthorizedConnectionTest < Cable::Connection
+  def connect
+    reject_unauthorized_connection
+  end
+end
+
+def connect(connection_class : Cable::Connection.class = ConnectionTest, &block)
   socket = DummySocket.new(IO::Memory.new)
-  connection = ConnectionTest.new(builds_request, socket)
+  connection = connection_class.new(builds_request, socket)
 
   yield connection, socket
 

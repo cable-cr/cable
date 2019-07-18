@@ -2,6 +2,8 @@ require "redis"
 
 module Cable
   class Connection
+    class UnathorizedConnectionException < Exception; end
+
     @@mock : ApplicationCable::Connection?
 
     property internal_identifier : String = "0"
@@ -32,6 +34,18 @@ module Cable
       end
     end
 
+    macro owned_by(type_definition)
+      @{{type_definition.var}} : {{type_definition.type}}?
+      
+      def {{type_definition.var}}=(value : {{type_definition.type}})
+        @{{type_definition.var}} = value
+      end
+
+      def {{type_definition.var}}
+        @{{type_definition.var}}
+      end
+    end
+
     def self.use_mock(mock, &block)
       @@mock = mock
 
@@ -53,7 +67,13 @@ module Cable
         raise "Not token on params"
       }
       @redis = Redis.new
-      connect
+
+      begin
+        connect
+      rescue e : UnathorizedConnectionException
+        socket.close
+        Logger.info("An unauthorized connection attempt was rejected")
+      end
     end
 
     def connect
@@ -66,10 +86,11 @@ module Cable
         channel.close
         Connection::CHANNELS[internal_identifier].delete(identifier)
       end
+      socket.close
     end
 
     def reject_unauthorized_connection
-      # TODO: Reject Connection
+      raise UnathorizedConnectionException.new
     end
 
     def receive(message)

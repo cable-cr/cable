@@ -56,12 +56,18 @@ module ApplicationCable
     # You need to specify how you identify the class, using something like:
     # Remembering that it must, be a String
     # Tip: Use your `User#id` converted to String
-    identified_by identifier
+    identified_by :identifier
+
+    # If you'd like to keep a `User` instance together with the Connection, so
+    # there's no need to fetch from the database all the time, you can use the
+    # `owned_by` instruction
+    owned_by current_user : User
 
     def connect
       # Implement your Auth logic, something like
       JWT.decode(auth_token, Lucky::Server.settings.secret_key_base, JWT::Algorithm::HS256)
       self.identifier = payload["sub"].to_s
+      self.current_user = User.find(payload["sub"])
     end
   end
 end
@@ -169,13 +175,13 @@ Then on your Browser console you can see the message:
 After you load, then you can broadcast messages with:
 
 ```js
-App.channels["chat"].send({message: "Hello World"})
+App.channels["chat"].send({ message: "Hello World" });
 ```
 
 And performs an action with:
 
 ```js
-App.channels["chat"].perform("status", {status: "My New Status"});
+App.channels["chat"].perform("status", { status: "My New Status" });
 ```
 
 ## TODO
