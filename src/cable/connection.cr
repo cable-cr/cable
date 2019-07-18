@@ -12,6 +12,10 @@ module Cable
     getter socket
     getter redis
 
+    def identifier
+      ""
+    end
+
     macro identified_by(name)
       @{{name}} : String = ""
       

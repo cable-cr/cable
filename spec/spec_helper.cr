@@ -10,3 +10,7 @@ Cable.configure do |settings|
   settings.route = "/updates"
   settings.token = "test_token"
 end
+
+Spec.before_each do
+  Cable::Logger.reset_messages
+end
