@@ -30,14 +30,14 @@ On your `src/app_server.cr` add the `Cable::Handler` before `Lucky::RouteHandler
 class AppServer < Lucky::BaseAppServer
   def middleware
     [
-      WebsocketHandler.new,
+      Cable::Handler.new(ApplicationCable::Connection),
       Lucky::RouteHandler.new,
     ]
    end
 end
 ```
 
-After that, you need to configure your `Cable`, using:
+After that, you can configure your `Cable`, the defaults are:
 
 ```crystal
 Cable.configure do |settings|
@@ -48,7 +48,7 @@ end
 
 Then you need to implement a few classes
 
-The most important (and needs to be named `ApplicationCable::Connection`)
+The connection class is how you are gonna handle connections, it's referenced on the `src/app_server.cr` when creating the handler.
 
 ```crystal
 module ApplicationCable
@@ -66,8 +66,10 @@ module ApplicationCable
     def connect
       # Implement your Auth logic, something like
       JWT.decode(auth_token, Lucky::Server.settings.secret_key_base, JWT::Algorithm::HS256)
-      self.identifier = payload["sub"].to_s
-      self.current_user = User.find(payload["sub"])
+      self.identifier = payload["id"].to_s
+      self.current_user = UserQuery.find(payload["id"])
+    rescue e : Avram::RecordNotFoundError
+       reject_unauthorized_connection
     end
   end
 end
