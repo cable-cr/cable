@@ -24,7 +24,7 @@ module Cable
 
     def close
       redis.unsubscribe("cable:#{identifier}")
-      Logger.info "#{self.class.to_s} stopped streaming from #{identifier}"
+      Logger.info "#{self.class.name} stopped streaming from #{identifier}"
       unsubscribed
     end
 

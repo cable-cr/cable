@@ -4,8 +4,8 @@ module Cable
   class Connection
     @@mock : ApplicationCable::Connection?
 
-    property current_user : String = "0"
-    getter user_id : String
+    property internal_identifier : String = "0"
+    getter token : String
 
     CHANNELS = {} of String => Hash(String, Cable::Channel)
 
@@ -17,14 +17,18 @@ module Cable
     end
 
     macro identified_by(name)
-      @{{name}} : String = ""
+      @{{name.id}} : String = ""
       
-      def {{name}}=(value : String)
-        @{{name}} = value
+      def {{name.id}}=(value : String)
+        @{{name.id}} = value
       end
     
-      def {{name}}
-        @{{name}}
+      def {{name.id}}
+        @{{name.id}}
+      end
+
+      private def internal_identifier
+        @{{name.id}}
       end
     end
 
@@ -45,11 +49,9 @@ module Cable
     end
 
     def initialize(@request : HTTP::Request, @socket : HTTP::WebSocket)
-      if query = @request.query
-        @user_id = query.split("=")[1]
-      else
-        @user_id = "0"
-      end
+      @token = @request.query_params.fetch(Cable.settings.token) {
+        raise "Not token on params"
+      }
       @redis = Redis.new
       connect
     end
@@ -59,10 +61,10 @@ module Cable
     end
 
     def close
-      return true unless Connection::CHANNELS.has_key?(current_user)
-      Connection::CHANNELS[current_user].each do |identifier, channel|
+      return true unless Connection::CHANNELS.has_key?(internal_identifier)
+      Connection::CHANNELS[internal_identifier].each do |identifier, channel|
         channel.close
-        Connection::CHANNELS[current_user].delete(identifier)
+        Connection::CHANNELS[internal_identifier].delete(identifier)
       end
     end
 
@@ -81,8 +83,8 @@ module Cable
       identifier = Cable::Identifier.from_json(payload_identifier)
       channel = Cable::Channel::CHANNELS[identifier.channel].new(connection: self, identifier: payload_identifier, params: identifier.params || {} of String => String)
       channel.subscribed
-      Connection::CHANNELS[current_user] ||= {} of String => Cable::Channel
-      Connection::CHANNELS[current_user][payload_identifier] = channel
+      Connection::CHANNELS[internal_identifier] ||= {} of String => Cable::Channel
+      Connection::CHANNELS[internal_identifier][payload_identifier] = channel
       Logger.info "#{identifier.channel} is transmitting the subscription confirmation"
       socket.send({type: "confirm_subscription", identifier: payload_identifier}.to_json)
     end
@@ -93,8 +95,8 @@ module Cable
 
       parsed_message = JSON.parse(payload_data).as_s unless parsed_message
 
-      if Connection::CHANNELS[current_user].has_key?(payload_identifier)
-        channel = Connection::CHANNELS[current_user][payload_identifier]
+      if Connection::CHANNELS[internal_identifier].has_key?(payload_identifier)
+        channel = Connection::CHANNELS[internal_identifier][payload_identifier]
         if parsed_message.is_a?(Hash) && parsed_message.has_key?("action")
           action = parsed_message.delete("action")
           Logger.info "#{channel.class}#perform(#{action}, #{parsed_message})"
