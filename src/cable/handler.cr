@@ -14,7 +14,7 @@ module Cable
 
       remote_address = context.request.remote_address
       path = context.request.path
-      Cable::Logger.info "Started GET \"#{path}\" [WebSocket] for #{remote_address} at #{Time.now.to_s}"
+      Cable::Logger.info "Started GET \"#{path}\" [WebSocket] for #{remote_address} at #{Time.local.to_s}"
 
       context.response.headers["Sec-WebSocket-Protocol"] = "actioncable-v1-json"
 
