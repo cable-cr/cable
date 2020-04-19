@@ -11,7 +11,7 @@ dependencies:
     github: hugoabonizio/schedule.cr
   redis:
     github: stefanwille/crystal-redis
-    version: ~> 2.2.1
+    version: ~> 2.6.0
   habitat:
     github: luckyframework/habitat
 

@@ -37,7 +37,7 @@ module Cable
 
         socket.on_close do
           connection.close
-          Cable::Logger.info "Finished \"#{path}\" [WebSocket] for #{remote_address} at #{Time.now.to_s}"
+          Cable::Logger.info "Finished \"#{path}\" [WebSocket] for #{remote_address} at #{Time.local.to_s}"
         end
       end
 
