@@ -67,8 +67,10 @@ module Cable
         raise "Not token on params"
       }
       if ENV["REDIS_URL"]? 
+        Cable::Logger.info "#{self.class.name} found a redis url, using that. (Connection)"
         @redis = Redis.new(url: ENV["REDIS_URL"])
       else
+        Cable::Logger.info "#{self.class.name} couldnt load a REDIS_URL, using localhost (Connection)"
         @redis = Redis.new
       end
 
@@ -141,7 +143,13 @@ module Cable
     end
 
     def self.broadcast_to(channel : String, message : String)
-      Redis::PooledClient.new.publish("cable:#{channel}", message)
+      if ENV["REDIS_URL"]?
+        Cable::Logger.info "#{self.class.name} loaded a REDIS_URL, using that (Connection Broadcast)"
+        Redis::PooledClient.new(url: ENV["REDIS_URL"]).publish("cable:#{channel}", message)
+      else
+        Cable::Logger.info "#{self.class.name} couldnt load a REDIS_URL, using localhost (Connection Broadcast)"
+        Redis::PooledClient.new.publish("cable:#{channel}", message)
+      end
     end
   end
 end

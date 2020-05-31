@@ -15,9 +15,11 @@ module Cable
     getter stream_identifier : String?
 
     def initialize(@connection : Cable::Connection, @identifier : String, @params : Hash(String, Cable::Payload::RESULT))
-      if ENV["REDIS_URL"]? 
+      if ENV["REDIS_URL"]?
+        Cable::Logger.info "#{self.class.name} found a redis url, using that. (Channel)"
         @redis = Redis.new(url: ENV["REDIS_URL"])
       else
+        Cable::Logger.info "#{self.class.name} couldnt load a REDIS_URL, using localhost"
         @redis = Redis.new
       end
     end
@@ -62,12 +64,20 @@ module Cable
 
     def self.broadcast_to(channel : String, message : JSON::Any)
       Cable::Logger.info "[ActionCable] Broadcasting to #{channel}: #{message}"
-      Redis::PooledClient.new.publish("cable:#{channel}", message.to_json)
+      if ENV["REDIS_URL"]?
+        Redis::PooledClient.new(url: ENV["REDIS_URL"]).publish("cable:#{channel}", message.to_json)
+      else
+        Redis::PooledClient.new.publish("cable:#{channel}", message.to_json)
+      end
     end
 
     def self.broadcast_to(channel : String, message : Hash(String, String))
       Cable::Logger.info "[ActionCable] Broadcasting to #{channel}: #{message}"
-      Redis::PooledClient.new.publish("cable:#{channel}", message.to_json)
+      if ENV["REDIS_URL"]?
+        Redis::PooledClient.new(url: ENV["REDIS_URL"]).publish("cable:#{channel}", message.to_json)
+      else
+        Redis::PooledClient.new.publish("cable:#{channel}", message.to_json)
+      end
     end
   end
 end
