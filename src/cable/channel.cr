@@ -15,7 +15,11 @@ module Cable
     getter stream_identifier : String?
 
     def initialize(@connection : Cable::Connection, @identifier : String, @params : Hash(String, Cable::Payload::RESULT))
-      @redis = Redis.new
+      if ENV["REDIS_URL"]? 
+        @redis = Redis.new(url: ENV["REDIS_URL"])
+      else
+        @redis = Redis.new
+      end
     end
 
     def subscribed

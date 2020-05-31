@@ -66,7 +66,11 @@ module Cable
       @token = @request.query_params.fetch(Cable.settings.token) {
         raise "Not token on params"
       }
-      @redis = Redis.new
+      if ENV["REDIS_URL"]? 
+        @redis = Redis.new(url: ENV["REDIS_URL"])
+      else
+        @redis = Redis.new
+      end
 
       begin
         connect
