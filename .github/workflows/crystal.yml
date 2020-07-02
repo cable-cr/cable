@@ -1,0 +1,28 @@
+name: Lucky CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: "*"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+            
+    steps:
+    - name: Git checkout
+    - uses: actions/checkout@v2
+
+    - name: Install crystal
+    - uses: oprypin/install-crystal@v1
+      with:
+        crystal: 0.35.1
+
+    - name: Start Redis
+    - uses: supercharge/redis-github-action@1.1.0
+      with:
+        redis-version: 6
+
+    - run: shards install
+    - run: crystal spec
