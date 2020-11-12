@@ -143,7 +143,7 @@ describe Cable::Handler do
       request = HTTP::Request.new("GET", "/unknown_route?test_token=1", headers)
 
       io_with_context = create_ws_request_and_return_io_and_context(handler, request)[0]
-      io_with_context.to_s.should eq("")
+      io_with_context.to_s.should contain("404 Not Found")
     end
 
     it "doesn't upgrade with wrong headers (without Upgrade header)" do
@@ -153,7 +153,7 @@ describe Cable::Handler do
       request = HTTP::Request.new("GET", "/unknown_route?test_token=1", headers_without_upgrade)
 
       io_with_context = create_ws_request_and_return_io_and_context(handler, request)[0]
-      io_with_context.to_s.should eq("")
+      io_with_context.to_s.should contain("404 Not Found")
     end
 
     it "doesn't upgrade with wrong headers (without Connection header)" do
@@ -163,7 +163,7 @@ describe Cable::Handler do
       request = HTTP::Request.new("GET", "/unknown_route?test_token=1", headers_without_connection)
 
       io_with_context = create_ws_request_and_return_io_and_context(handler, request)[0]
-      io_with_context.to_s.should eq("")
+      io_with_context.to_s.should contain("404 Not Found")
     end
   end
 end
