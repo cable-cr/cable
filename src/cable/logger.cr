@@ -1,10 +1,10 @@
-require "logger"
+require "log"
 
 module Cable
   class Logger
     @@show : Bool = true
     @@messages = [] of String
-    LOG = ::Logger.new(STDOUT)
+    LOG = ::Log.for("cable")
 
     def self.suppress_output
       @@show = false
@@ -15,7 +15,7 @@ module Cable
     end
 
     def self.info(message)
-      return Cable::Logger::LOG.info message if @@show
+      return Cable::Logger::LOG.info { message } if @@show
       @@messages << message
     end
 
