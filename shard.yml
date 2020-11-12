@@ -4,14 +4,14 @@ version: 0.1.0
 authors:
   - Celso Fernandes <celso.fernandes@gmail.com>
 
-crystal: 0.29.0
+crystal: 0.35.0
 
 dependencies:
   schedule:
     github: hugoabonizio/schedule.cr
   redis:
     github: stefanwille/crystal-redis
-    version: ~> 2.2.1
+    version: ~> 2.6.0
   habitat:
     github: luckyframework/habitat
 
