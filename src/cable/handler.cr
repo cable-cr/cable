@@ -22,7 +22,7 @@ module Cable
         connection = @connection_class.new(context.request, socket)
 
         # Send welcome message to the client
-        socket.send ({type: "welcome"}.to_json)
+        socket.send({type: "welcome"}.to_json)
 
         Cable::WebsocketPinger.build(socket)
 
@@ -43,6 +43,7 @@ module Cable
 
       Cable::Logger.info "Successfully upgraded to WebSocket (REQUEST_METHOD: GET, HTTP_CONNECTION: Upgrade, HTTP_UPGRADE: websocket)"
       content = ws.call(context)
+      content.as(Proc(IO, Nil)).call(context.response.output)
       context.response.print(content)
       context
     end
