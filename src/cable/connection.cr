@@ -20,11 +20,11 @@ module Cable
 
     macro identified_by(name)
       @{{name.id}} : String = ""
-      
+
       def {{name.id}}=(value : String)
         @{{name.id}} = value
       end
-    
+
       def {{name.id}}
         @{{name.id}}
       end
@@ -36,7 +36,7 @@ module Cable
 
     macro owned_by(type_definition)
       @{{type_definition.var}} : {{type_definition.type}}?
-      
+
       def {{type_definition.var}}=(value : {{type_definition.type}})
         @{{type_definition.var}} = value
       end
