@@ -14,7 +14,7 @@ module Cable
 
       remote_address = context.request.remote_address
       path = context.request.path
-      Cable::Logger.info "Started GET \"#{path}\" [WebSocket] for #{remote_address} at #{Time.now.to_s}"
+      Cable::Logger.info "Started GET \"#{path}\" [WebSocket] for #{remote_address} at #{Time.utc.to_s}"
 
       context.response.headers["Sec-WebSocket-Protocol"] = "actioncable-v1-json"
 
@@ -37,7 +37,7 @@ module Cable
 
         socket.on_close do
           connection.close
-          Cable::Logger.info "Finished \"#{path}\" [WebSocket] for #{remote_address} at #{Time.now.to_s}"
+          Cable::Logger.info "Finished \"#{path}\" [WebSocket] for #{remote_address} at #{Time.utc.to_s}"
         end
       end
 
