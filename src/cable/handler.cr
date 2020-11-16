@@ -19,6 +19,7 @@ module Cable
       context.response.headers["Sec-WebSocket-Protocol"] = "actioncable-v1-json"
 
       ws = HTTP::WebSocketHandler.new do |socket, context|
+        socket.on_ping { socket.pong context.request.path }
         connection = @connection_class.new(context.request, socket)
 
         # Send welcome message to the client
@@ -36,15 +37,17 @@ module Cable
         end
 
         socket.on_close do
-          connection.close
+          #connection.close
           Cable::Logger.info "Finished \"#{path}\" [WebSocket] for #{remote_address} at #{Time.utc.to_s}"
         end
       end
 
       Cable::Logger.info "Successfully upgraded to WebSocket (REQUEST_METHOD: GET, HTTP_CONNECTION: Upgrade, HTTP_UPGRADE: websocket)"
       content = ws.call(context)
-      content.as(Proc(IO, Nil)).call(context.response.output)
-      context.response.print(content)
+
+      # These cause a websocket issue with `One or more reserved bits are on: reserved1 = 1, reserved2 = 0, reserved3 = 0`
+      #content.as(Proc(IO, Nil)).call(context.response.output)
+      #context.response.print(content)
       context
     end
 
