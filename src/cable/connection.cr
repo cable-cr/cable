@@ -64,7 +64,7 @@ module Cable
 
     def initialize(@request : HTTP::Request, @socket : HTTP::WebSocket)
       @token = @request.query_params.fetch(Cable.settings.token) {
-        raise "Not token on params"
+        raise "No token on params"
       }
       @redis = Redis.new
 
