@@ -26,6 +26,10 @@ module Cable
 
         Cable::WebsocketPinger.build(socket)
 
+        socket.on_ping do
+          socket.pong context.request.path
+        end
+
         # Handle incoming message and echo back to the client
         socket.on_message do |message|
           begin
@@ -42,10 +46,7 @@ module Cable
       end
 
       Cable::Logger.info "Successfully upgraded to WebSocket (REQUEST_METHOD: GET, HTTP_CONNECTION: Upgrade, HTTP_UPGRADE: websocket)"
-      content = ws.call(context)
-      content.as(Proc(IO, Nil)).call(context.response.output)
-      context.response.print(content)
-      context
+      ws.call(context)
     end
 
     private def websocket_upgrade_request?(context)

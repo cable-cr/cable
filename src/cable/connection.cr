@@ -71,7 +71,7 @@ module Cable
       begin
         connect
       rescue e : UnathorizedConnectionException
-        socket.close
+        socket.close(HTTP::WebSocket::CloseCode::NormalClosure, "Farewell")
         Cable::Logger.info("An unauthorized connection attempt was rejected")
       end
     end

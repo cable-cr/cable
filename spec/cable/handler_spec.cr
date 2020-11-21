@@ -7,7 +7,7 @@ describe Cable::Handler do
       request = HTTP::Request.new("GET", "#{Cable.settings.route}?test_token=1", headers)
 
       io_with_context = create_ws_request_and_return_io_and_context(handler, request)[0]
-      io_with_context.to_s.should eq("HTTP/1.1 101 Switching Protocols\r\nSec-WebSocket-Protocol: actioncable-v1-json\r\nUpgrade: websocket\r\nConnection: Upgrade\r\nSec-WebSocket-Accept: 6x90CSU0y750nc+5Do8J0YjG7lM=\r\n\r\n\x81\u0012{\"type\":\"welcome\"}")
+      io_with_context.to_s.should eq("HTTP/1.1 101 Switching Protocols\r\nSec-WebSocket-Protocol: actioncable-v1-json\r\nUpgrade: websocket\r\nConnection: Upgrade\r\nSec-WebSocket-Accept: 6x90CSU0y750nc+5Do8J0YjG7lM=\r\n\r\n")
     end
 
     it "starts the web pinger" do
