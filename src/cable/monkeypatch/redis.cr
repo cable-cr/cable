@@ -6,7 +6,6 @@ class Redis
     module ValueOriented
       def void_command(request : Request) : Nil
         command(request)
-        Nil
       end
     end
   end
