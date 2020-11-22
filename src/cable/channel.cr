@@ -11,11 +11,9 @@ module Cable
     getter params
     getter identifier
     getter connection
-    getter redis
     getter stream_identifier : String?
 
     def initialize(@connection : Cable::Connection, @identifier : String, @params : Hash(String, Cable::Payload::RESULT))
-      @redis = Redis.new
     end
 
     def subscribed
@@ -23,7 +21,9 @@ module Cable
     end
 
     def close
-      redis.unsubscribe("cable:#{identifier}")
+      if stream_identifier = @stream_identifier
+        Cable.server.unsubscribe_channel(channel: self, identifier: stream_identifier)
+      end
       Cable::Logger.info "#{self.class.name} stopped streaming from #{identifier}"
       unsubscribed
     end
@@ -37,33 +37,20 @@ module Cable
     def perform(action, message)
     end
 
-    def stream_from(identifier)
-      @stream_identifier = identifier
-      spawn do
-        begin
-          redis.subscribe("cable:#{identifier}") do |on|
-            on.message do |channel, message|
-              connection.broadcast_to(self, message)
-            end
-
-            on.unsubscribe do |channel, subscriptions|
-              raise CloseRedisFiber.new("Unsubscribed")
-            end
-          end
-        rescue e : CloseRedisFiber
-        end
-      end
-      Cable::Logger.info "#{self.class.to_s} is streaming from #{identifier}"
+    def stream_from(stream_identifier)
+      @stream_identifier = stream_identifier
+      Cable.server.subscribe_channel(channel: self, identifier: stream_identifier)
+      Cable::Logger.info "#{self.class.to_s} is streaming from #{stream_identifier}"
     end
 
     def self.broadcast_to(channel : String, message : JSON::Any)
       Cable::Logger.info "[ActionCable] Broadcasting to #{channel}: #{message}"
-      Redis::PooledClient.new.publish("cable:#{channel}", message.to_json)
+      Cable.server.publish("#{channel}", message.to_json)
     end
 
     def self.broadcast_to(channel : String, message : Hash(String, String))
       Cable::Logger.info "[ActionCable] Broadcasting to #{channel}: #{message}"
-      Redis::PooledClient.new.publish("cable:#{channel}", message.to_json)
+      Cable.server.publish("#{channel}", message.to_json)
     end
   end
 end

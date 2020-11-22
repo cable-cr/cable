@@ -1,4 +1,4 @@
-require "redis"
+require "uuid"
 
 module Cable
   class Connection
@@ -8,11 +8,12 @@ module Cable
 
     property internal_identifier : String = "0"
     getter token : String
+    getter connection_identifier : String
 
     CHANNELS = {} of String => Hash(String, Cable::Channel)
 
     getter socket
-    getter redis
+    getter id : String
 
     def identifier
       ""
@@ -66,10 +67,12 @@ module Cable
       @token = @request.query_params.fetch(Cable.settings.token) {
         raise "No token on params"
       }
-      @redis = Redis.new
+      @id = UUID.random.to_s
+      @connection_identifier = ""
 
       begin
         connect
+        @connection_identifier = "#{internal_identifier}-#{@id}"
       rescue e : UnathorizedConnectionException
         socket.close(HTTP::WebSocket::CloseCode::NormalClosure, "Farewell")
         Cable::Logger.info("An unauthorized connection attempt was rejected")
@@ -81,10 +84,10 @@ module Cable
     end
 
     def close
-      return true unless Connection::CHANNELS.has_key?(internal_identifier)
-      Connection::CHANNELS[internal_identifier].each do |identifier, channel|
+      return true unless Connection::CHANNELS.has_key?(connection_identifier)
+      Connection::CHANNELS[connection_identifier].each do |identifier, channel|
         channel.close
-        Connection::CHANNELS[internal_identifier].delete(identifier)
+        Connection::CHANNELS[connection_identifier].delete(identifier)
       end
       socket.close
     end
@@ -101,17 +104,22 @@ module Cable
     end
 
     def subscribe(payload)
-      channel = Cable::Channel::CHANNELS[payload.channel].new(connection: self, identifier: payload.identifier, params: payload.channel_params)
+      channel = Cable::Channel::CHANNELS[payload.channel].new(
+        connection: self, 
+        identifier: payload.identifier,
+        params: payload.channel_params
+      )
+      Connection::CHANNELS[connection_identifier] ||= {} of String => Cable::Channel
+      Connection::CHANNELS[connection_identifier][payload.identifier] = channel
+      # Cable.server.subscribe_channel(channel: channel, identifier: payload.identifier)
       channel.subscribed
-      Connection::CHANNELS[internal_identifier] ||= {} of String => Cable::Channel
-      Connection::CHANNELS[internal_identifier][payload.identifier] = channel
       Cable::Logger.info "#{payload.channel} is transmitting the subscription confirmation"
       socket.send({type: "confirm_subscription", identifier: payload.identifier}.to_json)
     end
 
     def message(payload)
-      if Connection::CHANNELS[internal_identifier].has_key?(payload.identifier)
-        channel = Connection::CHANNELS[internal_identifier][payload.identifier]
+      if Connection::CHANNELS[connection_identifier].has_key?(payload.identifier)
+        channel = Connection::CHANNELS[connection_identifier][payload.identifier]
         if payload.action?
           Cable::Logger.info "#{channel.class}#perform(\"#{payload.action}\", #{payload.data})"
           channel.perform(payload.action, payload.data)
@@ -125,19 +133,8 @@ module Cable
       end
     end
 
-    def broadcast_to(channel : Cable::Channel, message : String)
-      parsed_message = JSON.parse(message)
-      if stream_identifier = channel.stream_identifier
-        Cable::Logger.info "#{channel.class} transmitting #{parsed_message} (via streamed from #{channel.stream_identifier})"
-      end
-      socket.send({
-        identifier: channel.identifier,
-        message:    parsed_message,
-      }.to_json)
-    end
-
     def self.broadcast_to(channel : String, message : String)
-      Redis::PooledClient.new.publish("cable:#{channel}", message)
+      Cable.server.publish("#{channel}", message)
     end
   end
 end

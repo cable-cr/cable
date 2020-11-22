@@ -1,5 +1,6 @@
 require "habitat"
 require "json"
+require "redis"
 require "./cable/**"
 
 # TODO: Write documentation for `Cable`
@@ -28,4 +29,12 @@ module Cable
     setting token : String = "token", example: "token"
   end
   # TODO: Put your code here
+end
+
+# Needs access to connection so we can subscribe to
+# multiple channeels
+class Redis
+  def _connection : Redis::Connection
+    connection
+  end
 end
