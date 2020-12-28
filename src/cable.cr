@@ -1,5 +1,6 @@
 require "habitat"
 require "json"
+require "redis"
 require "./cable/**"
 
 # TODO: Write documentation for `Cable`
@@ -26,6 +27,15 @@ module Cable
   Habitat.create do
     setting route : String = "/cable", example: "/cable"
     setting token : String = "token", example: "token"
+    setting url : String = ENV.fetch("REDIS_URL", "redis://localhost:6379"), example: "redis://localhost:6379"
   end
   # TODO: Put your code here
+end
+
+# Needs access to connection so we can subscribe to
+# multiple channeels
+class Redis
+  def _connection : Redis::Connection
+    connection
+  end
 end

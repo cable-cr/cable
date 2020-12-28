@@ -1,7 +1,5 @@
 require "http/server"
 
-# require "http/handler"
-
 module Cable
   class Handler
     include HTTP::Handler
@@ -20,6 +18,8 @@ module Cable
 
       ws = HTTP::WebSocketHandler.new do |socket, context|
         connection = @connection_class.new(context.request, socket)
+        connection_id = connection.connection_identifier
+        Cable.server.add_connection(connection)
 
         # Send welcome message to the client
         socket.send({type: "welcome"}.to_json)
@@ -40,7 +40,7 @@ module Cable
         end
 
         socket.on_close do
-          connection.close
+          Cable.server.remove_connection(connection_id)
           Cable::Logger.info "Finished \"#{path}\" [WebSocket] for #{remote_address} at #{Time.utc.to_s}"
         end
       end

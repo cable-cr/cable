@@ -19,6 +19,10 @@ module Cable
       @@messages << message
     end
 
+    def self.debug(message)
+      return Cable::Logger::LOG.debug { message } if @@show
+    end
+
     def self.reset_messages
       @@messages = [] of String
     end

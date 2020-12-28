@@ -13,7 +13,7 @@ describe Cable::Payload do
 
     payload = Cable::Payload.new(payload_json)
     payload.command.should eq("subscribe")
-    payload.identifier.should eq("{\"channel\":\"ChatChannel\",\"person\":{\"name\":\"Celso\",\"age\":32,\"boom\":\"boom\"},\"foo\":\"bar\"}")
+    payload.identifier.should eq({ channel: "ChatChannel", person: { name: "Celso", age: 32, boom: "boom"}, foo: "bar"}.to_json)
     payload.channel.should eq("ChatChannel")
     payload.channel_params.should eq({"person" => {"name" => "Celso", "age" => 32, "boom" => "boom"}, "foo" => "bar"})
   end
@@ -29,7 +29,7 @@ describe Cable::Payload do
 
     payload = Cable::Payload.new(payload_json)
     payload.command.should eq("message")
-    payload.identifier.should eq("{\"channel\":\"ChatChannel\"}")
+    payload.identifier.should eq({ channel: "ChatChannel"}.to_json)
     payload.channel.should eq("ChatChannel")
     payload.data.should eq({"invite_id" => 3})
     payload.action?.should be_truthy
