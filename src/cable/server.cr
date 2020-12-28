@@ -19,8 +19,8 @@ module Cable
     def initialize
       @connections = {} of String => Connection
       @channels = {} of String => Array(Cable::Channel)
-      @redis_subscribe = Redis.new
-      @redis_publish = Redis.new
+      @redis_subscribe = Redis.new(url: Cable.settings.url)
+      @redis_publish = Redis.new(url: Cable.settings.url)
       @fiber_channel = ::Channel({String, String}).new
       subscribe
       process_subscribed_messages
