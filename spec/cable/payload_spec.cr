@@ -6,16 +6,16 @@ describe Cable::Payload do
       command:    "subscribe",
       identifier: {
         channel: "ChatChannel",
-        person:  {name: "Celso", age: 32, boom: "boom"},
+        person:  {name: "Foo", age: 32, boom: "boom"},
         foo:     "bar",
       }.to_json,
     }.to_json
 
     payload = Cable::Payload.new(payload_json)
     payload.command.should eq("subscribe")
-    payload.identifier.should eq({ channel: "ChatChannel", person: { name: "Celso", age: 32, boom: "boom"}, foo: "bar"}.to_json)
+    payload.identifier.should eq({ channel: "ChatChannel", person: { name: "Foo", age: 32, boom: "boom"}, foo: "bar"}.to_json)
     payload.channel.should eq("ChatChannel")
-    payload.channel_params.should eq({"person" => {"name" => "Celso", "age" => 32, "boom" => "boom"}, "foo" => "bar"})
+    payload.channel_params.should eq({"person" => {"name" => "Foo", "age" => 32, "boom" => "boom"}, "foo" => "bar"})
   end
 
   it "parses a perform command" do

@@ -37,11 +37,11 @@ describe Cable::Connection do
 
     it "accepts with nested hash" do
       connect do |connection, socket|
-        connection.receive({"command" => "subscribe", "identifier" => { channel: "ChatChannel", room: "1", person: { name: "Celso", age: 32, boom: "boom" }}.to_json}.to_json)
+        connection.receive({"command" => "subscribe", "identifier" => { channel: "ChatChannel", room: "1", person: { name: "Foo", age: 32, boom: "boom" }}.to_json}.to_json)
         sleep 0.001
 
         socket.messages.size.should eq(1)
-        socket.messages[0].should eq({"type" => "confirm_subscription", "identifier" => { channel: "ChatChannel", room: "1", person: { name: "Celso", age: 32, boom: "boom" }}.to_json}.to_json)
+        socket.messages[0].should eq({"type" => "confirm_subscription", "identifier" => { channel: "ChatChannel", room: "1", person: { name: "Foo", age: 32, boom: "boom" }}.to_json}.to_json)
 
         Cable::Logger.messages.size.should eq(2)
         Cable::Logger.messages[0].should eq("ChatChannel is streaming from chat_1")
@@ -143,14 +143,10 @@ describe Cable::Connection do
 
         socket.messages.size.should eq(1)
         socket.messages[0].should eq({"type" => "confirm_subscription", "identifier" => { channel: "ChatChannel", room: "1" }.to_json}.to_json)
-        # this message now is send by the server
-        # socket.messages[1].should eq({identifier: { channel: "ChatChannel", room: "1" }.to_json, message: {hello: "Broadcast!"}}.to_json)
 
         Cable::Logger.messages.size.should eq(2)
         Cable::Logger.messages[0].should eq("ChatChannel is streaming from chat_1")
         Cable::Logger.messages[1].should eq("ChatChannel is transmitting the subscription confirmation")
-        # this message now is send by the server
-        # Cable::Logger.messages[2].should eq("ChatChannel transmitting {\"hello\" => \"Broadcast!\"} (via streamed from chat_1)")
       end
     end
   end
@@ -170,6 +166,69 @@ describe Cable::Connection do
         Cable::Logger.messages[0].should eq("ChatChannel is streaming from chat_1")
         Cable::Logger.messages[1].should eq("ChatChannel is transmitting the subscription confirmation")
         Cable::Logger.messages[2].should eq("ChatChannel transmitting {\"hello\" => \"Broadcast!\"} (via streamed from chat_1)")
+      end
+    end
+  end
+
+  describe "when channel broadcast a message" do
+    describe "as string" do
+      it "receives correctly" do
+        connect do |connection, socket|
+          connection.receive({"command" => "subscribe", "identifier" => { channel: "ChatChannel", room: "1" }.to_json}.to_json)
+          ChatChannel.broadcast_to(channel: "chat_1", message: "<turbo-stream></turbo-stream>")
+          sleep 0.001
+  
+          socket.messages.size.should eq(2)
+          socket.messages[0].should eq({"type" => "confirm_subscription", "identifier" => { channel: "ChatChannel", room: "1" }.to_json}.to_json)
+          socket.messages[1].should eq({"identifier" => { channel: "ChatChannel", room: "1" }.to_json, "message" => "<turbo-stream></turbo-stream>"}.to_json)
+  
+          Cable::Logger.messages.size.should eq(4)
+          Cable::Logger.messages[0].should eq("ChatChannel is streaming from chat_1")
+          Cable::Logger.messages[1].should eq("ChatChannel is transmitting the subscription confirmation")
+          Cable::Logger.messages[2].should eq("[ActionCable] Broadcasting to chat_1: <turbo-stream></turbo-stream>")
+          Cable::Logger.messages[3].should eq("ChatChannel transmitting <turbo-stream></turbo-stream> (via streamed from chat_1)")
+        end
+      end
+    end
+
+    describe "as Hash(String, String)" do
+      it "receives correctly" do
+        connect do |connection, socket|
+          connection.receive({"command" => "subscribe", "identifier" => { channel: "ChatChannel", room: "1" }.to_json}.to_json)
+          ChatChannel.broadcast_to(channel: "chat_1", message: {"foo" => "bar"})
+          sleep 0.001
+  
+          socket.messages.size.should eq(2)
+          socket.messages[0].should eq({"type" => "confirm_subscription", "identifier" => { channel: "ChatChannel", room: "1" }.to_json}.to_json)
+          socket.messages[1].should eq({"identifier" => { channel: "ChatChannel", room: "1" }.to_json, "message" => {"foo" => "bar"}}.to_json)
+  
+          Cable::Logger.messages.size.should eq(4)
+          Cable::Logger.messages[0].should eq("ChatChannel is streaming from chat_1")
+          Cable::Logger.messages[1].should eq("ChatChannel is transmitting the subscription confirmation")
+          Cable::Logger.messages[2].should eq("[ActionCable] Broadcasting to chat_1: {\"foo\" => \"bar\"}")
+          Cable::Logger.messages[3].should eq("ChatChannel transmitting {\"foo\" => \"bar\"} (via streamed from chat_1)")
+        end
+      end
+    end
+
+    describe "as JSON::Any" do
+      it "receives correctly" do
+        connect do |connection, socket|
+          connection.receive({"command" => "subscribe", "identifier" => { channel: "ChatChannel", room: "1" }.to_json}.to_json)
+          json_message = JSON.parse(%({"foo": "bar"}))
+          ChatChannel.broadcast_to(channel: "chat_1", message: json_message)
+          sleep 0.001
+  
+          socket.messages.size.should eq(2)
+          socket.messages[0].should eq({"type" => "confirm_subscription", "identifier" => { channel: "ChatChannel", room: "1" }.to_json}.to_json)
+          socket.messages[1].should eq({"identifier" => { channel: "ChatChannel", room: "1" }.to_json, "message" => {"foo" => "bar"}}.to_json)
+  
+          Cable::Logger.messages.size.should eq(4)
+          Cable::Logger.messages[0].should eq("ChatChannel is streaming from chat_1")
+          Cable::Logger.messages[1].should eq("ChatChannel is transmitting the subscription confirmation")
+          Cable::Logger.messages[2].should eq("[ActionCable] Broadcasting to chat_1: {\"foo\" => \"bar\"}")
+          Cable::Logger.messages[3].should eq("ChatChannel transmitting {\"foo\" => \"bar\"} (via streamed from chat_1)")
+        end
       end
     end
   end
