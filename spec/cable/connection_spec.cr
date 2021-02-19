@@ -48,6 +48,20 @@ describe Cable::Connection do
         Cable::Logger.messages[1].should eq("ChatChannel is transmitting the subscription confirmation")
       end
     end
+
+    it "accepts without auth token" do
+      connect(connection_class: ConnectionNoTokenTest, token: nil) do |connection, socket|
+        connection.receive({"command" => "subscribe", "identifier" => { channel: "ChatChannel", room: "1", person: { name: "Celso", age: 32, boom: "boom" }}.to_json}.to_json)
+        sleep 0.001
+
+        socket.messages.size.should eq(1)
+        socket.messages[0].should eq({"type" => "confirm_subscription", "identifier" => { channel: "ChatChannel", room: "1", person: { name: "Celso", age: 32, boom: "boom" }}.to_json}.to_json)
+
+        Cable::Logger.messages.size.should eq(2)
+        Cable::Logger.messages[0].should eq("ChatChannel is streaming from chat_1")
+        Cable::Logger.messages[1].should eq("ChatChannel is transmitting the subscription confirmation")
+      end
+    end
   end
 
   describe ".identified_by" do
@@ -175,7 +189,7 @@ describe Cable::Connection do
   end
 end
 
-def builds_request
+def builds_request(token : String)
   headers = HTTP::Headers{
     "Upgrade"                => "websocket",
     "Connection"             => "Upgrade",
@@ -183,7 +197,18 @@ def builds_request
     "Sec-WebSocket-Protocol" => "actioncable-v1-json, actioncable-unsupported",
     "Sec-WebSocket-Version"  => "13",
   }
-  request = HTTP::Request.new("GET", "#{Cable.settings.route}?test_token=98", headers)
+  request = HTTP::Request.new("GET", "#{Cable.settings.route}?test_token=#{token}", headers)
+end
+
+def builds_request(token : Nil)
+  headers = HTTP::Headers{
+    "Upgrade"                => "websocket",
+    "Connection"             => "Upgrade",
+    "Sec-WebSocket-Key"      => "OqColdEJm3i9e/EqMxnxZw==",
+    "Sec-WebSocket-Protocol" => "actioncable-v1-json, actioncable-unsupported",
+    "Sec-WebSocket-Version"  => "13",
+  }
+  request = HTTP::Request.new("GET", "#{Cable.settings.route}", headers)
 end
 
 private class DummySocket < HTTP::WebSocket
@@ -214,9 +239,22 @@ private class ConnectionTest < Cable::Connection
   owned_by organization : Organization
 
   def connect
-    self.identifier = token
+    if tk = token
+      self.identifier = tk
+    end
     self.current_user = User.new("user98@mail.com")
     self.organization = Organization.new
+  end
+
+  def broadcast_to(channel, message)
+  end
+end
+
+private class ConnectionNoTokenTest < Cable::Connection
+  identified_by :uuid
+
+  def connect
+    self.uuid = UUID.random.to_s
   end
 
   def broadcast_to(channel, message)
@@ -229,9 +267,9 @@ private class UnauthorizedConnectionTest < Cable::Connection
   end
 end
 
-def connect(connection_class : Cable::Connection.class = ConnectionTest, &block)
+def connect(connection_class : Cable::Connection.class = ConnectionTest, token : String? = "98", &block)
   socket = DummySocket.new(IO::Memory.new)
-  connection = connection_class.new(builds_request, socket)
+  connection = connection_class.new(builds_request(token: token), socket)
 
   yield connection, socket
 

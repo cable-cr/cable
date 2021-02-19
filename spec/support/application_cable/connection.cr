@@ -3,7 +3,9 @@ module ApplicationCable
     identified_by :identifier
 
     def connect
-      self.identifier = token
+      if tk = token
+        self.identifier = tk
+      end
     end
   end
 end

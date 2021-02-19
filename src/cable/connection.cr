@@ -7,7 +7,7 @@ module Cable
     @@mock : Cable::Connection?
 
     property internal_identifier : String = "0"
-    getter token : String
+    getter token : String?
     getter connection_identifier : String
 
     CHANNELS = {} of String => Hash(String, Cable::Channel)
@@ -64,9 +64,7 @@ module Cable
     end
 
     def initialize(@request : HTTP::Request, @socket : HTTP::WebSocket)
-      @token = @request.query_params.fetch(Cable.settings.token) {
-        raise "No token on params"
-      }
+      @token = @request.query_params.fetch(Cable.settings.token, nil)
       @id = UUID.random.to_s
       @connection_identifier = ""
 
