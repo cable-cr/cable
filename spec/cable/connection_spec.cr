@@ -64,6 +64,25 @@ describe Cable::Connection do
     end
   end
 
+  describe "#unsubscribe" do
+    it "accepts" do
+      connect do |connection, socket|
+        connection.receive({"command" => "subscribe", "identifier" => { channel: "ChatChannel", room: "1" }.to_json}.to_json)
+        connection.receive({"command" => "unsubscribe", "identifier" => { channel: "ChatChannel", room: "1" }.to_json}.to_json)
+        sleep 0.001
+
+        socket.messages.size.should eq(1)
+        socket.messages[0].should eq({"type" => "confirm_subscription", "identifier" => { channel: "ChatChannel", room: "1" }.to_json}.to_json)
+        socket.messages[1].should eq({"type" => "confirm_unsubscription", "identifier" => { channel: "ChatChannel", room: "1" }.to_json}.to_json)
+
+        Cable::Logger.messages.size.should eq(2)
+        Cable::Logger.messages[0].should eq("ChatChannel is streaming from chat_1")
+        Cable::Logger.messages[1].should eq("ChatChannel is transmitting the subscription confirmation")
+        Cable::Logger.messages[2].should eq("ChatChannel is transmitting the unsubscription confirmation")
+      end
+    end
+  end
+
   describe ".identified_by" do
     it "uses the right identifier name for it" do
       connect do |connection, socket|
