@@ -65,7 +65,7 @@ module ApplicationCable
 
     def connect
       # Implement your Auth logic, something like
-      JWT.decode(auth_token, Lucky::Server.settings.secret_key_base, JWT::Algorithm::HS256)
+      payload = JWT.decode(token, Lucky::Server.settings.secret_key_base, JWT::Algorithm::HS256)
       self.identifier = payload["id"].to_s
       self.current_user = UserQuery.find(payload["id"])
     rescue e : Avram::RecordNotFoundError
