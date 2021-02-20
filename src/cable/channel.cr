@@ -50,7 +50,7 @@ module Cable
 
     def self.broadcast_to(channel : String, message : String)
       Cable::Logger.info "[ActionCable] Broadcasting to #{channel}: #{message}"
-      Cable.server.publish("#{channel}", message)
+      Cable.server.publish("#{channel}", message.to_json)
     end
 
     def self.broadcast_to(channel : String, message : Hash(String, String))
