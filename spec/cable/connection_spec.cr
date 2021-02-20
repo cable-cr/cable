@@ -64,7 +64,7 @@ describe Cable::Connection do
         Cable::Logger.messages.size.should eq(3)
         Cable::Logger.messages[0].should eq("ChatChannel is streaming from chat_1")
         Cable::Logger.messages[1].should eq("ChatChannel is transmitting the subscription confirmation")
-        Cable::Logger.messages[2].should eq("ChatChannel is transmitting the unsubscription confirmation")
+        Cable::Logger.messages[2].should eq("ChatChannel is transmitting the unsubscribe confirmation")
       end
     end
   end
