@@ -57,11 +57,11 @@ describe Cable::Connection do
         connection.receive({"command" => "unsubscribe", "identifier" => { channel: "ChatChannel", room: "1" }.to_json}.to_json)
         sleep 0.001
 
-        socket.messages.size.should eq(1)
+        socket.messages.size.should eq(2)
         socket.messages[0].should eq({"type" => "confirm_subscription", "identifier" => { channel: "ChatChannel", room: "1" }.to_json}.to_json)
         socket.messages[1].should eq({"type" => "confirm_unsubscription", "identifier" => { channel: "ChatChannel", room: "1" }.to_json}.to_json)
 
-        Cable::Logger.messages.size.should eq(2)
+        Cable::Logger.messages.size.should eq(3)
         Cable::Logger.messages[0].should eq("ChatChannel is streaming from chat_1")
         Cable::Logger.messages[1].should eq("ChatChannel is transmitting the subscription confirmation")
         Cable::Logger.messages[2].should eq("ChatChannel is transmitting the unsubscription confirmation")
