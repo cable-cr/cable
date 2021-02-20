@@ -75,15 +75,21 @@ module Cable
       redis_publish.publish("#{channel}", message)
     end
 
-    def send_to_channels(channel, message)
+    def send_to_channels(identifier, message)
       parsed_message = JSON.parse(message)
 
-      @channels[channel].each do |channel|
-        Cable::Logger.info "#{channel.class} transmitting #{parsed_message} (via streamed from #{channel.stream_identifier})"
-        channel.connection.socket.send({
-          identifier: channel.identifier,
-          message:    parsed_message,
-        }.to_json)
+      @channels[identifier].each do |channel|
+        # TODO: would be nice to have a test where we open two connections
+        # close one, and make sure the other one receives the message
+        if channel.connection.socket.closed?
+          @channels[identifier].delete(channel)
+        else
+          Cable::Logger.info "#{channel.class} transmitting #{parsed_message} (via streamed from #{channel.stream_identifier})"
+          channel.connection.socket.send({
+            identifier: channel.identifier,
+            message:    parsed_message,
+          }.to_json)
+        end
       end
     rescue IO::Error
     end
