@@ -100,12 +100,13 @@ module Cable
       payload = Cable::Payload.new(message)
 
       return subscribe(payload) if payload.command == "subscribe"
+      return unsubscribe(payload) if payload.command == "unsubscribe"
       return message(payload) if payload.command == "message"
     end
 
     def subscribe(payload)
       channel = Cable::Channel::CHANNELS[payload.channel].new(
-        connection: self, 
+        connection: self,
         identifier: payload.identifier,
         params: payload.channel_params
       )
@@ -115,6 +116,14 @@ module Cable
       channel.subscribed
       Cable::Logger.info "#{payload.channel} is transmitting the subscription confirmation"
       socket.send({type: "confirm_subscription", identifier: payload.identifier}.to_json)
+    end
+
+    def unsubscribe(payload)
+      if channel = Connection::CHANNELS[connection_identifier].delete(payload.identifier)
+        channel.unsubscribed
+        Cable::Logger.info "#{payload.channel} is transmitting unsubscribe confirmation"
+        socket.send({type: "confirm_unsubscription", identifier: payload.identifier}.to_json)
+      end
     end
 
     def message(payload)
