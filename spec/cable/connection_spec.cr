@@ -64,6 +64,25 @@ describe Cable::Connection do
     end
   end
 
+  describe "#unsubscribe" do
+    it "unsubscribes from a channel" do
+      connect do |connection, socket|
+        connection.receive({"command" => "subscribe", "identifier" => { channel: "ChatChannel", room: "1" }.to_json}.to_json)
+        connection.receive({"command" => "unsubscribe", "identifier" => { channel: "ChatChannel", room: "1" }.to_json}.to_json)
+        sleep 0.001
+
+        socket.messages.size.should eq(2)
+        socket.messages[0].should eq({"type" => "confirm_subscription", "identifier" => { channel: "ChatChannel", room: "1" }.to_json}.to_json)
+        socket.messages[1].should eq({"type" => "confirm_unsubscription", "identifier" => { channel: "ChatChannel", room: "1" }.to_json}.to_json)
+
+        Cable::Logger.messages.size.should eq(3)
+        Cable::Logger.messages[0].should eq("ChatChannel is streaming from chat_1")
+        Cable::Logger.messages[1].should eq("ChatChannel is transmitting the subscription confirmation")
+        Cable::Logger.messages[2].should eq("ChatChannel is transmitting the unsubscribe confirmation")
+      end
+    end
+  end
+
   describe ".identified_by" do
     it "uses the right identifier name for it" do
       connect do |connection, socket|
@@ -82,11 +101,14 @@ describe Cable::Connection do
   end
 
   describe "#reject_unauthorized_connection" do
-    it "rejects the unauthorized connection" do
+    it "rejects the unauthorized connection (and does not receive any message)" do
       connect(UnauthorizedConnectionTest) do |connection, socket|
+        connection.receive({"command" => "subscribe", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
+        connection.receive({"command" => "message", "identifier" => { channel: "ChatChannel", room: "1" }.to_json, "data" => {message: "Hello"}.to_json}.to_json)
+
         socket.messages.size.should eq(0)
 
-        Cable::Logger.messages.size.should eq(1)
+        # we check only the first that is the one we care about, the others make no sense to our test
         Cable::Logger.messages[0].should eq("An unauthorized connection attempt was rejected")
         socket.closed?.should be_truthy
       end
@@ -274,6 +296,7 @@ private class DummySocket < HTTP::WebSocket
   getter messages : Array(String) = Array(String).new
 
   def send(message)
+    return if closed?
     @messages << message
   end
 end
