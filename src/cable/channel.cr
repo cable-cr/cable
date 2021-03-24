@@ -13,7 +13,15 @@ module Cable
     getter connection
     getter stream_identifier : String?
 
-    def initialize(@connection : Cable::Connection, @identifier : String, @params : Hash(String, Cable::Payload::RESULT))
+    def initialize(@connection : Cable::Connection, @identifier : String, @params : Hash(String, Cable::Payload::RESULT), @reject_subscription : Bool = false)
+    end
+
+    def reject
+      @reject_subscription = true
+    end
+
+    def subscription_rejected?
+      @reject_subscription
     end
 
     def subscribed
@@ -39,8 +47,6 @@ module Cable
 
     def stream_from(stream_identifier)
       @stream_identifier = stream_identifier
-      Cable.server.subscribe_channel(channel: self, identifier: stream_identifier)
-      Cable::Logger.info "#{self.class.to_s} is streaming from #{stream_identifier}"
     end
 
     def self.broadcast_to(channel : String, message : JSON::Any)

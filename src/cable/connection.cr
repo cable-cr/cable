@@ -102,7 +102,7 @@ module Cable
       return message(payload) if payload.command == "message"
     end
 
-    def subscribe(payload)
+    def subscribe(payload : Cable::Payload)
       channel = Cable::Channel::CHANNELS[payload.channel].new(
         connection: self,
         identifier: payload.identifier,
@@ -110,13 +110,20 @@ module Cable
       )
       Connection::CHANNELS[connection_identifier] ||= {} of String => Cable::Channel
       Connection::CHANNELS[connection_identifier][payload.identifier] = channel
-      # Cable.server.subscribe_channel(channel: channel, identifier: payload.identifier)
       channel.subscribed
+
+      return reject(channel) if channel.subscription_rejected?
+        
+      if stream_identifier = channel.stream_identifier
+        Cable.server.subscribe_channel(channel: channel, identifier: stream_identifier)
+        Cable::Logger.info "#{channel.class.to_s} is streaming from #{stream_identifier}"
+      end
+
       Cable::Logger.info "#{payload.channel} is transmitting the subscription confirmation"
       socket.send({type: "confirm_subscription", identifier: payload.identifier}.to_json)
     end
 
-    def unsubscribe(payload)
+    def unsubscribe(payload : Cable::Payload)
       if channel = Connection::CHANNELS[connection_identifier].delete(payload.identifier)
         channel.unsubscribed
         Cable::Logger.info "#{payload.channel} is transmitting the unsubscribe confirmation"
@@ -124,7 +131,13 @@ module Cable
       end
     end
 
-    def message(payload)
+    def reject(channel : Cable::Channel)
+      Connection::CHANNELS[connection_identifier].delete(channel.identifier)
+      Cable::Logger.info "#{channel.class.to_s} is transmitting the subscription rejection"
+      socket.send({type: "reject_subscription", identifier: channel.identifier}.to_json)
+    end
+
+    def message(payload : Cable::Payload)
       if Connection::CHANNELS[connection_identifier].has_key?(payload.identifier)
         channel = Connection::CHANNELS[connection_identifier][payload.identifier]
         if payload.action?

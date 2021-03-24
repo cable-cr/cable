@@ -268,6 +268,36 @@ describe Cable::Connection do
       end
     end
   end
+
+  describe "when channel rejects a connection" do
+    it "does not send any message to that connection related to the channel" do
+      connect do |connection, socket|
+        connection.receive({"command" => "subscribe", "identifier" => { channel: "ChatChannel", room: "1" }.to_json}.to_json)
+        connection.receive({"command" => "subscribe", "identifier" => { channel: "RejectionChannel" }.to_json}.to_json)
+        json_message = JSON.parse(%({"foo": "bar"}))
+        ChatChannel.broadcast_to(channel: "chat_1", message: json_message)
+
+        json_message = JSON.parse(%({"foo": "bar"}))
+        RejectionChannel.broadcast_to(channel: "rejection", message: json_message)
+        sleep 0.001
+
+        # Even after broadcasting to Rejection channel, we can check the socket didn't receive it
+        socket.messages.size.should eq(3)
+        socket.messages[0].should eq({"type" => "confirm_subscription", "identifier" => { channel: "ChatChannel", room: "1" }.to_json}.to_json)
+        socket.messages[1].should eq({"type" => "reject_subscription", "identifier" => { channel: "RejectionChannel" }.to_json}.to_json)
+        socket.messages[2].should eq({"identifier" => { channel: "ChatChannel", room: "1" }.to_json, "message" => {"foo" => "bar"}}.to_json)
+
+        Cable::Logger.messages.size.should eq(6)
+        Cable::Logger.messages[0].should eq("ChatChannel is streaming from chat_1")
+        Cable::Logger.messages[1].should eq("ChatChannel is transmitting the subscription confirmation")
+        Cable::Logger.messages[2].should eq("RejectionChannel is transmitting the subscription rejection")
+        Cable::Logger.messages[3].should eq("[ActionCable] Broadcasting to chat_1: {\"foo\" => \"bar\"}")
+        # and here we can confirm the message was broadcasted
+        Cable::Logger.messages[4].should eq("[ActionCable] Broadcasting to rejection: {\"foo\" => \"bar\"}")
+        Cable::Logger.messages[5].should eq("ChatChannel transmitting {\"foo\" => \"bar\"} (via streamed from chat_1)")
+      end
+    end
+  end
 end
 
 def builds_request(token : String)
