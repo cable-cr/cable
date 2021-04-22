@@ -113,7 +113,7 @@ module Cable
       channel.subscribed
 
       return reject(channel) if channel.subscription_rejected?
-        
+
       if stream_identifier = channel.stream_identifier
         Cable.server.subscribe_channel(channel: channel, identifier: stream_identifier)
         Cable::Logger.info "#{channel.class.to_s} is streaming from #{stream_identifier}"

@@ -9,11 +9,11 @@ describe Cable::Connection do
   describe "#subscribe" do
     it "accepts" do
       connect do |connection, socket|
-        connection.receive({"command" => "subscribe", "identifier" => { channel: "ChatChannel", room: "1" }.to_json}.to_json)
+        connection.receive({"command" => "subscribe", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
         sleep 0.001
 
         socket.messages.size.should eq(1)
-        socket.messages[0].should eq({"type" => "confirm_subscription", "identifier" => { channel: "ChatChannel", room: "1" }.to_json}.to_json)
+        socket.messages[0].should eq({"type" => "confirm_subscription", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
 
         Cable::Logger.messages.size.should eq(2)
         Cable::Logger.messages[0].should eq("ChatChannel is streaming from chat_1")
@@ -23,11 +23,11 @@ describe Cable::Connection do
 
     it "accepts without params hash key" do
       connect do |connection, socket|
-        connection.receive({"command" => "subscribe", "identifier" => { channel: "ChatChannel", room: "1" }.to_json}.to_json)
+        connection.receive({"command" => "subscribe", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
         sleep 0.001
 
         socket.messages.size.should eq(1)
-        socket.messages[0].should eq({"type" => "confirm_subscription", "identifier" => { channel: "ChatChannel", room: "1" }.to_json}.to_json)
+        socket.messages[0].should eq({"type" => "confirm_subscription", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
 
         Cable::Logger.messages.size.should eq(2)
         Cable::Logger.messages[0].should eq("ChatChannel is streaming from chat_1")
@@ -37,11 +37,11 @@ describe Cable::Connection do
 
     it "accepts with nested hash" do
       connect do |connection, socket|
-        connection.receive({"command" => "subscribe", "identifier" => { channel: "ChatChannel", room: "1", person: { name: "Foo", age: 32, boom: "boom" }}.to_json}.to_json)
+        connection.receive({"command" => "subscribe", "identifier" => {channel: "ChatChannel", room: "1", person: {name: "Foo", age: 32, boom: "boom"}}.to_json}.to_json)
         sleep 0.001
 
         socket.messages.size.should eq(1)
-        socket.messages[0].should eq({"type" => "confirm_subscription", "identifier" => { channel: "ChatChannel", room: "1", person: { name: "Foo", age: 32, boom: "boom" }}.to_json}.to_json)
+        socket.messages[0].should eq({"type" => "confirm_subscription", "identifier" => {channel: "ChatChannel", room: "1", person: {name: "Foo", age: 32, boom: "boom"}}.to_json}.to_json)
 
         Cable::Logger.messages.size.should eq(2)
         Cable::Logger.messages[0].should eq("ChatChannel is streaming from chat_1")
@@ -51,11 +51,11 @@ describe Cable::Connection do
 
     it "accepts without auth token" do
       connect(connection_class: ConnectionNoTokenTest, token: nil) do |connection, socket|
-        connection.receive({"command" => "subscribe", "identifier" => { channel: "ChatChannel", room: "1", person: { name: "Celso", age: 32, boom: "boom" }}.to_json}.to_json)
+        connection.receive({"command" => "subscribe", "identifier" => {channel: "ChatChannel", room: "1", person: {name: "Celso", age: 32, boom: "boom"}}.to_json}.to_json)
         sleep 0.001
 
         socket.messages.size.should eq(1)
-        socket.messages[0].should eq({"type" => "confirm_subscription", "identifier" => { channel: "ChatChannel", room: "1", person: { name: "Celso", age: 32, boom: "boom" }}.to_json}.to_json)
+        socket.messages[0].should eq({"type" => "confirm_subscription", "identifier" => {channel: "ChatChannel", room: "1", person: {name: "Celso", age: 32, boom: "boom"}}.to_json}.to_json)
 
         Cable::Logger.messages.size.should eq(2)
         Cable::Logger.messages[0].should eq("ChatChannel is streaming from chat_1")
@@ -67,13 +67,13 @@ describe Cable::Connection do
   describe "#unsubscribe" do
     it "unsubscribes from a channel" do
       connect do |connection, socket|
-        connection.receive({"command" => "subscribe", "identifier" => { channel: "ChatChannel", room: "1" }.to_json}.to_json)
-        connection.receive({"command" => "unsubscribe", "identifier" => { channel: "ChatChannel", room: "1" }.to_json}.to_json)
+        connection.receive({"command" => "subscribe", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
+        connection.receive({"command" => "unsubscribe", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
         sleep 0.001
 
         socket.messages.size.should eq(2)
-        socket.messages[0].should eq({"type" => "confirm_subscription", "identifier" => { channel: "ChatChannel", room: "1" }.to_json}.to_json)
-        socket.messages[1].should eq({"type" => "confirm_unsubscription", "identifier" => { channel: "ChatChannel", room: "1" }.to_json}.to_json)
+        socket.messages[0].should eq({"type" => "confirm_subscription", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
+        socket.messages[1].should eq({"type" => "confirm_unsubscription", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
 
         Cable::Logger.messages.size.should eq(3)
         Cable::Logger.messages[0].should eq("ChatChannel is streaming from chat_1")
@@ -104,7 +104,7 @@ describe Cable::Connection do
     it "rejects the unauthorized connection (and does not receive any message)" do
       connect(UnauthorizedConnectionTest) do |connection, socket|
         connection.receive({"command" => "subscribe", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
-        connection.receive({"command" => "message", "identifier" => { channel: "ChatChannel", room: "1" }.to_json, "data" => {message: "Hello"}.to_json}.to_json)
+        connection.receive({"command" => "message", "identifier" => {channel: "ChatChannel", room: "1"}.to_json, "data" => {message: "Hello"}.to_json}.to_json)
 
         socket.messages.size.should eq(0)
 
@@ -119,11 +119,11 @@ describe Cable::Connection do
     it "ignore a message for a non valid channel" do
       connect do |connection, socket|
         connection.receive({"command" => "subscribe", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
-        connection.receive({"command" => "message", "identifier" => { channel: "UnknownChannel", room: "1" }.to_json, "data" => { invite_id: "3", action: "invite" }.to_json}.to_json)
+        connection.receive({"command" => "message", "identifier" => {channel: "UnknownChannel", room: "1"}.to_json, "data" => {invite_id: "3", action: "invite"}.to_json}.to_json)
         sleep 0.001
 
         socket.messages.size.should eq(1)
-        socket.messages[0].should eq({"type" => "confirm_subscription", "identifier" => { channel: "ChatChannel", room: "1" }.to_json}.to_json)
+        socket.messages[0].should eq({"type" => "confirm_subscription", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
 
         Cable::Logger.messages.size.should eq(2)
         Cable::Logger.messages[0].should eq("ChatChannel is streaming from chat_1")
@@ -133,13 +133,13 @@ describe Cable::Connection do
 
     it "receives a message and send to Channel#receive" do
       connect do |connection, socket|
-        connection.receive({"command" => "subscribe", "identifier" => { channel: "ChatChannel", room: "1" }.to_json}.to_json)
-        connection.receive({"command" => "message", "identifier" => { channel: "ChatChannel", room: "1" }.to_json, "data" => {message: "Hello"}.to_json}.to_json)
+        connection.receive({"command" => "subscribe", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
+        connection.receive({"command" => "message", "identifier" => {channel: "ChatChannel", room: "1"}.to_json, "data" => {message: "Hello"}.to_json}.to_json)
         sleep 0.001
 
         socket.messages.size.should eq(2)
-        socket.messages[0].should eq({"type" => "confirm_subscription", "identifier" => { channel: "ChatChannel", room: "1" }.to_json}.to_json)
-        socket.messages[1].should eq({"identifier" => { channel: "ChatChannel", room: "1" }.to_json, "message" => {message: "Hello", current_user: "98"}}.to_json)
+        socket.messages[0].should eq({"type" => "confirm_subscription", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
+        socket.messages[1].should eq({"identifier" => {channel: "ChatChannel", room: "1"}.to_json, "message" => {message: "Hello", current_user: "98"}}.to_json)
 
         Cable::Logger.messages.size.should eq(5)
         Cable::Logger.messages[0].should eq("ChatChannel is streaming from chat_1")
@@ -152,13 +152,13 @@ describe Cable::Connection do
 
     it "receives a message with an action key and sends to Channel#Perform" do
       connect do |connection, socket|
-        connection.receive({"command" => "subscribe", "identifier" => { channel: "ChatChannel", room: "1" }.to_json}.to_json)
-        connection.receive({"command" => "message", "identifier" => { channel: "ChatChannel", room: "1" }.to_json, "data" => { invite_id: "4", action: "invite" }.to_json}.to_json)
+        connection.receive({"command" => "subscribe", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
+        connection.receive({"command" => "message", "identifier" => {channel: "ChatChannel", room: "1"}.to_json, "data" => {invite_id: "4", action: "invite"}.to_json}.to_json)
         sleep 0.001
 
         socket.messages.size.should eq(2)
-        socket.messages[0].should eq({"type" => "confirm_subscription", "identifier" => { channel: "ChatChannel", room: "1" }.to_json}.to_json)
-        socket.messages[1].should eq({"identifier" => { channel: "ChatChannel", room: "1" }.to_json, "message" => {"performed" => "invite", "params" => "4"}}.to_json)
+        socket.messages[0].should eq({"type" => "confirm_subscription", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
+        socket.messages[1].should eq({"identifier" => {channel: "ChatChannel", room: "1"}.to_json, "message" => {"performed" => "invite", "params" => "4"}}.to_json)
 
         Cable::Logger.messages.size.should eq(5)
         Cable::Logger.messages[0].should eq("ChatChannel is streaming from chat_1")
@@ -173,12 +173,12 @@ describe Cable::Connection do
   describe "#broadcast_to" do
     it "sends the broadcasted message" do
       connect do |connection, socket|
-        connection.receive({"command" => "subscribe", "identifier" => { channel: "ChatChannel", room: "1" }.to_json}.to_json)
+        connection.receive({"command" => "subscribe", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
         sleep 0.001
-        connection.broadcast_to(ConnectionTest::CHANNELS[connection.connection_identifier][{ channel: "ChatChannel", room: "1" }.to_json], {hello: "Broadcast!"}.to_json)
+        connection.broadcast_to(ConnectionTest::CHANNELS[connection.connection_identifier][{channel: "ChatChannel", room: "1"}.to_json], {hello: "Broadcast!"}.to_json)
 
         socket.messages.size.should eq(1)
-        socket.messages[0].should eq({"type" => "confirm_subscription", "identifier" => { channel: "ChatChannel", room: "1" }.to_json}.to_json)
+        socket.messages[0].should eq({"type" => "confirm_subscription", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
 
         Cable::Logger.messages.size.should eq(2)
         Cable::Logger.messages[0].should eq("ChatChannel is streaming from chat_1")
@@ -190,13 +190,13 @@ describe Cable::Connection do
   describe ".broadcast_to" do
     it "sends the broadcasted message" do
       connect do |connection, socket|
-        connection.receive({"command" => "subscribe", "identifier" => { channel: "ChatChannel", room: "1" }.to_json}.to_json)
+        connection.receive({"command" => "subscribe", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
         ConnectionTest.broadcast_to("chat_1", {hello: "Broadcast!"}.to_json)
         sleep 0.001
 
         socket.messages.size.should eq(2)
-        socket.messages[0].should eq({"type" => "confirm_subscription", "identifier" => { channel: "ChatChannel", room: "1" }.to_json}.to_json)
-        socket.messages[1].should eq({identifier: { channel: "ChatChannel", room: "1" }.to_json, message: {hello: "Broadcast!"}}.to_json)
+        socket.messages[0].should eq({"type" => "confirm_subscription", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
+        socket.messages[1].should eq({identifier: {channel: "ChatChannel", room: "1"}.to_json, message: {hello: "Broadcast!"}}.to_json)
 
         Cable::Logger.messages.size.should eq(3)
         Cable::Logger.messages[0].should eq("ChatChannel is streaming from chat_1")
@@ -210,14 +210,14 @@ describe Cable::Connection do
     describe "as string" do
       it "receives correctly" do
         connect do |connection, socket|
-          connection.receive({"command" => "subscribe", "identifier" => { channel: "ChatChannel", room: "1" }.to_json}.to_json)
+          connection.receive({"command" => "subscribe", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
           ChatChannel.broadcast_to(channel: "chat_1", message: "<turbo-stream></turbo-stream>")
           sleep 0.001
-  
+
           socket.messages.size.should eq(2)
-          socket.messages[0].should eq({"type" => "confirm_subscription", "identifier" => { channel: "ChatChannel", room: "1" }.to_json}.to_json)
-          socket.messages[1].should eq({"identifier" => { channel: "ChatChannel", room: "1" }.to_json, "message" => "<turbo-stream></turbo-stream>"}.to_json)
-  
+          socket.messages[0].should eq({"type" => "confirm_subscription", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
+          socket.messages[1].should eq({"identifier" => {channel: "ChatChannel", room: "1"}.to_json, "message" => "<turbo-stream></turbo-stream>"}.to_json)
+
           Cable::Logger.messages.size.should eq(4)
           Cable::Logger.messages[0].should eq("ChatChannel is streaming from chat_1")
           Cable::Logger.messages[1].should eq("ChatChannel is transmitting the subscription confirmation")
@@ -230,14 +230,14 @@ describe Cable::Connection do
     describe "as Hash(String, String)" do
       it "receives correctly" do
         connect do |connection, socket|
-          connection.receive({"command" => "subscribe", "identifier" => { channel: "ChatChannel", room: "1" }.to_json}.to_json)
+          connection.receive({"command" => "subscribe", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
           ChatChannel.broadcast_to(channel: "chat_1", message: {"foo" => "bar"})
           sleep 0.001
-  
+
           socket.messages.size.should eq(2)
-          socket.messages[0].should eq({"type" => "confirm_subscription", "identifier" => { channel: "ChatChannel", room: "1" }.to_json}.to_json)
-          socket.messages[1].should eq({"identifier" => { channel: "ChatChannel", room: "1" }.to_json, "message" => {"foo" => "bar"}}.to_json)
-  
+          socket.messages[0].should eq({"type" => "confirm_subscription", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
+          socket.messages[1].should eq({"identifier" => {channel: "ChatChannel", room: "1"}.to_json, "message" => {"foo" => "bar"}}.to_json)
+
           Cable::Logger.messages.size.should eq(4)
           Cable::Logger.messages[0].should eq("ChatChannel is streaming from chat_1")
           Cable::Logger.messages[1].should eq("ChatChannel is transmitting the subscription confirmation")
@@ -250,15 +250,15 @@ describe Cable::Connection do
     describe "as JSON::Any" do
       it "receives correctly" do
         connect do |connection, socket|
-          connection.receive({"command" => "subscribe", "identifier" => { channel: "ChatChannel", room: "1" }.to_json}.to_json)
+          connection.receive({"command" => "subscribe", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
           json_message = JSON.parse(%({"foo": "bar"}))
           ChatChannel.broadcast_to(channel: "chat_1", message: json_message)
           sleep 0.001
-  
+
           socket.messages.size.should eq(2)
-          socket.messages[0].should eq({"type" => "confirm_subscription", "identifier" => { channel: "ChatChannel", room: "1" }.to_json}.to_json)
-          socket.messages[1].should eq({"identifier" => { channel: "ChatChannel", room: "1" }.to_json, "message" => {"foo" => "bar"}}.to_json)
-  
+          socket.messages[0].should eq({"type" => "confirm_subscription", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
+          socket.messages[1].should eq({"identifier" => {channel: "ChatChannel", room: "1"}.to_json, "message" => {"foo" => "bar"}}.to_json)
+
           Cable::Logger.messages.size.should eq(4)
           Cable::Logger.messages[0].should eq("ChatChannel is streaming from chat_1")
           Cable::Logger.messages[1].should eq("ChatChannel is transmitting the subscription confirmation")
@@ -272,8 +272,8 @@ describe Cable::Connection do
   describe "when channel rejects a connection" do
     it "does not send any message to that connection related to the channel" do
       connect do |connection, socket|
-        connection.receive({"command" => "subscribe", "identifier" => { channel: "ChatChannel", room: "1" }.to_json}.to_json)
-        connection.receive({"command" => "subscribe", "identifier" => { channel: "RejectionChannel" }.to_json}.to_json)
+        connection.receive({"command" => "subscribe", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
+        connection.receive({"command" => "subscribe", "identifier" => {channel: "RejectionChannel"}.to_json}.to_json)
         json_message = JSON.parse(%({"foo": "bar"}))
         ChatChannel.broadcast_to(channel: "chat_1", message: json_message)
 
@@ -283,9 +283,9 @@ describe Cable::Connection do
 
         # Even after broadcasting to Rejection channel, we can check the socket didn't receive it
         socket.messages.size.should eq(3)
-        socket.messages[0].should eq({"type" => "confirm_subscription", "identifier" => { channel: "ChatChannel", room: "1" }.to_json}.to_json)
-        socket.messages[1].should eq({"type" => "reject_subscription", "identifier" => { channel: "RejectionChannel" }.to_json}.to_json)
-        socket.messages[2].should eq({"identifier" => { channel: "ChatChannel", room: "1" }.to_json, "message" => {"foo" => "bar"}}.to_json)
+        socket.messages[0].should eq({"type" => "confirm_subscription", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
+        socket.messages[1].should eq({"type" => "reject_subscription", "identifier" => {channel: "RejectionChannel"}.to_json}.to_json)
+        socket.messages[2].should eq({"identifier" => {channel: "ChatChannel", room: "1"}.to_json, "message" => {"foo" => "bar"}}.to_json)
 
         Cable::Logger.messages.size.should eq(6)
         Cable::Logger.messages[0].should eq("ChatChannel is streaming from chat_1")

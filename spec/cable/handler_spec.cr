@@ -22,7 +22,7 @@ describe Cable::Handler do
             str.match(/\{\"type\":\"ping\",\"message\":[0-9]{10}\}/).should be_truthy
             ws2.close
           else
-            str.should eq({ type: "welcome"}.to_json)
+            str.should eq({type: "welcome"}.to_json)
             initialized = true
           end
         end
@@ -40,8 +40,8 @@ describe Cable::Handler do
       ws2 = HTTP::WebSocket.new("ws://#{listen_address}/updates?test_token=1")
 
       messages = [
-        { type: "welcome"}.to_json,
-        { type: "confirm_subscription", identifier: { channel: "ChatChannel", room: "1" }.to_json }.to_json,
+        {type: "welcome"}.to_json,
+        {type: "confirm_subscription", identifier: {channel: "ChatChannel", room: "1"}.to_json}.to_json,
       ]
       seq = 0
       ws2.on_message do |str|
@@ -49,7 +49,7 @@ describe Cable::Handler do
         seq += 1
         ws2.close if seq >= messages.size
       end
-      ws2.send({"command" => "subscribe", "identifier" => { channel: "ChatChannel", room: "1"}.to_json }.to_json)
+      ws2.send({"command" => "subscribe", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
 
       ws2.run
     end
@@ -63,9 +63,9 @@ describe Cable::Handler do
       ws2 = HTTP::WebSocket.new("ws://#{listen_address}/updates?test_token=1")
 
       messages = [
-        { type: "welcome"}.to_json,
-        { type: "confirm_subscription", identifier: { channel: "ChatChannel", room: "1" }.to_json }.to_json,
-        { identifier: { channel: "ChatChannel", room: "1", }.to_json, message: { message: "test", current_user: "1" }}.to_json
+        {type: "welcome"}.to_json,
+        {type: "confirm_subscription", identifier: {channel: "ChatChannel", room: "1"}.to_json}.to_json,
+        {identifier: {channel: "ChatChannel", room: "1"}.to_json, message: {message: "test", current_user: "1"}}.to_json,
       ]
       seq = 0
       ws2.on_message do |str|
@@ -74,9 +74,9 @@ describe Cable::Handler do
         ws2.close if seq >= messages.size
       end
       # App.cable.subscriptions.create({ channel: "ChatChannel", params: {room: "1"}});
-      ws2.send({"command" => "subscribe", "identifier" => { channel: "ChatChannel", room: "1"}.to_json }.to_json)
+      ws2.send({"command" => "subscribe", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
       # App.cable.subscriptions.subscriptions[0].send({message: "test"})
-      ws2.send({"command" => "message", "identifier" => { channel: "ChatChannel", room: "1"}.to_json, "data" => { message: "test"}.to_json }.to_json)
+      ws2.send({"command" => "message", "identifier" => {channel: "ChatChannel", room: "1"}.to_json, "data" => {message: "test"}.to_json}.to_json)
 
       ws2.run
     end
@@ -91,9 +91,9 @@ describe Cable::Handler do
       ws2 = HTTP::WebSocket.new("ws://#{listen_address}/updates?test_token=1")
 
       messages = [
-        { type: "welcome" }.to_json,
-        { type: "confirm_subscription", identifier: { channel: "ChatChannel", room: "1" }.to_json }.to_json,
-        { identifier: { channel: "ChatChannel", room: "1"}.to_json, message: { message: "from Ruby!", current_user: "1" }}.to_json
+        {type: "welcome"}.to_json,
+        {type: "confirm_subscription", identifier: {channel: "ChatChannel", room: "1"}.to_json}.to_json,
+        {identifier: {channel: "ChatChannel", room: "1"}.to_json, message: {message: "from Ruby!", current_user: "1"}}.to_json,
       ]
       seq = 0
       ws2.on_message do |str|
@@ -110,7 +110,7 @@ describe Cable::Handler do
         ws2.close if seq >= messages.size
       end
       # App.cable.subscriptions.create({ channel: "ChatChannel", params: {room: "1"}});
-      ws2.send({command: "subscribe", identifier: { channel: "ChatChannel", room: "1" }.to_json}.to_json)
+      ws2.send({command: "subscribe", identifier: {channel: "ChatChannel", room: "1"}.to_json}.to_json)
       ws2.run
     end
   end
@@ -123,9 +123,9 @@ describe Cable::Handler do
       ws2 = HTTP::WebSocket.new("ws://#{listen_address}/updates?test_token=1")
 
       messages = [
-        { type: "welcome" }.to_json,
-        { type: "confirm_subscription", identifier: { channel: "ChatChannel", room: "1" }.to_json }.to_json,
-        { identifier: { channel: "ChatChannel", room: "1"}.to_json, message: { performed: "invite", params: "3" } }.to_json
+        {type: "welcome"}.to_json,
+        {type: "confirm_subscription", identifier: {channel: "ChatChannel", room: "1"}.to_json}.to_json,
+        {identifier: {channel: "ChatChannel", room: "1"}.to_json, message: {performed: "invite", params: "3"}}.to_json,
       ]
       seq = 0
       ws2.on_message do |str|
@@ -134,9 +134,9 @@ describe Cable::Handler do
         ws2.close if seq >= messages.size
       end
       # App.cable.subscriptions.create({ channel: "ChatChannel", params: {room: "1"}});
-      ws2.send({command: "subscribe", identifier: { channel: "ChatChannel", room: "1" }.to_json }.to_json)
+      ws2.send({command: "subscribe", identifier: {channel: "ChatChannel", room: "1"}.to_json}.to_json)
       # App.cable.subscriptions.subscriptions[0].perform("invite", {invite_id: "3"});
-      ws2.send({command: "message", identifier: { channel: "ChatChannel", room: "1" }.to_json, data: { invite_id: "3", action: "invite" }.to_json }.to_json)
+      ws2.send({command: "message", identifier: {channel: "ChatChannel", room: "1"}.to_json, data: {invite_id: "3", action: "invite"}.to_json}.to_json)
       ws2.run
     end
   end
