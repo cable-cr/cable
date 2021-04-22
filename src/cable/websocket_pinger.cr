@@ -1,7 +1,9 @@
-require "schedule"
+require "tasker"
 
 module Cable
   class WebsocketPinger
+    class PingStoppedException < Exception; end
+
     @@seconds : Int32 | Float64 = 3
 
     def self.run_every(value : Int32 | Float64, &block)
@@ -21,10 +23,9 @@ module Cable
     end
 
     def initialize(@socket : HTTP::WebSocket)
-      runner = Schedule::Runner.new
-      runner.every(Cable::WebsocketPinger.seconds.seconds) do
-        raise Schedule::StopException.new("Stoped") if socket.closed?
-        socket.send({type: "ping", message: Time.utc.to_unix}.to_json)
+      Tasker.every(Cable::WebsocketPinger.seconds.seconds) do
+        raise PingStoppedException.new("Stoped") if @socket.closed?
+        @socket.send({type: "ping", message: Time.utc.to_unix}.to_json)
       end
     end
   end
