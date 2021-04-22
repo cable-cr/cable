@@ -288,13 +288,13 @@ describe Cable::Connection do
         socket.messages[2].should eq({"identifier" => {channel: "ChatChannel", room: "1"}.to_json, "message" => {"foo" => "bar"}}.to_json)
 
         Cable::Logger.messages.size.should eq(6)
-        Cable::Logger.messages[0].should eq("ChatChannel is streaming from chat_1")
-        Cable::Logger.messages[1].should eq("ChatChannel is transmitting the subscription confirmation")
-        Cable::Logger.messages[2].should eq("RejectionChannel is transmitting the subscription rejection")
-        Cable::Logger.messages[3].should eq("[ActionCable] Broadcasting to chat_1: {\"foo\" => \"bar\"}")
+        Cable::Logger.messages.should contain("ChatChannel is streaming from chat_1")
+        Cable::Logger.messages.should contain("ChatChannel is transmitting the subscription confirmation")
+        Cable::Logger.messages.should contain("RejectionChannel is transmitting the subscription rejection")
+        Cable::Logger.messages.should contain("[ActionCable] Broadcasting to chat_1: {\"foo\" => \"bar\"}")
         # and here we can confirm the message was broadcasted
-        Cable::Logger.messages[4].should eq("[ActionCable] Broadcasting to rejection: {\"foo\" => \"bar\"}")
-        Cable::Logger.messages[5].should eq("ChatChannel transmitting {\"foo\" => \"bar\"} (via streamed from chat_1)")
+        Cable::Logger.messages.should contain("ChatChannel transmitting {\"foo\" => \"bar\"} (via streamed from chat_1)")
+        Cable::Logger.messages.should contain("[ActionCable] Broadcasting to rejection: {\"foo\" => \"bar\"}")
       end
     end
   end
