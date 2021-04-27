@@ -126,7 +126,6 @@ module Cable
     def unsubscribe(payload : Cable::Payload)
       if channel = Connection::CHANNELS[connection_identifier].delete(payload.identifier)
         channel.close
-        channel.unsubscribed
         Cable::Logger.info "#{payload.channel} is transmitting the unsubscribe confirmation"
         socket.send({type: "confirm_unsubscription", identifier: payload.identifier}.to_json)
       end
