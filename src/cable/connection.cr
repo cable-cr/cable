@@ -113,7 +113,7 @@ module Cable
       channel.subscribed
 
       return reject(channel) if channel.subscription_rejected?
-        
+
       if stream_identifier = channel.stream_identifier
         Cable.server.subscribe_channel(channel: channel, identifier: stream_identifier)
         Cable::Logger.info "#{channel.class.to_s} is streaming from #{stream_identifier}"
@@ -125,6 +125,7 @@ module Cable
 
     def unsubscribe(payload : Cable::Payload)
       if channel = Connection::CHANNELS[connection_identifier].delete(payload.identifier)
+        channel.close
         channel.unsubscribed
         Cable::Logger.info "#{payload.channel} is transmitting the unsubscribe confirmation"
         socket.send({type: "confirm_unsubscription", identifier: payload.identifier}.to_json)
