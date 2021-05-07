@@ -62,7 +62,6 @@ module Cable
 
           @channels.delete(identifier)
         end
-
       else
         request = Redis::Request.new
         request << "unsubscribe"
