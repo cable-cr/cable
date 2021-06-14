@@ -22,7 +22,7 @@ It's like [ActionCable](https://guides.rubyonrails.org/action_cable_overview.htm
 require "cable"
 ```
 
-### With Lucky
+### Lucky example
 
 On your `src/app_server.cr` add the `Cable::Handler` before `Lucky::RouteHandler`
 
@@ -64,13 +64,12 @@ module ApplicationCable
     owned_by current_user : User
 
     def connect
-      # Implement your Auth logic, something like
-      payload = JWT.decode(token, Lucky::Server.settings.secret_key_base, JWT::Algorithm::HS256)
-      self.identifier = payload["id"].to_s
-      self.current_user = UserQuery.find(payload["id"])
-    rescue e : Avram::RecordNotFoundError
-       reject_unauthorized_connection
+      UserToken.decode_user_id(token.to_s).try do |user_id|
+        self.identifier = user_id.to_s
+        self.current_user =  UserQuery.find(user_id)
+      end
     end
+
   end
 end
 ```
@@ -102,8 +101,10 @@ class ChatChannel < ApplicationCable::Channel
 
   def perform(action, action_params)
     user = UserQuery.new.find(connection.identifier)
-    user.away if action == "away"
-    user.status(action_params["status"]) if action == "status"
+    # Perform action on your user object. For example, you could manage
+    # its status by adding some .away and .status methods on it like below
+    # user.away if action == "away"
+    # user.status(action_params["status"]) if action == "status"
     ChatChannel.broadcast_to("chat_#{params["room"]}", {
       "user"      => user.email,
       "performed" => action.to_s,
@@ -113,7 +114,9 @@ class ChatChannel < ApplicationCable::Channel
   def unsubscribed
     # You can do any action after client closes connection
     user = UserQuery.new.find(connection.identifier)
-    user.logout
+
+    # You could for example call any method on your user like a .logout one
+    # user.logout
   end
 end
 ```
