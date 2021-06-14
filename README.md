@@ -63,11 +63,16 @@ module ApplicationCable
     # `owned_by` instruction
     owned_by current_user : User
 
+
     def connect
-      # Implement your Auth logic, something like
-      payload = JWT.decode(token, Lucky::Server.settings.secret_key_base, JWT::Algorithm::HS256)
-      self.identifier = payload["id"].to_s
-      self.current_user = UserQuery.find(payload["id"])
+      if t = token
+        # Implement your Auth logic, something like
+          payload, _header = JWT.decode(t, Lucky::Server.settings.secret_key_base, JWT::Algorithm::HS256)
+        self.identifier = payload["id"].to_s
+        self.current_user = UserQuery.find(payload["id"].to_s)
+      else
+         reject_unauthorized_connection
+      end
     rescue e : Avram::RecordNotFoundError
        reject_unauthorized_connection
     end
