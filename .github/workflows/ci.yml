@@ -1,0 +1,42 @@
+name: Cable-CR CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: "*"
+
+jobs:
+  specs:
+    strategy:
+      fail-fast: false
+      matrix:
+        shard_file:
+          - shard.yml
+        crystal_version:
+          - 0.36.1
+          - 1.0.0
+    runs-on: ubuntu-latest
+    container: crystallang/crystal:${{ matrix.crystal_version }}-alpine
+    services:
+      redis:
+        image: redis
+        ports:
+          - 6379:6379
+        # Set health checks to wait until redis has started
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v2
+      - name: Cache Crystal
+        uses: actions/cache@v2.1.4
+        with:
+          path: ~/.cache/crystal
+          key: ${{ runner.os }}-crystal
+      - name: Install shards
+        run: shards install
+      - name: Run tests
+        run: crystal spec
