@@ -8,6 +8,8 @@ on:
 
 jobs:
   specs:
+    env:
+      REDIS_URL: redis://redis:6379
     strategy:
       fail-fast: false
       matrix:
