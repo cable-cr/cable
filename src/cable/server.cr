@@ -129,7 +129,7 @@ module Cable
 
     private def process_subscribed_messages
       server = self
-      spawn do
+      spawn(name: "Cable::Server - process_subscribed_messages") do
         while received = fiber_channel.receive
           channel = received[0]
           message = received[1]
@@ -139,7 +139,7 @@ module Cable
     end
 
     private def subscribe
-      spawn do
+      spawn(name: "Cable::Server - subscribe") do
         redis_subscribe.subscribe("_internal") do |on|
           on.message do |channel, message|
             if channel == "_internal" && message == "debug"
