@@ -1,6 +1,6 @@
 # Cable
 
-[![Build Status](https://travis-ci.com/cable-cr/cable.svg?branch=master)](https://travis-ci.com/cable-cr/cable)
+![ci workflow](https://github.com/cable-cr/cable/actions/workflows/ci.yml/badge.svg)
 
 It's like [ActionCable](https://guides.rubyonrails.org/action_cable_overview.html) (100% compatible with JS Client), but you know, for Crystal
 
