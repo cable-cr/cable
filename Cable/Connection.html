@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Crystal Docs 0.35.1">
+<meta name="crystal_docs.project_version" content="0.1.0">
+<meta name="crystal_docs.project_name" content="cable">
+
+
+
+<link href="../css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../js/doc.js"></script>
+
+  <meta name="repository-name" content="cable">
+  <title>Cable::Connection - cable 0.1.0</title>
+  <script type="text/javascript">
+    CrystalDocs.base_path = "../";
+  </script>
+</head>
+<body>
+
+<svg class="hidden">
+  <symbol id="octicon-link" viewBox="0 0 16 16">
+    <path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path>
+  </symbol>
+</svg>
+<div class="sidebar">
+  <div class="sidebar-header">
+    <div class="search-box">
+      <input type="search" class="search-input" placeholder="Search..." spellcheck="false" aria-label="Search">
+    </div>
+
+    <div class="project-summary">
+      <h1 class="project-name">
+        <a href="../index.html">
+          cable
+        </a>
+      </h1>
+
+      <span class="project-version">
+        0.1.0
+      </span>
+    </div>
+  </div>
+
+  <div class="search-results hidden">
+    <ul class="search-list"></ul>
+  </div>
+
+  <div class="types-list">
+    <ul>
+  
+  <li class="parent open current" data-id="cable/Cable" data-name="cable">
+      <a href="../Cable.html">Cable</a>
+      
+        <ul>
+  
+  <li class="parent " data-id="cable/Cable/Channel" data-name="cable::channel">
+      <a href="../Cable/Channel.html">Channel</a>
+      
+        <ul>
+  
+  <li class=" " data-id="cable/Cable/Channel/CloseRedisFiber" data-name="cable::channel::closeredisfiber">
+      <a href="../Cable/Channel/CloseRedisFiber.html">CloseRedisFiber</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent open current" data-id="cable/Cable/Connection" data-name="cable::connection">
+      <a href="../Cable/Connection.html">Connection</a>
+      
+        <ul>
+  
+  <li class=" " data-id="cable/Cable/Connection/UnathorizedConnectionException" data-name="cable::connection::unathorizedconnectionexception">
+      <a href="../Cable/Connection/UnathorizedConnectionException.html">UnathorizedConnectionException</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="cable/Cable/HabitatSettings" data-name="cable::habitatsettings">
+      <a href="../Cable/HabitatSettings.html">HabitatSettings</a>
+      
+    </li>
+  
+  <li class=" " data-id="cable/Cable/Handler" data-name="cable::handler">
+      <a href="../Cable/Handler.html">Handler</a>
+      
+    </li>
+  
+  <li class=" " data-id="cable/Cable/Logger" data-name="cable::logger">
+      <a href="../Cable/Logger.html">Logger</a>
+      
+    </li>
+  
+  <li class="parent " data-id="cable/Cable/Payload" data-name="cable::payload">
+      <a href="../Cable/Payload.html">Payload</a>
+      
+        <ul>
+  
+  <li class=" " data-id="cable/Cable/Payload/PARAMS" data-name="cable::payload::params">
+      <a href="../Cable/Payload/PARAMS.html">PARAMS</a>
+      
+    </li>
+  
+  <li class=" " data-id="cable/Cable/Payload/RESULT" data-name="cable::payload::result">
+      <a href="../Cable/Payload/RESULT.html">RESULT</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="cable/Cable/Server" data-name="cable::server">
+      <a href="../Cable/Server.html">Server</a>
+      
+    </li>
+  
+  <li class="parent " data-id="cable/Cable/WebsocketPinger" data-name="cable::websocketpinger">
+      <a href="../Cable/WebsocketPinger.html">WebsocketPinger</a>
+      
+        <ul>
+  
+  <li class=" " data-id="cable/Cable/WebsocketPinger/PingStoppedException" data-name="cable::websocketpinger::pingstoppedexception">
+      <a href="../Cable/WebsocketPinger/PingStoppedException.html">PingStoppedException</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="cable/Redis" data-name="redis">
+      <a href="../Redis.html">Redis</a>
+      
+    </li>
+  
+</ul>
+
+  </div>
+</div>
+
+
+<div class="main-content">
+<h1 class="type-name">
+
+  <span class="kind">class</span> Cable::Connection
+
+</h1>
+
+
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../Cable/Connection.html">Cable::Connection</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2>
+    <a id="defined-in" class="anchor" href="#defined-in">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Defined in:
+  </h2>
+  
+
+
+
+  
+    <h2>
+      <a id="constant-summary" class="anchor" href="#constant-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+      Constant Summary
+    </h2>
+  
+  <dl>
+    
+      <dt class="entry-const" id="CHANNELS">
+        <strong>CHANNELS</strong> = <code>{} <span class="k">of</span> <span class="t">String</span> => <span class="t">Hash</span>(<span class="t">String</span>, <span class="t">Cable</span><span class="t">::</span><span class="t">Channel</span>)</code>
+      </dt>
+      
+    
+  </dl>
+
+
+
+  <h2>
+    <a id="constructors" class="anchor" href="#constructors">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Constructors
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#new(request:HTTP::Request,socket:HTTP::WebSocket)-class-method" class="signature"><strong>.new</strong>(request : HTTP::Request, socket : HTTP::WebSocket)</a>
+        
+      </li>
+    
+  </ul>
+
+
+
+  <h2>
+    <a id="class-method-summary" class="anchor" href="#class-method-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Class Method Summary
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#broadcast_to(channel:String,message:String)-class-method" class="signature"><strong>.broadcast_to</strong>(channel : String, message : String)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#build(request:HTTP::Request,socket:HTTP::WebSocket)-class-method" class="signature"><strong>.build</strong>(request : HTTP::Request, socket : HTTP::WebSocket)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#use_mock(mock,&)-class-method" class="signature"><strong>.use_mock</strong>(mock, &)</a>
+        
+      </li>
+    
+  </ul>
+
+
+
+  <h2>
+    <a id="instance-method-summary" class="anchor" href="#instance-method-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Summary
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#close-instance-method" class="signature"><strong>#close</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#connect-instance-method" class="signature"><strong>#connect</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#connection_identifier:String-instance-method" class="signature"><strong>#connection_identifier</strong> : String</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#id:String-instance-method" class="signature"><strong>#id</strong> : String</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#identifier-instance-method" class="signature"><strong>#identifier</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#internal_identifier:String-instance-method" class="signature"><strong>#internal_identifier</strong> : String</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#internal_identifier=(internal_identifier:String)-instance-method" class="signature"><strong>#internal_identifier=</strong>(internal_identifier : String)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#message(payload:Cable::Payload)-instance-method" class="signature"><strong>#message</strong>(payload : Cable::Payload)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#receive(message)-instance-method" class="signature"><strong>#receive</strong>(message)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#reject(channel:Cable::Channel)-instance-method" class="signature"><strong>#reject</strong>(channel : Cable::Channel)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#reject_unauthorized_connection-instance-method" class="signature"><strong>#reject_unauthorized_connection</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#socket:HTTP::WebSocket-instance-method" class="signature"><strong>#socket</strong> : HTTP::WebSocket</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#subscribe(payload:Cable::Payload)-instance-method" class="signature"><strong>#subscribe</strong>(payload : Cable::Payload)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#token:String?-instance-method" class="signature"><strong>#token</strong> : String?</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#unsubscribe(payload:Cable::Payload)-instance-method" class="signature"><strong>#unsubscribe</strong>(payload : Cable::Payload)</a>
+        
+      </li>
+    
+  </ul>
+
+
+
+  <h2>
+    <a id="macro-summary" class="anchor" href="#macro-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Macro Summary
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#identified_by(name)-macro" class="signature"><strong>identified_by</strong>(name)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#owned_by(type_definition)-macro" class="signature"><strong>owned_by</strong>(type_definition)</a>
+        
+      </li>
+    
+  </ul>
+
+
+
+<div class="methods-inherited">
+  
+    
+
+
+    
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+    
+
+
+  
+</div>
+
+
+  <h2>
+    <a id="constructor-detail" class="anchor" href="#constructor-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Constructor Detail
+  </h2>
+  
+    <div class="entry-detail" id="new(request:HTTP::Request,socket:HTTP::WebSocket)-class-method">
+      <div class="signature">
+        
+        def self.<strong>new</strong>(request : HTTP::Request, socket : HTTP::WebSocket)
+
+        <a class="method-permalink" href="#new(request:HTTP::Request,socket:HTTP::WebSocket)-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+
+
+
+  <h2>
+    <a id="class-method-detail" class="anchor" href="#class-method-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Class Method Detail
+  </h2>
+  
+    <div class="entry-detail" id="broadcast_to(channel:String,message:String)-class-method">
+      <div class="signature">
+        
+        def self.<strong>broadcast_to</strong>(channel : String, message : String)
+
+        <a class="method-permalink" href="#broadcast_to(channel:String,message:String)-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="build(request:HTTP::Request,socket:HTTP::WebSocket)-class-method">
+      <div class="signature">
+        
+        def self.<strong>build</strong>(request : HTTP::Request, socket : HTTP::WebSocket)
+
+        <a class="method-permalink" href="#build(request:HTTP::Request,socket:HTTP::WebSocket)-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="use_mock(mock,&)-class-method">
+      <div class="signature">
+        
+        def self.<strong>use_mock</strong>(mock, &)
+
+        <a class="method-permalink" href="#use_mock(mock,&)-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+
+
+
+  <h2>
+    <a id="instance-method-detail" class="anchor" href="#instance-method-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Detail
+  </h2>
+  
+    <div class="entry-detail" id="close-instance-method">
+      <div class="signature">
+        
+        def <strong>close</strong>
+
+        <a class="method-permalink" href="#close-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="connect-instance-method">
+      <div class="signature">
+        
+        def <strong>connect</strong>
+
+        <a class="method-permalink" href="#connect-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="connection_identifier:String-instance-method">
+      <div class="signature">
+        
+        def <strong>connection_identifier</strong> : String
+
+        <a class="method-permalink" href="#connection_identifier:String-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="id:String-instance-method">
+      <div class="signature">
+        
+        def <strong>id</strong> : String
+
+        <a class="method-permalink" href="#id:String-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="identifier-instance-method">
+      <div class="signature">
+        
+        def <strong>identifier</strong>
+
+        <a class="method-permalink" href="#identifier-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="internal_identifier:String-instance-method">
+      <div class="signature">
+        
+        def <strong>internal_identifier</strong> : String
+
+        <a class="method-permalink" href="#internal_identifier:String-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="internal_identifier=(internal_identifier:String)-instance-method">
+      <div class="signature">
+        
+        def <strong>internal_identifier=</strong>(internal_identifier : String)
+
+        <a class="method-permalink" href="#internal_identifier=(internal_identifier:String)-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="message(payload:Cable::Payload)-instance-method">
+      <div class="signature">
+        
+        def <strong>message</strong>(payload : <a href="../Cable/Payload.html">Cable::Payload</a>)
+
+        <a class="method-permalink" href="#message(payload:Cable::Payload)-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="receive(message)-instance-method">
+      <div class="signature">
+        
+        def <strong>receive</strong>(message)
+
+        <a class="method-permalink" href="#receive(message)-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="reject(channel:Cable::Channel)-instance-method">
+      <div class="signature">
+        
+        def <strong>reject</strong>(channel : <a href="../Cable/Channel.html">Cable::Channel</a>)
+
+        <a class="method-permalink" href="#reject(channel:Cable::Channel)-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="reject_unauthorized_connection-instance-method">
+      <div class="signature">
+        
+        def <strong>reject_unauthorized_connection</strong>
+
+        <a class="method-permalink" href="#reject_unauthorized_connection-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="socket:HTTP::WebSocket-instance-method">
+      <div class="signature">
+        
+        def <strong>socket</strong> : HTTP::WebSocket
+
+        <a class="method-permalink" href="#socket:HTTP::WebSocket-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="subscribe(payload:Cable::Payload)-instance-method">
+      <div class="signature">
+        
+        def <strong>subscribe</strong>(payload : <a href="../Cable/Payload.html">Cable::Payload</a>)
+
+        <a class="method-permalink" href="#subscribe(payload:Cable::Payload)-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="token:String?-instance-method">
+      <div class="signature">
+        
+        def <strong>token</strong> : String?
+
+        <a class="method-permalink" href="#token:String?-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="unsubscribe(payload:Cable::Payload)-instance-method">
+      <div class="signature">
+        
+        def <strong>unsubscribe</strong>(payload : <a href="../Cable/Payload.html">Cable::Payload</a>)
+
+        <a class="method-permalink" href="#unsubscribe(payload:Cable::Payload)-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+
+
+
+  <h2>
+    <a id="macro-detail" class="anchor" href="#macro-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Macro Detail
+  </h2>
+  
+    <div class="entry-detail" id="identified_by(name)-macro">
+      <div class="signature">
+        
+        macro <strong>identified_by</strong>(name)
+
+        <a class="method-permalink" href="#identified_by(name)-macro">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="owned_by(type_definition)-macro">
+      <div class="signature">
+        
+        macro <strong>owned_by</strong>(type_definition)
+
+        <a class="method-permalink" href="#owned_by(type_definition)-macro">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+
+
+</div>
+
+</body>
+</html>

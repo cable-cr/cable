@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Crystal Docs 0.35.1">
+<meta name="crystal_docs.project_version" content="0.1.0">
+<meta name="crystal_docs.project_name" content="cable">
+
+
+
+<link href="css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="js/doc.js"></script>
+
+  <meta name="repository-name" content="cable">
+  <title>cable 0.1.0</title>
+  <script type="text/javascript">
+  CrystalDocs.base_path = "";
+  </script>
+</head>
+<body>
+
+<svg class="hidden">
+  <symbol id="octicon-link" viewBox="0 0 16 16">
+    <path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path>
+  </symbol>
+</svg>
+<div class="sidebar">
+  <div class="sidebar-header">
+    <div class="search-box">
+      <input type="search" class="search-input" placeholder="Search..." spellcheck="false" aria-label="Search">
+    </div>
+
+    <div class="project-summary">
+      <h1 class="project-name">
+        <a href="index.html">
+          cable
+        </a>
+      </h1>
+
+      <span class="project-version">
+        0.1.0
+      </span>
+    </div>
+  </div>
+
+  <div class="search-results hidden">
+    <ul class="search-list"></ul>
+  </div>
+
+  <div class="types-list">
+    <ul>
+  
+  <li class="parent " data-id="cable/Cable" data-name="cable">
+      <a href="Cable.html">Cable</a>
+      
+        <ul>
+  
+  <li class="parent " data-id="cable/Cable/Channel" data-name="cable::channel">
+      <a href="Cable/Channel.html">Channel</a>
+      
+        <ul>
+  
+  <li class=" " data-id="cable/Cable/Channel/CloseRedisFiber" data-name="cable::channel::closeredisfiber">
+      <a href="Cable/Channel/CloseRedisFiber.html">CloseRedisFiber</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="cable/Cable/Connection" data-name="cable::connection">
+      <a href="Cable/Connection.html">Connection</a>
+      
+        <ul>
+  
+  <li class=" " data-id="cable/Cable/Connection/UnathorizedConnectionException" data-name="cable::connection::unathorizedconnectionexception">
+      <a href="Cable/Connection/UnathorizedConnectionException.html">UnathorizedConnectionException</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="cable/Cable/HabitatSettings" data-name="cable::habitatsettings">
+      <a href="Cable/HabitatSettings.html">HabitatSettings</a>
+      
+    </li>
+  
+  <li class=" " data-id="cable/Cable/Handler" data-name="cable::handler">
+      <a href="Cable/Handler.html">Handler</a>
+      
+    </li>
+  
+  <li class=" " data-id="cable/Cable/Logger" data-name="cable::logger">
+      <a href="Cable/Logger.html">Logger</a>
+      
+    </li>
+  
+  <li class="parent " data-id="cable/Cable/Payload" data-name="cable::payload">
+      <a href="Cable/Payload.html">Payload</a>
+      
+        <ul>
+  
+  <li class=" " data-id="cable/Cable/Payload/PARAMS" data-name="cable::payload::params">
+      <a href="Cable/Payload/PARAMS.html">PARAMS</a>
+      
+    </li>
+  
+  <li class=" " data-id="cable/Cable/Payload/RESULT" data-name="cable::payload::result">
+      <a href="Cable/Payload/RESULT.html">RESULT</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="cable/Cable/Server" data-name="cable::server">
+      <a href="Cable/Server.html">Server</a>
+      
+    </li>
+  
+  <li class="parent " data-id="cable/Cable/WebsocketPinger" data-name="cable::websocketpinger">
+      <a href="Cable/WebsocketPinger.html">WebsocketPinger</a>
+      
+        <ul>
+  
+  <li class=" " data-id="cable/Cable/WebsocketPinger/PingStoppedException" data-name="cable::websocketpinger::pingstoppedexception">
+      <a href="Cable/WebsocketPinger/PingStoppedException.html">PingStoppedException</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="cable/Redis" data-name="redis">
+      <a href="Redis.html">Redis</a>
+      
+    </li>
+  
+</ul>
+
+  </div>
+</div>
+
+
+<div class="main-content">
+<h1><a id="cable" class="anchor" href="#cable">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Cable</h1>
+
+<p><img src="https://github.com/cable-cr/cable/actions/workflows/ci.yml/badge.svg" alt="ci workflow"/></p>
+
+<p>It's like <a href="https://guides.rubyonrails.org/action_cable_overview.html">ActionCable</a> (100% compatible with JS Client), but you know, for Crystal</p>
+
+<h2><a id="installation" class="anchor" href="#installation">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Installation</h2>
+
+<ol><li>Add the dependency to your <code>shard.yml</code>:</li></ol>
+
+<p><code></code>`yaml
+   dependencies:</p>
+
+<pre><code class="language-crystal"> cable:
+   github: cable-cr/cable</code></pre>
+
+<p><code></code>`</p>
+
+<ol><li>Run <code>shards install</code></li></ol>
+
+<h2><a id="usage" class="anchor" href="#usage">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Usage</h2>
+
+<pre><code class="language-crystal"><span class="k">require</span> <span class="s">&quot;cable&quot;</span></code></pre>
+
+<h3><a id="lucky-example" class="anchor" href="#lucky-example">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Lucky example</h3>
+
+<p>On your <code>src/app_server.cr</code> add the <code><a href="Cable/Handler.html">Cable::Handler</a></code> before <code>Lucky::RouteHandler</code></p>
+
+<pre><code class="language-crystal"><span class="k">class</span> <span class="t">AppServer</span> <span class="o">&lt;</span> <span class="t">Lucky</span><span class="t">::</span><span class="t">BaseAppServer</span>
+  <span class="k">def</span> <span class="m">middleware</span>
+    [
+      <span class="t">Cable</span><span class="t">::</span><span class="t">Handler</span>.<span class="k">new</span>(<span class="t">ApplicationCable</span><span class="t">::</span><span class="t">Connection</span>),
+      <span class="t">Lucky</span><span class="t">::</span><span class="t">RouteHandler</span>.<span class="k">new</span>,
+    ]
+   <span class="k">end</span>
+<span class="k">end</span></code></pre>
+
+<p>After that, you can configure your <code><a href="Cable.html">Cable</a></code>, the defaults are:</p>
+
+<pre><code class="language-crystal"><span class="t">Cable</span>.configure <span class="k">do</span> <span class="o">|</span>settings<span class="o">|</span>
+  settings.route <span class="o">=</span> <span class="s">&quot;/cable&quot;</span>    <span class="c"># the URL your JS Client will connect</span>
+  settings.token <span class="o">=</span> <span class="s">&quot;token&quot;</span>     <span class="c"># The query string parameter used to get the token</span>
+<span class="k">end</span></code></pre>
+
+<p>Then you need to implement a few classes</p>
+
+<p>The connection class is how you are gonna handle connections, it's referenced on the <code>src/app_server.cr</code> when creating the handler.</p>
+
+<pre><code class="language-crystal"><span class="k">module</span> <span class="t">ApplicationCable</span>
+  <span class="k">class</span> <span class="t">Connection</span> <span class="o">&lt;</span> <span class="t">Cable</span><span class="t">::</span><span class="t">Connection</span>
+    <span class="c"># You need to specify how you identify the class, using something like:</span>
+    <span class="c"># Remembering that it must, be a String</span>
+    <span class="c"># Tip: Use your `User#id` converted to String</span>
+    identified_by <span class="n">:identifier</span>
+
+    <span class="c"># If you&#39;d like to keep a `User` instance together with the Connection, so</span>
+    <span class="c"># there&#39;s no need to fetch from the database all the time, you can use the</span>
+    <span class="c"># `owned_by` instruction</span>
+    owned_by current_user : <span class="t">User</span>
+
+    <span class="k">def</span> <span class="m">connect</span>
+      <span class="t">UserToken</span>.decode_user_id(token.to_s).try <span class="k">do</span> <span class="o">|</span>user_id<span class="o">|</span>
+        <span class="k">self</span>.identifier <span class="o">=</span> user_id.to_s
+        <span class="k">self</span>.current_user <span class="o">=</span>  <span class="t">UserQuery</span>.find(user_id)
+      <span class="k">end</span>
+    <span class="k">end</span>
+
+  <span class="k">end</span>
+<span class="k">end</span></code></pre>
+
+<p>Then you need your base channel, just to make easy to aggregate your app's cables logic</p>
+
+<pre><code class="language-crystal"><span class="k">module</span> <span class="t">ApplicationCable</span>
+  <span class="k">class</span> <span class="t">Channel</span> <span class="o">&lt;</span> <span class="t">Cable</span><span class="t">::</span><span class="t">Channel</span>
+  <span class="k">end</span>
+<span class="k">end</span></code></pre>
+
+<p>Then create your cables, as much as your want!! Let's setup a <code>ChatChannel</code> as example:</p>
+
+<pre><code class="language-crystal"><span class="k">class</span> <span class="t">ChatChannel</span> <span class="o">&lt;</span> <span class="t">ApplicationCable</span><span class="t">::</span><span class="t">Channel</span>
+  <span class="k">def</span> <span class="m">subscribed</span>
+    <span class="c"># We don&#39;t support stream_for, needs to generate your own unique string</span>
+    stream_from <span class="s">&quot;chat_</span><span class="i">#{</span>params[<span class="s">&quot;room&quot;</span>]<span class="i">}</span><span class="s">&quot;</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="m">receive</span>(data)
+    broadcast_message <span class="o">=</span> {} <span class="k">of</span> <span class="t">String</span> => <span class="t">String</span>
+    broadcast_message[<span class="s">&quot;message&quot;</span>] <span class="o">=</span> data[<span class="s">&quot;message&quot;</span>].to_s
+    broadcast_message[<span class="s">&quot;current_user_id&quot;</span>] <span class="o">=</span> connection.identifier
+    <span class="t">ChatChannel</span>.broadcast_to(<span class="s">&quot;chat_</span><span class="i">#{</span>params[<span class="s">&quot;room&quot;</span>]<span class="i">}</span><span class="s">&quot;</span>, broadcast_message)
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="m">perform</span>(action, action_params)
+    user <span class="o">=</span> <span class="t">UserQuery</span>.<span class="k">new</span>.find(connection.identifier)
+    <span class="c"># Perform action on your user object. For example, you could manage</span>
+    <span class="c"># its status by adding some .away and .status methods on it like below</span>
+    <span class="c"># user.away if action == &quot;away&quot;</span>
+    <span class="c"># user.status(action_params[&quot;status&quot;]) if action == &quot;status&quot;</span>
+    <span class="t">ChatChannel</span>.broadcast_to(<span class="s">&quot;chat_</span><span class="i">#{</span>params[<span class="s">&quot;room&quot;</span>]<span class="i">}</span><span class="s">&quot;</span>, {
+      <span class="s">&quot;user&quot;</span>      => user.email,
+      <span class="s">&quot;performed&quot;</span> => action.to_s,
+    })
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="m">unsubscribed</span>
+    <span class="c"># You can do any action after client closes connection</span>
+    user <span class="o">=</span> <span class="t">UserQuery</span>.<span class="k">new</span>.find(connection.identifier)
+
+    <span class="c"># You could for example call any method on your user like a .logout one</span>
+    <span class="c"># user.logout</span>
+  <span class="k">end</span>
+<span class="k">end</span></code></pre>
+
+<p>Check below on the JavaScript section how to communicate with the Cable backend</p>
+
+<h2><a id="java-script" class="anchor" href="#java-script">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>JavaScript</h2>
+
+<p>It works with <a href="https://www.npmjs.com/package/actioncable">ActionCable</a> JS Client out-of-the-box!! Yeah, that's really cool no? If you need to adapt, make a hack, or something like that?! No, you don't need! Just read the few lines below and start playing with Cable in 5 minutes!</p>
+
+<p>If you are using Rails, then you already has a <code>app/assets/javascripts/cable.js</code> file that requires <code>action_cable</code>, you just need to connect to the right URL (don't forgot the settings you used), to authenticate using JWT use something like:</p>
+
+<pre><code class="language-js">(function() {
+  this.App || (this.App = {});
+
+  App.cable = ActionCable.createConsumer(
+    "ws://localhost:5000/cable?token=JWT_TOKEN" // if using the default options
+  );
+}.call(this));</code></pre>
+
+<p>then on your <code>app/assets/javascripts/channels/chat.js</code></p>
+
+<pre><code class="language-js">App.channels || (App.channels = {});
+
+App.channels["chat"] = App.cable.subscriptions.create(
+  {
+    channel: "ChatChannel",
+    room: "1"
+  },
+  {
+    connected: function() {
+      return console.log("ChatChannel connected");
+    },
+    disconnected: function() {
+      return console.log("ChatChannel disconnected");
+    },
+    received: function(data) {
+      return console.log("ChatChannel received", data);
+    },
+    rejected: function() {
+      return console.log("ChatChannel rejected");
+    },
+    away: function() {
+      return this.perform("away");
+    },
+    status: function(status) {
+      return this.perform("status", {
+        status: status
+      });
+    }
+  }
+);</code></pre>
+
+<p>Then on your Browser console you can see the message:</p>
+
+<blockquote>ChatChannel connected</blockquote>
+
+<p>After you load, then you can broadcast messages with:</p>
+
+<pre><code class="language-js">App.channels["chat"].send({ message: "Hello World" });</code></pre>
+
+<p>And performs an action with:</p>
+
+<pre><code class="language-js">App.channels["chat"].perform("status", { status: "My New Status" });</code></pre>
+
+<h2><a id="todo" class="anchor" href="#todo">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>TODO</h2>
+
+<p>After reading the docs, I realized I'm using some weird naming for variables / methods, so</p>
+
+<ul><li>[x] Need to make connection use identifier</li><li>[x] Add <code>identified_by identifier</code> to <code><a href="Cable/Connection.html">Cable::Connection</a></code></li><li>[x] Give better methods to reject a connection</li><li>[x] Refactor, Connection class is soooo bloated</li><li>[ ] Add an async/local adapter (make tests, development and small deploys simpler)</li></ul>
+
+<h2><a id="first-class-citizen" class="anchor" href="#first-class-citizen">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>First Class Citizen</h2>
+
+<ul><li>[ ] Better integrate with Lucky, maybe with generators, or something else?</li><li>[ ] Add support for Kemal</li><li>[ ] Add support for Amber</li></ul>
+
+<p>Idea is create different modules, <code>Cable::Lucky</code>, <code>Cable::Kemal</code>, <code>Cable::Amber</code>, and make it easy to use with any crystal web framework</p>
+
+<h2><a id="contributing" class="anchor" href="#contributing">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Contributing</h2>
+
+<p>You know, fork-branch-push-pr 😉 don't be shy, participate as you want!</p>
+</div>
+</body>
+</html>

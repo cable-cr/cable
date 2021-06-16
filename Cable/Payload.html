@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Crystal Docs 0.35.1">
+<meta name="crystal_docs.project_version" content="0.1.0">
+<meta name="crystal_docs.project_name" content="cable">
+
+
+
+<link href="../css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../js/doc.js"></script>
+
+  <meta name="repository-name" content="cable">
+  <title>Cable::Payload - cable 0.1.0</title>
+  <script type="text/javascript">
+    CrystalDocs.base_path = "../";
+  </script>
+</head>
+<body>
+
+<svg class="hidden">
+  <symbol id="octicon-link" viewBox="0 0 16 16">
+    <path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path>
+  </symbol>
+</svg>
+<div class="sidebar">
+  <div class="sidebar-header">
+    <div class="search-box">
+      <input type="search" class="search-input" placeholder="Search..." spellcheck="false" aria-label="Search">
+    </div>
+
+    <div class="project-summary">
+      <h1 class="project-name">
+        <a href="../index.html">
+          cable
+        </a>
+      </h1>
+
+      <span class="project-version">
+        0.1.0
+      </span>
+    </div>
+  </div>
+
+  <div class="search-results hidden">
+    <ul class="search-list"></ul>
+  </div>
+
+  <div class="types-list">
+    <ul>
+  
+  <li class="parent open current" data-id="cable/Cable" data-name="cable">
+      <a href="../Cable.html">Cable</a>
+      
+        <ul>
+  
+  <li class="parent " data-id="cable/Cable/Channel" data-name="cable::channel">
+      <a href="../Cable/Channel.html">Channel</a>
+      
+        <ul>
+  
+  <li class=" " data-id="cable/Cable/Channel/CloseRedisFiber" data-name="cable::channel::closeredisfiber">
+      <a href="../Cable/Channel/CloseRedisFiber.html">CloseRedisFiber</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="cable/Cable/Connection" data-name="cable::connection">
+      <a href="../Cable/Connection.html">Connection</a>
+      
+        <ul>
+  
+  <li class=" " data-id="cable/Cable/Connection/UnathorizedConnectionException" data-name="cable::connection::unathorizedconnectionexception">
+      <a href="../Cable/Connection/UnathorizedConnectionException.html">UnathorizedConnectionException</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="cable/Cable/HabitatSettings" data-name="cable::habitatsettings">
+      <a href="../Cable/HabitatSettings.html">HabitatSettings</a>
+      
+    </li>
+  
+  <li class=" " data-id="cable/Cable/Handler" data-name="cable::handler">
+      <a href="../Cable/Handler.html">Handler</a>
+      
+    </li>
+  
+  <li class=" " data-id="cable/Cable/Logger" data-name="cable::logger">
+      <a href="../Cable/Logger.html">Logger</a>
+      
+    </li>
+  
+  <li class="parent open current" data-id="cable/Cable/Payload" data-name="cable::payload">
+      <a href="../Cable/Payload.html">Payload</a>
+      
+        <ul>
+  
+  <li class=" " data-id="cable/Cable/Payload/PARAMS" data-name="cable::payload::params">
+      <a href="../Cable/Payload/PARAMS.html">PARAMS</a>
+      
+    </li>
+  
+  <li class=" " data-id="cable/Cable/Payload/RESULT" data-name="cable::payload::result">
+      <a href="../Cable/Payload/RESULT.html">RESULT</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="cable/Cable/Server" data-name="cable::server">
+      <a href="../Cable/Server.html">Server</a>
+      
+    </li>
+  
+  <li class="parent " data-id="cable/Cable/WebsocketPinger" data-name="cable::websocketpinger">
+      <a href="../Cable/WebsocketPinger.html">WebsocketPinger</a>
+      
+        <ul>
+  
+  <li class=" " data-id="cable/Cable/WebsocketPinger/PingStoppedException" data-name="cable::websocketpinger::pingstoppedexception">
+      <a href="../Cable/WebsocketPinger/PingStoppedException.html">PingStoppedException</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="cable/Redis" data-name="redis">
+      <a href="../Redis.html">Redis</a>
+      
+    </li>
+  
+</ul>
+
+  </div>
+</div>
+
+
+<div class="main-content">
+<h1 class="type-name">
+
+  <span class="kind">class</span> Cable::Payload
+
+</h1>
+
+
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../Cable/Payload.html">Cable::Payload</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2>
+    <a id="defined-in" class="anchor" href="#defined-in">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Defined in:
+  </h2>
+  
+
+
+
+
+
+  <h2>
+    <a id="constructors" class="anchor" href="#constructors">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Constructors
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#new(json:String)-class-method" class="signature"><strong>.new</strong>(json : String)</a>
+        
+      </li>
+    
+  </ul>
+
+
+
+
+
+  <h2>
+    <a id="instance-method-summary" class="anchor" href="#instance-method-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Summary
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#action:String-instance-method" class="signature"><strong>#action</strong> : String</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#action?:Bool-instance-method" class="signature"><strong>#action?</strong> : Bool</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#channel:String?-instance-method" class="signature"><strong>#channel</strong> : String?</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#channel_params:Hash(String,Cable::Payload::RESULT)-instance-method" class="signature"><strong>#channel_params</strong> : Hash(String, Cable::Payload::RESULT)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#command:String?-instance-method" class="signature"><strong>#command</strong> : String?</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#data:Hash(String,Cable::Payload::RESULT)-instance-method" class="signature"><strong>#data</strong> : Hash(String, Cable::Payload::RESULT)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#identifier:String-instance-method" class="signature"><strong>#identifier</strong> : String</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#json:String-instance-method" class="signature"><strong>#json</strong> : String</a>
+        
+      </li>
+    
+  </ul>
+
+
+
+
+
+<div class="methods-inherited">
+  
+    
+
+
+    
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+    
+
+
+  
+</div>
+
+
+  <h2>
+    <a id="constructor-detail" class="anchor" href="#constructor-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Constructor Detail
+  </h2>
+  
+    <div class="entry-detail" id="new(json:String)-class-method">
+      <div class="signature">
+        
+        def self.<strong>new</strong>(json : String)
+
+        <a class="method-permalink" href="#new(json:String)-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+
+
+
+
+
+  <h2>
+    <a id="instance-method-detail" class="anchor" href="#instance-method-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Detail
+  </h2>
+  
+    <div class="entry-detail" id="action:String-instance-method">
+      <div class="signature">
+        
+        def <strong>action</strong> : String
+
+        <a class="method-permalink" href="#action:String-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="action?:Bool-instance-method">
+      <div class="signature">
+        
+        def <strong>action?</strong> : Bool
+
+        <a class="method-permalink" href="#action?:Bool-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="channel:String?-instance-method">
+      <div class="signature">
+        
+        def <strong>channel</strong> : String?
+
+        <a class="method-permalink" href="#channel:String?-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="channel_params:Hash(String,Cable::Payload::RESULT)-instance-method">
+      <div class="signature">
+        
+        def <strong>channel_params</strong> : Hash(String, <a href="../Cable/Payload/RESULT.html">Cable::Payload::RESULT</a>)
+
+        <a class="method-permalink" href="#channel_params:Hash(String,Cable::Payload::RESULT)-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="command:String?-instance-method">
+      <div class="signature">
+        
+        def <strong>command</strong> : String?
+
+        <a class="method-permalink" href="#command:String?-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="data:Hash(String,Cable::Payload::RESULT)-instance-method">
+      <div class="signature">
+        
+        def <strong>data</strong> : Hash(String, <a href="../Cable/Payload/RESULT.html">Cable::Payload::RESULT</a>)
+
+        <a class="method-permalink" href="#data:Hash(String,Cable::Payload::RESULT)-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="identifier:String-instance-method">
+      <div class="signature">
+        
+        def <strong>identifier</strong> : String
+
+        <a class="method-permalink" href="#identifier:String-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="json:String-instance-method">
+      <div class="signature">
+        
+        def <strong>json</strong> : String
+
+        <a class="method-permalink" href="#json:String-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+
+
+
+
+</div>
+
+</body>
+</html>
