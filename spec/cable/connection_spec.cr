@@ -75,10 +75,11 @@ describe Cable::Connection do
         socket.messages[0].should eq({"type" => "confirm_subscription", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
         socket.messages[1].should eq({"type" => "confirm_unsubscription", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
 
-        Cable::Logger.messages.size.should eq(3)
+        Cable::Logger.messages.size.should eq(4)
         Cable::Logger.messages[0].should eq("ChatChannel is streaming from chat_1")
         Cable::Logger.messages[1].should eq("ChatChannel is transmitting the subscription confirmation")
-        Cable::Logger.messages[2].should eq("ChatChannel is transmitting the unsubscribe confirmation")
+        Cable::Logger.messages[2].should eq("ChatChannel stopped streaming from {\"channel\":\"ChatChannel\",\"room\":\"1\"}")
+        Cable::Logger.messages[3].should eq("ChatChannel is transmitting the unsubscribe confirmation")
       end
     end
   end
