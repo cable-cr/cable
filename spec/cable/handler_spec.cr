@@ -83,7 +83,7 @@ describe Cable::Handler do
 
       # wait server subscribe to channel
       # how can we ensure it was subscribed and avoid this sleep?
-      sleep 0.1
+      sleep 0.2
 
       # App.cable.subscriptions.subscriptions[0].send({message: "test"})
       ws2.send({"command" => "message", "identifier" => {channel: "ChatChannel", room: "1"}.to_json, "data" => {message: "test"}.to_json}.to_json)
@@ -112,7 +112,7 @@ describe Cable::Handler do
         # before `ws2.close`
         if seq == 0
           # this is a sleep to avoid publishing before channel hasn't subscribed
-          sleep 0.05
+          sleep 0.2
           Cable.server.publish("chat_1", {"message" => "from Ruby!", "current_user" => "1"}.to_json)
         end
         str.should eq(messages[seq])
