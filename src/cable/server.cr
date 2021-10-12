@@ -47,7 +47,7 @@ module Cable
       request = Redis::Request.new
       request << "subscribe"
       request << identifier
-      request_return = redis_subscribe._connection.send(request)
+      redis_subscribe._connection.send(request)
     end
 
     def unsubscribe_channel(channel : Channel, identifier : String)
