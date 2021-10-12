@@ -68,13 +68,23 @@ describe Cable::Handler do
         {identifier: {channel: "ChatChannel", room: "1"}.to_json, message: {message: "test", current_user: "1"}}.to_json,
       ]
       seq = 0
+      ping_seq = 0
       ws2.on_message do |str|
+        if str.match(/\{"type":"ping","message":[0-9]{8,12}\}/) && ping_seq < 2
+          ping_seq += 1
+          next
+        end
         str.should eq(messages[seq])
         seq += 1
         ws2.close if seq >= messages.size
       end
       # App.cable.subscriptions.create({ channel: "ChatChannel", params: {room: "1"}});
       ws2.send({"command" => "subscribe", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
+
+      # wait server subscribe to channel
+      # how can we ensure it was subscribed and avoid this sleep?
+      sleep 0.2
+
       # App.cable.subscriptions.subscriptions[0].send({message: "test"})
       ws2.send({"command" => "message", "identifier" => {channel: "ChatChannel", room: "1"}.to_json, "data" => {message: "test"}.to_json}.to_json)
 
@@ -102,7 +112,7 @@ describe Cable::Handler do
         # before `ws2.close`
         if seq == 0
           # this is a sleep to avoid publishing before channel hasn't subscribed
-          sleep 0.05
+          sleep 0.2
           Cable.server.publish("chat_1", {"message" => "from Ruby!", "current_user" => "1"}.to_json)
         end
         str.should eq(messages[seq])
@@ -135,6 +145,11 @@ describe Cable::Handler do
       end
       # App.cable.subscriptions.create({ channel: "ChatChannel", params: {room: "1"}});
       ws2.send({command: "subscribe", identifier: {channel: "ChatChannel", room: "1"}.to_json}.to_json)
+
+      # wait server subscribe to channel
+      # how can we ensure it was subscribed and avoid this sleep?
+      sleep 0.1
+
       # App.cable.subscriptions.subscriptions[0].perform("invite", {invite_id: "3"});
       ws2.send({command: "message", identifier: {channel: "ChatChannel", room: "1"}.to_json, data: {invite_id: "3", action: "invite"}.to_json}.to_json)
       ws2.run

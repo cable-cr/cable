@@ -12,5 +12,6 @@ Cable.configure do |settings|
 end
 
 Spec.before_each do
+  Cable.restart
   Cable::Logger.reset_messages
 end

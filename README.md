@@ -1,6 +1,6 @@
 # Cable
 
-![ci workflow](https://github.com/cable-cr/cable/actions/workflows/ci.yml/badge.svg)
+[![ci workflow](https://github.com/cable-cr/cable/actions/workflows/ci.yml/badge.svg)](https://github.com/cable-cr/cable/actions/workflows/ci.yml)
 
 It's like [ActionCable](https://guides.rubyonrails.org/action_cable_overview.html) (100% compatible with JS Client), but you know, for Crystal
 
