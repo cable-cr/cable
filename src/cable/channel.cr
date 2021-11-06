@@ -8,6 +8,19 @@ module Cable
       Cable::Channel::CHANNELS[self.name] = self
     end
 
+    # @override in after_subscribed macro
+    def run_after_subscribed_callbacks
+    end
+
+    # Run `block` after the subscription is created.
+    macro after_subscribed(*callbacks)
+      def run_after_subscribed_callbacks
+        {% for callback in callbacks %}
+          {{callback.id}}
+        {% end %}
+      end
+    end
+
     getter params
     getter identifier
     getter connection
@@ -63,6 +76,60 @@ module Cable
     def self.broadcast_to(channel : String, message : Hash(String, String))
       Cable::Logger.info "[ActionCable] Broadcasting to #{channel}: #{message}"
       Cable.server.publish(channel, message.to_json)
+    end
+
+    def transmit(message : String)
+      if stream_identifier.nil?
+        Cable::Logger.info "#{self.class}.transmit(message : String) with #{message} without already using stream_from(stream_identifier)"
+      else
+        Cable::Logger.info "[ActionCable] Broadcasting to #{self.class}: #{message}"
+        Cable.server.send_to_channels(stream_identifier.not_nil!, message)
+      end
+    end
+
+    def transmit(message : JSON::Any)
+      if stream_identifier.nil?
+        Cable::Logger.info "#{self.class}.transmit(message : JSON::Any) with #{message} without already using stream_from(stream_identifier)"
+      else
+        Cable::Logger.info "[ActionCable] Broadcasting to #{self.class}: #{message}"
+        Cable.server.send_to_channels(stream_identifier.not_nil!, message)
+      end
+    end
+
+    def transmit(message : Hash(String, String))
+      if stream_identifier.nil?
+        Cable::Logger.info "#{self.class}.transmit(message : Hash(String, String)) with #{message} without already using stream_from(stream_identifier)"
+      else
+        Cable::Logger.info "[ActionCable] Broadcasting to #{self.class}: #{message}"
+        Cable.server.send_to_channels(stream_identifier.not_nil!, message.to_json)
+      end
+    end
+
+    # broadcast single message to single connection for this channel
+    def connection_transmit(message : String)
+      Cable::Logger.info "[ActionCable] Broadcasting to #{self.class}: #{message}"
+      connection.socket.send({
+        identifier: identifier,
+        message:    Cable.server.safe_decode_message(message),
+      }.to_json)
+    end
+
+    # broadcast single message to single connection for this channel
+    def connection_transmit(message : JSON::Any)
+      Cable::Logger.info "[ActionCable] Broadcasting to #{self.class}: #{message}"
+      connection.socket.send({
+        identifier: identifier,
+        message:    Cable.server.safe_decode_message(message),
+      }.to_json)
+    end
+
+    # broadcast single message to single connection for this channel
+    def connection_transmit(message : Hash(String, String))
+      Cable::Logger.info "[ActionCable] Broadcasting to #{self.class}: #{message}"
+      connection.socket.send({
+        identifier: identifier,
+        message:    Cable.server.safe_decode_message(message),
+      }.to_json)
     end
   end
 end

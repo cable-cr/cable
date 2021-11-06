@@ -409,6 +409,120 @@ describe Cable::Connection do
       end
     end
   end
+
+  describe ".after_subscribed callbacks with #transmit" do
+    it "receives all broadcast messages" do
+      socket_1 = DummySocket.new(IO::Memory.new)
+      socket_2 = DummySocket.new(IO::Memory.new)
+
+      connection_1 = ConnectionTest.new(builds_request(token: "98"), socket_1)
+      connection_2 = ConnectionTest.new(builds_request(token: "101"), socket_2)
+
+      connection_1.receive({"command" => "subscribe", "identifier" => {channel: "CallbackTransmitChannel"}.to_json}.to_json)
+      sleep 0.1
+      CallbackTransmitChannel.broadcast_to(channel: "callbacks_01", message: "<turbo-stream></turbo-stream>")
+      sleep 0.1
+
+      connection_2.receive({"command" => "subscribe", "identifier" => {channel: "CallbackTransmitChannel"}.to_json}.to_json)
+      sleep 0.1
+      CallbackTransmitChannel.broadcast_to(channel: "callbacks_01", message: "<turbo-stream>2nd</turbo-stream>")
+      sleep 0.1
+
+      # since socket_1 was connected first
+      # 1 x received the subscribe command message
+      # 1 x received the first broadcast_to -> <turbo-stream></turbo-stream>
+      # 4 x callback#transmit messages
+      #
+      # Then when socket_2 got connected
+      # 1 x it received the 2nd broadcast_to -> <turbo-stream>2nd</turbo-stream>
+      # 4 x it received the 2nd batch of callback#transmit messages
+      socket_1.messages.size.should eq(1 + 1 + 4 + 1 + 4)
+      socket_1.messages.should contain({"type" => "confirm_subscription", "identifier" => {channel: "CallbackTransmitChannel"}.to_json}.to_json)
+      socket_1.messages.should contain({"identifier" => {channel: "CallbackTransmitChannel"}.to_json, "message" => "<turbo-stream></turbo-stream>"}.to_json)
+      socket_1.messages.should contain({"identifier" => {channel: "CallbackTransmitChannel"}.to_json, "message" => "<turbo-stream>2nd</turbo-stream>"}.to_json)
+
+      # transmit messages
+      socket_1.messages.should contain({"identifier" => {channel: "CallbackTransmitChannel"}.to_json, "message" => {"welcome" => "hash"}}.to_json)
+      socket_1.messages.should contain({"identifier" => {channel: "CallbackTransmitChannel"}.to_json, "message" => {"welcome" => "json_string"}}.to_json)
+      socket_1.messages.should contain({"identifier" => {channel: "CallbackTransmitChannel"}.to_json, "message" => {"welcome" => "json"}}.to_json)
+      socket_1.messages.should contain({"identifier" => {channel: "CallbackTransmitChannel"}.to_json, "message" => "welcome_string"}.to_json)
+
+      # since socket_2 was connected after socket_1
+      # 1 x received the subscribe command message
+      # 1 x received the 2nd broadcast_to -> <turbo-stream>2nd</turbo-stream>
+      # 4 x callback#transmit messages
+      socket_2.messages.size.should eq(1 + 1 + 4)
+      socket_2.messages.should contain({"type" => "confirm_subscription", "identifier" => {channel: "CallbackTransmitChannel"}.to_json}.to_json)
+      socket_2.messages.should contain({"identifier" => {channel: "CallbackTransmitChannel"}.to_json, "message" => "<turbo-stream>2nd</turbo-stream>"}.to_json)
+
+      # transmit messages
+      socket_2.messages.should contain({"identifier" => {channel: "CallbackTransmitChannel"}.to_json, "message" => {"welcome" => "hash"}}.to_json)
+      socket_2.messages.should contain({"identifier" => {channel: "CallbackTransmitChannel"}.to_json, "message" => {"welcome" => "json_string"}}.to_json)
+      socket_2.messages.should contain({"identifier" => {channel: "CallbackTransmitChannel"}.to_json, "message" => {"welcome" => "json"}}.to_json)
+      socket_2.messages.should contain({"identifier" => {channel: "CallbackTransmitChannel"}.to_json, "message" => "welcome_string"}.to_json)
+
+      connection_1.close
+      connection_2.close
+      socket_1.close
+      socket_2.close
+    end
+  end
+
+  describe ".after_subscribed callbacks with #connection_transmit" do
+    it "receives all broadcast messages" do
+      socket_1 = DummySocket.new(IO::Memory.new)
+      socket_2 = DummySocket.new(IO::Memory.new)
+
+      connection_1 = ConnectionTest.new(builds_request(token: "98"), socket_1)
+      connection_2 = ConnectionTest.new(builds_request(token: "101"), socket_2)
+
+      connection_1.receive({"command" => "subscribe", "identifier" => {channel: "CallbackConnectionTransmitChannel"}.to_json}.to_json)
+      sleep 0.1
+      CallbackConnectionTransmitChannel.broadcast_to(channel: "callbacks_02", message: "<turbo-stream></turbo-stream>")
+      sleep 0.1
+
+      connection_2.receive({"command" => "subscribe", "identifier" => {channel: "CallbackConnectionTransmitChannel"}.to_json}.to_json)
+      sleep 0.1
+      CallbackConnectionTransmitChannel.broadcast_to(channel: "callbacks_02", message: "<turbo-stream>2nd</turbo-stream>")
+      sleep 0.1
+
+      # since socket_1 was connected first
+      # 1 x received the subscribe command message
+      # 1 x received the first broadcast_to -> <turbo-stream></turbo-stream>
+      # 4 x callback#transmit messages
+      #
+      # It will not receive any of the messages sent to socket_2
+      socket_1.messages.size.should eq(1 + 1 + 4 + 1)
+      socket_1.messages.should contain({"type" => "confirm_subscription", "identifier" => {channel: "CallbackConnectionTransmitChannel"}.to_json}.to_json)
+      socket_1.messages.should contain({"identifier" => {channel: "CallbackConnectionTransmitChannel"}.to_json, "message" => "<turbo-stream></turbo-stream>"}.to_json)
+      socket_1.messages.should contain({"identifier" => {channel: "CallbackConnectionTransmitChannel"}.to_json, "message" => "<turbo-stream>2nd</turbo-stream>"}.to_json)
+
+      # transmit messages
+      socket_1.messages.should contain({"identifier" => {channel: "CallbackConnectionTransmitChannel"}.to_json, "message" => {"welcome" => "hash"}}.to_json)
+      socket_1.messages.should contain({"identifier" => {channel: "CallbackConnectionTransmitChannel"}.to_json, "message" => {"welcome" => "json_string"}}.to_json)
+      socket_1.messages.should contain({"identifier" => {channel: "CallbackConnectionTransmitChannel"}.to_json, "message" => {"welcome" => "json"}}.to_json)
+      socket_1.messages.should contain({"identifier" => {channel: "CallbackConnectionTransmitChannel"}.to_json, "message" => "welcome_string"}.to_json)
+
+      # since socket_2 was connected after socket_1
+      # 1 x received the subscribe command message
+      # 1 x received the 2nd broadcast_to -> <turbo-stream>2nd</turbo-stream>
+      # 4 x callback#transmit messages
+      socket_2.messages.size.should eq(1 + 1 + 4)
+      socket_2.messages.should contain({"type" => "confirm_subscription", "identifier" => {channel: "CallbackConnectionTransmitChannel"}.to_json}.to_json)
+      socket_2.messages.should contain({"identifier" => {channel: "CallbackConnectionTransmitChannel"}.to_json, "message" => "<turbo-stream>2nd</turbo-stream>"}.to_json)
+
+      # transmit messages
+      socket_2.messages.should contain({"identifier" => {channel: "CallbackConnectionTransmitChannel"}.to_json, "message" => {"welcome" => "hash"}}.to_json)
+      socket_2.messages.should contain({"identifier" => {channel: "CallbackConnectionTransmitChannel"}.to_json, "message" => {"welcome" => "json_string"}}.to_json)
+      socket_2.messages.should contain({"identifier" => {channel: "CallbackConnectionTransmitChannel"}.to_json, "message" => {"welcome" => "json"}}.to_json)
+      socket_2.messages.should contain({"identifier" => {channel: "CallbackConnectionTransmitChannel"}.to_json, "message" => "welcome_string"}.to_json)
+
+      connection_1.close
+      connection_2.close
+      socket_1.close
+      socket_2.close
+    end
+  end
 end
 
 def builds_request(token : String)

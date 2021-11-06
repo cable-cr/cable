@@ -91,6 +91,8 @@ module Cable
 
       Cable::Logger.info "#{payload.channel} is transmitting the subscription confirmation"
       socket.send({type: "confirm_subscription", identifier: payload.identifier}.to_json)
+
+      channel.run_after_subscribed_callbacks unless channel.subscription_rejected?
     end
 
     # ensure we only allow subscribing to the same channel once from a connection
