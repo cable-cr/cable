@@ -10,6 +10,16 @@ describe Cable::Handler do
       io_with_context.to_s.should eq("HTTP/1.1 101 Switching Protocols\r\nSec-WebSocket-Protocol: actioncable-v1-json\r\nUpgrade: websocket\r\nConnection: Upgrade\r\nSec-WebSocket-Accept: 6x90CSU0y750nc+5Do8J0YjG7lM=\r\n\r\n")
     end
 
+    it "allows you to remove undesired actioncable headers" do
+      ENV["DISABLE_SEC_WEBSOCKET_PROTOCOL_HEADER"] = "true"
+      handler = Cable::Handler.new(ApplicationCable::Connection)
+      request = HTTP::Request.new("GET", "#{Cable.settings.route}?test_token=1", headers_without_sec_websocket_protocol)
+
+      io_with_context = create_ws_request_and_return_io_and_context(handler, request)[0]
+      io_with_context.to_s.should eq("HTTP/1.1 101 Switching Protocols\r\nUpgrade: websocket\r\nConnection: Upgrade\r\nSec-WebSocket-Accept: 6x90CSU0y750nc+5Do8J0YjG7lM=\r\n\r\n")
+      ENV.delete("DISABLE_SEC_WEBSOCKET_PROTOCOL_HEADER")
+    end
+
     it "starts the web pinger" do
       Cable::WebsocketPinger.run_every(0.001) do
         address_chan = start_server
@@ -223,5 +233,14 @@ private def headers
     "Sec-WebSocket-Key"      => "OqColdEJm3i9e/EqMxnxZw==",
     "Sec-WebSocket-Protocol" => "actioncable-v1-json, actioncable-unsupported",
     "Sec-WebSocket-Version"  => "13",
+  }
+end
+
+private def headers_without_sec_websocket_protocol
+  HTTP::Headers{
+    "Upgrade"               => "websocket",
+    "Connection"            => "Upgrade",
+    "Sec-WebSocket-Key"     => "OqColdEJm3i9e/EqMxnxZw==",
+    "Sec-WebSocket-Version" => "13",
   }
 end

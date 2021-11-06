@@ -190,6 +190,16 @@ And performs an action with:
 App.channels["chat"].perform("status", { status: "My New Status" });
 ```
 
+Vanilla JS Examples
+
+If you want to use this shard with an iOS clients or vanilla JS using react etc. there is an example in the `/examples` folder.
+
+> Note - If your using a vanilla - non action-cable JS client, you may want to disable the action cable response headers as they cause issues on the clients who don't know how to handle them. Set an environment variable like so to disable those headers;
+
+```
+DISABLE_SEC_WEBSOCKET_PROTOCOL_HEADER=true
+```
+
 ## TODO
 
 After reading the docs, I realized I'm using some weird naming for variables / methods, so
