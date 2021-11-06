@@ -24,16 +24,13 @@ describe Cable::Connection do
 
     it "accepts without params hash key" do
       connect do |connection, socket|
-        connection.receive({"command" => "subscribe", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
+        connection.receive({"command" => "subscribe", "identifier" => {channel: "AppearanceChannel"}.to_json}.to_json)
         sleep 0.1
 
-        socket.messages.should contain({"type" => "confirm_subscription", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
+        socket.messages.should contain({"type" => "confirm_subscription", "identifier" => {channel: "AppearanceChannel"}.to_json}.to_json)
 
         connection.close
         socket.close
-        Cable::Logger.messages.should contain("ChatChannel is streaming from chat_1")
-        Cable::Logger.messages.should contain("ChatChannel is transmitting the subscription confirmation")
-        Cable::Logger.messages.should contain("ChatChannel stopped streaming from {\"channel\":\"ChatChannel\",\"room\":\"1\"}")
       end
     end
 
