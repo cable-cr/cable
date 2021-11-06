@@ -30,7 +30,9 @@ On your `src/app_server.cr` add the `Cable::Handler` before `Lucky::RouteHandler
 class AppServer < Lucky::BaseAppServer
   def middleware
     [
-      Cable::Handler.new(ApplicationCable::Connection),
+      Cable::Handler(ApplicationCable::Connection).new, # place before the middleware below
+      Honeybadger::Handler.new,
+      Lucky::ErrorHandler.new(action: Errors::Show),
       Lucky::RouteHandler.new,
     ]
    end
@@ -44,6 +46,21 @@ Cable.configure do |settings|
   settings.route = "/cable"    # the URL your JS Client will connect
   settings.token = "token"     # The query string parameter used to get the token
 end
+```
+
+You may want to tune how to report logging
+
+```crystal
+# config/log.cr
+
+log_levels = {
+  "debug" => Log::Severity::Debug,
+  "info"  => Log::Severity::Info,
+  "error" => Log::Severity::Error,
+}
+
+# use the `CABLE_DEBUG_LEVEL` env var to choose any of the 3 log levels above
+Cable::Logger.level = log_levels[ENV.fetch("CABLE_DEBUG_LEVEL", "info")]
 ```
 
 Then you need to implement a few classes

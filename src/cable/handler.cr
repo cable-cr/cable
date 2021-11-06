@@ -1,11 +1,8 @@
 require "http/server"
 
 module Cable
-  class Handler
+  class Handler(T)
     include HTTP::Handler
-
-    def initialize(@connection_class : Cable::Connection.class)
-    end
 
     def call(context)
       return call_next(context) unless ws_route_found?(context) && websocket_upgrade_request?(context)
@@ -19,7 +16,7 @@ module Cable
       end
 
       ws = HTTP::WebSocketHandler.new do |socket, context|
-        connection = @connection_class.new(context.request, socket)
+        connection = T.new(context.request, socket)
         connection_id = connection.connection_identifier
 
         # we should not add any connections which have been rejected

@@ -3,7 +3,7 @@ require "../spec_helper"
 describe Cable::Handler do
   describe "basic handling" do
     it "matches the right route" do
-      handler = Cable::Handler.new(ApplicationCable::Connection)
+      handler = Cable::Handler(ApplicationCable::Connection).new
       request = HTTP::Request.new("GET", "#{Cable.settings.route}?test_token=1", headers)
 
       io_with_context = create_ws_request_and_return_io_and_context(handler, request)[0]
@@ -168,7 +168,7 @@ describe Cable::Handler do
 
   describe "the error handling" do
     it "doesn't match the wrong route" do
-      handler = Cable::Handler.new(ApplicationCable::Connection)
+      handler = Cable::Handler(ApplicationCable::Connection).new
       request = HTTP::Request.new("GET", "/unknown_route?test_token=1", headers)
 
       io_with_context = create_ws_request_and_return_io_and_context(handler, request)[0]
@@ -176,7 +176,7 @@ describe Cable::Handler do
     end
 
     it "doesn't upgrade with wrong headers (without Upgrade header)" do
-      handler = Cable::Handler.new(ApplicationCable::Connection)
+      handler = Cable::Handler(ApplicationCable::Connection).new
       headers_without_upgrade = headers
       headers_without_upgrade.delete("Upgrade")
       request = HTTP::Request.new("GET", "/unknown_route?test_token=1", headers_without_upgrade)
@@ -186,7 +186,7 @@ describe Cable::Handler do
     end
 
     it "doesn't upgrade with wrong headers (without Connection header)" do
-      handler = Cable::Handler.new(ApplicationCable::Connection)
+      handler = Cable::Handler(ApplicationCable::Connection).new
       headers_without_connection = headers
       headers_without_connection.delete("Connection")
       request = HTTP::Request.new("GET", "/unknown_route?test_token=1", headers_without_connection)
@@ -217,7 +217,7 @@ private def start_server
   spawn do
     # Make pinger real fast so we don't need to wait
     http_ref = nil
-    http_server = http_ref = HTTP::Server.new([Cable::Handler.new(ApplicationCable::Connection)])
+    http_server = http_ref = HTTP::Server.new([Cable::Handler(ApplicationCable::Connection).new])
     address = http_server.bind_unused_port
     address_chan.send(address)
     http_server.listen
