@@ -4,31 +4,22 @@ module Cable
   class Connection
     class UnathorizedConnectionException < Exception; end
 
-    @@mock : Cable::Connection?
-
     property internal_identifier : String = "0"
+    property connection_identifier : String = ""
+
     getter token : String?
-    getter connection_identifier : String
+    getter reject_connection : Bool = false
+    getter socket
+    getter id : UUID
 
     CHANNELS = {} of String => Hash(String, Cable::Channel)
-
-    getter socket
-    getter id : String
 
     def identifier
       internal_identifier
     end
 
     macro identified_by(name)
-      @{{name.id}} : String = ""
-
-      def {{name.id}}=(value : String)
-        @{{name.id}} = value
-      end
-
-      def {{name.id}}
-        @{{name.id}}
-      end
+      property {{name.id}} = ""
 
       private def internal_identifier
         @{{name.id}}
@@ -36,49 +27,33 @@ module Cable
     end
 
     macro owned_by(type_definition)
-      @{{type_definition.var}} : {{type_definition.type}}?
-
-      def {{type_definition.var}}=(value : {{type_definition.type}})
-        @{{type_definition.var}} = value
-      end
-
-      def {{type_definition.var}}
-        @{{type_definition.var}}
-      end
-    end
-
-    def self.use_mock(mock, &block)
-      @@mock = mock
-
-      yield
-
-      @@mock = nil
-    end
-
-    def self.build(request : HTTP::Request, socket : HTTP::WebSocket)
-      if mock = @@mock
-        return mock
-      else
-        self.new(request, socket)
-      end
+      property {{type_definition.var}} : {{type_definition.type}}?
     end
 
     def initialize(@request : HTTP::Request, @socket : HTTP::WebSocket)
       @token = @request.query_params.fetch(Cable.settings.token, nil)
-      @id = UUID.random.to_s
-      @connection_identifier = ""
+      @id = UUID.random
 
       begin
         connect
-        @connection_identifier = "#{internal_identifier}-#{@id}"
+        # gather connection_identifier after the connection has gathered the id from identified_by(field)
+        self.connection_identifier = "#{internal_identifier}-#{@id}"
       rescue e : UnathorizedConnectionException
+        reject_connection!
         socket.close(HTTP::WebSocket::CloseCode::NormalClosure, "Farewell")
         Cable::Logger.info("An unauthorized connection attempt was rejected")
       end
     end
 
     def connect
-      raise Exception.new("Implement the `connect` method")
+    end
+
+    def reject_connection!
+      @reject_connection = true
+    end
+
+    def connection_rejected?
+      reject_connection
     end
 
     def close

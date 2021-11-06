@@ -120,6 +120,8 @@ describe Cable::Connection do
         # we check only the first that is the one we care about, the others make no sense to our test
         Cable::Logger.messages.should contain("An unauthorized connection attempt was rejected")
         socket.closed?.should be_truthy
+
+        Cable.server.connections.should eq({} of String => Cable::Connection)
       end
     end
   end
