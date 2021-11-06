@@ -87,7 +87,10 @@ module Cable
       Connection::CHANNELS[connection_identifier][payload.identifier] = channel
       channel.subscribed
 
-      return reject(channel) if channel.subscription_rejected?
+      if channel.subscription_rejected?
+        reject(payload)
+        return
+      end
 
       if stream_identifier = channel.stream_identifier
         Cable.server.subscribe_channel(channel: channel, identifier: stream_identifier)
@@ -106,10 +109,12 @@ module Cable
       end
     end
 
-    def reject(channel : Cable::Channel)
-      Connection::CHANNELS[connection_identifier].delete(channel.identifier)
-      Cable::Logger.info "#{channel.class.to_s} is transmitting the subscription rejection"
-      socket.send({type: "reject_subscription", identifier: channel.identifier}.to_json)
+    def reject(payload : Cable::Payload)
+      if channel = Connection::CHANNELS[connection_identifier].delete(payload.identifier)
+        channel.unsubscribed
+        Cable::Logger.info "#{channel.class.to_s} is transmitting the subscription rejection"
+        socket.send({type: "reject_subscription", identifier: payload.identifier}.to_json)
+      end
     end
 
     def message(payload : Cable::Payload)

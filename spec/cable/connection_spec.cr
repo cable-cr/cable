@@ -308,9 +308,11 @@ describe Cable::Connection do
         sleep 0.1
 
         # Even after broadcasting to Rejection channel, we can check the socket didn't receive it
+        socket.messages.size.should eq(3)
         socket.messages.should contain({"type" => "confirm_subscription", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
         socket.messages.should contain({"type" => "reject_subscription", "identifier" => {channel: "RejectionChannel"}.to_json}.to_json)
         socket.messages.should contain({"identifier" => {channel: "ChatChannel", room: "1"}.to_json, "message" => {"foo" => "bar"}}.to_json)
+        socket.messages.should_not contain({"identifier" => {channel: "RejectionChannel"}.to_json, "message" => {"foo" => "bar"}}.to_json)
 
         connection.close
         socket.close
