@@ -89,11 +89,6 @@ module Cable
         return
       end
 
-      if stream_identifier = channel.stream_identifier
-        Cable.server.subscribe_channel(channel: channel, identifier: stream_identifier)
-        Cable::Logger.info "#{channel.class.to_s} is streaming from #{stream_identifier}"
-      end
-
       Cable::Logger.info "#{payload.channel} is transmitting the subscription confirmation"
       socket.send({type: "confirm_subscription", identifier: payload.identifier}.to_json)
     end
@@ -122,8 +117,7 @@ module Cable
     end
 
     def message(payload : Cable::Payload)
-      if Connection::CHANNELS[connection_identifier].has_key?(payload.identifier)
-        channel = Connection::CHANNELS[connection_identifier][payload.identifier]
+      if channel = Connection::CHANNELS.dig?(connection_identifier, payload.identifier)
         if payload.action?
           Cable::Logger.info "#{channel.class}#perform(\"#{payload.action}\", #{payload.data})"
           channel.perform(payload.action, payload.data)
@@ -138,7 +132,7 @@ module Cable
     end
 
     def self.broadcast_to(channel : String, message : String)
-      Cable.server.publish("#{channel}", message)
+      Cable.server.publish(channel, message)
     end
   end
 end

@@ -260,6 +260,22 @@ describe Cable::Connection do
           Cable::Logger.messages.should contain("ChatChannel stopped streaming from {\"channel\":\"ChatChannel\",\"room\":\"1\"}")
         end
       end
+
+      it "receives string json correctly" do
+        connect do |connection, socket|
+          connection.receive({"command" => "subscribe", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
+          sleep 0.1
+          json_message = %({"foo": "bar"})
+          ChatChannel.broadcast_to(channel: "chat_1", message: json_message)
+          sleep 0.1
+
+          socket.messages.should contain({"type" => "confirm_subscription", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
+          socket.messages.should contain({"identifier" => {channel: "ChatChannel", room: "1"}.to_json, "message" => JSON.parse(%({"foo": "bar"}))}.to_json)
+
+          connection.close
+          socket.close
+        end
+      end
     end
 
     describe "as Hash(String, String)" do
@@ -303,6 +319,58 @@ describe Cable::Connection do
           Cable::Logger.messages.should contain("[ActionCable] Broadcasting to chat_1: {\"foo\" => \"bar\"}")
           Cable::Logger.messages.should contain("ChatChannel transmitting {\"foo\" => \"bar\"} (via streamed from chat_1)")
           Cable::Logger.messages.should contain("ChatChannel stopped streaming from {\"channel\":\"ChatChannel\",\"room\":\"1\"}")
+        end
+      end
+    end
+  end
+
+  describe "when Cable.server.publish broadcasts a message" do
+    describe "as string" do
+      it "receives correctly" do
+        connect do |connection, socket|
+          connection.receive({"command" => "subscribe", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
+          sleep 0.1
+          Cable.server.publish(channel: "chat_1", message: "<turbo-stream></turbo-stream>")
+          sleep 0.1
+
+          socket.messages.should contain({"type" => "confirm_subscription", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
+          socket.messages.should contain({"identifier" => {channel: "ChatChannel", room: "1"}.to_json, "message" => "<turbo-stream></turbo-stream>"}.to_json)
+
+          connection.close
+          socket.close
+        end
+      end
+
+      it "receives string json correctly" do
+        connect do |connection, socket|
+          connection.receive({"command" => "subscribe", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
+          sleep 0.1
+          json_message = %({"foo": "bar"})
+          Cable.server.publish(channel: "chat_1", message: json_message)
+          sleep 0.1
+
+          socket.messages.should contain({"type" => "confirm_subscription", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
+          socket.messages.should contain({"identifier" => {channel: "ChatChannel", room: "1"}.to_json, "message" => JSON.parse(%({"foo": "bar"}))}.to_json)
+
+          connection.close
+          socket.close
+        end
+      end
+    end
+
+    describe "as JSON::Any (string)" do
+      it "receives correctly" do
+        connect do |connection, socket|
+          connection.receive({"command" => "subscribe", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
+          sleep 0.1
+          Cable.server.publish(channel: "chat_1", message: %({"foo": "bar"}))
+          sleep 0.1
+
+          socket.messages.should contain({"type" => "confirm_subscription", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
+          socket.messages.should contain({"identifier" => {channel: "ChatChannel", room: "1"}.to_json, "message" => {"foo" => "bar"}}.to_json)
+
+          connection.close
+          socket.close
         end
       end
     end
