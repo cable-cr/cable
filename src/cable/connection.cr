@@ -103,6 +103,8 @@ module Cable
     end
 
     def subscribe(payload : Cable::Payload)
+      return if connection_requesting_duplicate_channel_subscription?(payload)
+
       channel = Cable::Channel::CHANNELS[payload.channel].new(
         connection: self,
         identifier: payload.identifier,
@@ -121,6 +123,13 @@ module Cable
 
       Cable::Logger.info "#{payload.channel} is transmitting the subscription confirmation"
       socket.send({type: "confirm_subscription", identifier: payload.identifier}.to_json)
+    end
+
+    # ensure we only allow subscribing to the same channel once from a connection
+    def connection_requesting_duplicate_channel_subscription?(payload)
+      return unless connection_key = Connection::CHANNELS.dig?(connection_identifier, payload.identifier)
+
+      connection_key.class.to_s == payload.channel
     end
 
     def unsubscribe(payload : Cable::Payload)

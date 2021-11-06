@@ -63,6 +63,23 @@ describe Cable::Connection do
         Cable::Logger.messages.should contain("ChatChannel stopped streaming from {\"channel\":\"ChatChannel\",\"room\":\"1\",\"person\":{\"name\":\"Celso\",\"age\":32,\"boom\":\"boom\"}}")
       end
     end
+
+    it "accepts without params hash key" do
+      connect do |connection, socket|
+        connection.receive({"command" => "subscribe", "identifier" => {channel: "AppearanceChannel"}.to_json}.to_json)
+        sleep 0.1
+        connection.receive({"command" => "subscribe", "identifier" => {channel: "AppearanceChannel"}.to_json}.to_json)
+        sleep 0.1
+        connection.receive({"command" => "subscribe", "identifier" => {channel: "AppearanceChannel"}.to_json}.to_json)
+
+        # ensure we only allow subscribing to the same channel once from a connection
+        socket.messages.size.should eq(1)
+        socket.messages.should contain({"type" => "confirm_subscription", "identifier" => {channel: "AppearanceChannel"}.to_json}.to_json)
+
+        connection.close
+        socket.close
+      end
+    end
   end
 
   describe "#unsubscribe" do
