@@ -93,6 +93,10 @@ describe Cable::Connection do
       connect do |connection, socket|
         connection.identifier.should eq("98")
       end
+
+      connect(connection_class: ConnectionWithDifferentIndentifierTest) do |connection, socket|
+        connection.identifier.should eq("98")
+      end
     end
   end
 
@@ -374,6 +378,23 @@ private class ConnectionTest < Cable::Connection
   def connect
     if tk = token
       self.identifier = tk
+    end
+    self.current_user = User.new("user98@mail.com")
+    self.organization = Organization.new
+  end
+
+  def broadcast_to(channel, message)
+  end
+end
+
+private class ConnectionWithDifferentIndentifierTest < Cable::Connection
+  identified_by :identifier_test
+  owned_by current_user : User
+  owned_by organization : Organization
+
+  def connect
+    if tk = token
+      self.identifier_test = tk
     end
     self.current_user = User.new("user98@mail.com")
     self.organization = Organization.new

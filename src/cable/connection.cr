@@ -16,7 +16,7 @@ module Cable
     getter id : String
 
     def identifier
-      ""
+      internal_identifier
     end
 
     macro identified_by(name)
