@@ -69,7 +69,6 @@ module ApplicationCable
         self.current_user =  UserQuery.find(user_id)
       end
     end
-
   end
 end
 ```
@@ -117,6 +116,18 @@ class ChatChannel < ApplicationCable::Channel
 
     # You could for example call any method on your user like a .logout one
     # user.logout
+  end
+end
+```
+
+Reject channel subscription if the request is invalid:
+
+```crystal
+class ChatChannel < ApplicationCable::Channel
+  def subscribed
+    reject if user_not_allowed_to_join_chat_room?
+
+    stream_from "chat_#{params["room"]}"
   end
 end
 ```
