@@ -14,7 +14,7 @@ module Cable
       path = context.request.path
       Cable::Logger.info "Started GET \"#{path}\" [WebSocket] for #{remote_address} at #{Time.utc.to_s}"
 
-      unless ENV["DISABLE_SEC_WEBSOCKET_PROTOCOL_HEADER"]?
+      unless Cable.settings.disable_sec_websocket_protocol_header
         context.response.headers["Sec-WebSocket-Protocol"] = "actioncable-v1-json"
       end
 

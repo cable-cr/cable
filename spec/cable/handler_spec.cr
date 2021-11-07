@@ -11,13 +11,13 @@ describe Cable::Handler do
     end
 
     it "allows you to remove undesired actioncable headers" do
-      ENV["DISABLE_SEC_WEBSOCKET_PROTOCOL_HEADER"] = "true"
+      Cable.settings.disable_sec_websocket_protocol_header = true
       handler = Cable::Handler.new(ApplicationCable::Connection)
       request = HTTP::Request.new("GET", "#{Cable.settings.route}?test_token=1", headers_without_sec_websocket_protocol)
 
       io_with_context = create_ws_request_and_return_io_and_context(handler, request)[0]
       io_with_context.to_s.should eq("HTTP/1.1 101 Switching Protocols\r\nUpgrade: websocket\r\nConnection: Upgrade\r\nSec-WebSocket-Accept: 6x90CSU0y750nc+5Do8J0YjG7lM=\r\n\r\n")
-      ENV.delete("DISABLE_SEC_WEBSOCKET_PROTOCOL_HEADER")
+      Cable.settings.disable_sec_websocket_protocol_header = false
     end
 
     it "starts the web pinger" do

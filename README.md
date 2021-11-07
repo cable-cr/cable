@@ -125,81 +125,28 @@ Check below on the JavaScript section how to communicate with the Cable backend
 
 ## JavaScript
 
-It works with [ActionCable](https://www.npmjs.com/package/actioncable) JS Client out-of-the-box!! Yeah, that's really cool no? If you need to adapt, make a hack, or something like that?! No, you don't need! Just read the few lines below and start playing with Cable in 5 minutes!
+It works with [ActionCable](https://www.npmjs.com/package/actioncable) JS Client out-of-the-box!! Yeah, that's really cool no? If you need to adapt, make a hack, or something like that?!
 
-If you are using Rails, then you already has a `app/assets/javascripts/cable.js` file that requires `action_cable`, you just need to connect to the right URL (don't forgot the settings you used), to authenticate using JWT use something like:
+No, you don't need! Just read the few lines below and start playing with Cable in 5 minutes!
 
-```js
-(function() {
-  this.App || (this.App = {});
+### ActionCable JS Example
 
-  App.cable = ActionCable.createConsumer(
-    "ws://localhost:5000/cable?token=JWT_TOKEN" // if using the default options
-  );
-}.call(this));
-```
+`/examples/action-cable-js-client.md`
 
-then on your `app/assets/javascripts/channels/chat.js`
-
-```js
-App.channels || (App.channels = {});
-
-App.channels["chat"] = App.cable.subscriptions.create(
-  {
-    channel: "ChatChannel",
-    room: "1"
-  },
-  {
-    connected: function() {
-      return console.log("ChatChannel connected");
-    },
-    disconnected: function() {
-      return console.log("ChatChannel disconnected");
-    },
-    received: function(data) {
-      return console.log("ChatChannel received", data);
-    },
-    rejected: function() {
-      return console.log("ChatChannel rejected");
-    },
-    away: function() {
-      return this.perform("away");
-    },
-    status: function(status) {
-      return this.perform("status", {
-        status: status
-      });
-    }
-  }
-);
-```
-
-Then on your Browser console you can see the message:
-
-> ChatChannel connected
-
-After you load, then you can broadcast messages with:
-
-```js
-App.channels["chat"].send({ message: "Hello World" });
-```
-
-And performs an action with:
-
-```js
-App.channels["chat"].perform("status", { status: "My New Status" });
-```
-
-Vanilla JS Examples
+### Vanilla JS Examples
 
 If you want to use this shard with an iOS clients or vanilla JS using react etc. there is an example in the `/examples` folder.
 
-> Note - If your using a vanilla - non action-cable JS client, you may want to disable the action cable response headers as they cause issues on the clients who don't know how to handle them. Set an environment variable like so to disable those headers;
+> Note - If your using a vanilla - non action-cable JS client, you may want to disable the action cable response headers as they cause issues on the clients who don't know how to handle them. Set an Habitat disable_sec_websocket_protocol_header like so to disable those headers;
 
 ```
-DISABLE_SEC_WEBSOCKET_PROTOCOL_HEADER=true
-```
+# config/cable.cr
 
+Cable.configure do |settings|
+  settings.disable_sec_websocket_protocol_header = true
+end
+```
+4
 ## TODO
 
 After reading the docs, I realized I'm using some weird naming for variables / methods, so
