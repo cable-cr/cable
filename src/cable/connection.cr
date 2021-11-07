@@ -1,14 +1,14 @@
 require "uuid"
 
 module Cable
-  class Connection
+  abstract class Connection
     class UnathorizedConnectionException < Exception; end
 
     property internal_identifier : String = "0"
     property connection_identifier : String = ""
 
     getter token : String?
-    getter reject_connection : Bool = false
+    getter? connection_rejected : Bool = false
     getter socket
     getter id : UUID
 
@@ -45,15 +45,10 @@ module Cable
       end
     end
 
-    def connect
-    end
+    abstract def connect
 
     def reject_connection!
-      @reject_connection = true
-    end
-
-    def connection_rejected?
-      reject_connection
+      @connection_rejected = true
     end
 
     def close
