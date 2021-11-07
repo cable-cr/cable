@@ -5,7 +5,7 @@ require "./cable/**"
 
 # TODO: Write documentation for `Cable`
 module Cable
-  VERSION = "0.2.0"
+  VERSION = "0.1.0"
 
   INTERNAL = {
     message_types: {
