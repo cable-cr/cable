@@ -7,12 +7,12 @@ class CallbackTransmitChannel < ApplicationCable::Channel
 
   # testing the type all at once to save time
   def announce_user_joining_1
-    transmit({"welcome" => "hash"})
-    transmit(%({"welcome": "json_string"}))
+    broadcast({"welcome" => "hash"})
+    broadcast(%({"welcome": "json_string"}))
   end
 
   def announce_user_joining_2
-    transmit(JSON.parse(%({"welcome": "json"})))
-    transmit("welcome_string")
+    broadcast(JSON.parse(%({"welcome": "json"})))
+    broadcast("welcome_string")
   end
 end

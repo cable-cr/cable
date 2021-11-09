@@ -7,9 +7,9 @@ class CallbackConnectionTransmitChannel < ApplicationCable::Channel
 
   # testing the type all at once to save time
   def broadcast_welcome_pack
-    connection_transmit({"welcome" => "hash"})
-    connection_transmit(%({"welcome": "json_string"}))
-    connection_transmit(JSON.parse(%({"welcome": "json"})))
-    connection_transmit("welcome_string")
+    transmit({"welcome" => "hash"})
+    transmit(%({"welcome": "json_string"}))
+    transmit(JSON.parse(%({"welcome": "json"})))
+    transmit("welcome_string")
   end
 end
