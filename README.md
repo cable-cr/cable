@@ -96,8 +96,6 @@ class ChatChannel < ApplicationCable::Channel
     broadcast_message["message"] = data["message"].to_s
     broadcast_message["current_user_id"] = connection.identifier
     ChatChannel.broadcast_to("chat_#{params["room"]}", broadcast_message)
-    # alternatively you can use the shorthand version
-    broadcast(broadcast_message) # this uses the `stream_from` key already set and broadcasts to everyone
   end
 
   def perform(action, action_params)
@@ -151,7 +149,7 @@ class ChatChannel < ApplicationCable::Channel
   # If you want to ONLY send the current_user a message
   # and none of the other subscribers
   #
-  # use -> transmit(message)
+  # use -> transmit(message), which accepts Hash(String, String) or String
   def broadcast_welcome_pack_to_single_subscribed_user
     transmit({ "welcome_pack" => "some cool stuff for this single user" })
   end
@@ -160,8 +158,8 @@ class ChatChannel < ApplicationCable::Channel
   # if you want to broadcast a message
   # to all subscribers connected to this channel
   #
-  # use -> broadcast(message)
-  def broadcast_welcome_pack_to_single_subscribed_user
+  # use -> broadcast(message), which accepts Hash(String, String) or String
+  def announce_user_joining_to_everyone_else_in_the_channel
     broadcast("username xyz just joined")
   end
 
