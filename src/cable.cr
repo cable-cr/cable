@@ -28,6 +28,7 @@ module Cable
     setting route : String = "/cable", example: "/cable"
     setting token : String = "token", example: "token"
     setting url : String = ENV.fetch("REDIS_URL", "redis://localhost:6379"), example: "redis://localhost:6379"
+    setting disable_sec_websocket_protocol_header : Bool = false
   end
   # TODO: Put your code here
 end

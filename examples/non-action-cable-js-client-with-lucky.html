@@ -1,0 +1,90 @@
+<!-- Open in a web browser with Lucky running -->
+
+<!DOCTYPE html>
+<meta charset="utf-8" />
+<title>Lucky Vanilla JS WebSocket Test</title>
+<script language="javascript" type="text/javascript">
+  var token = 'xyz'
+  var wsUri = `ws://localhost:5000/cable?token=${token}`
+  var output
+
+  function init () {
+    output = document.getElementById('output')
+    testWebSocket()
+  }
+
+  function testWebSocket () {
+    websocket = new WebSocket(wsUri)
+    websocket.onopen = function (evt) {
+      writeToScreen('CONNECTED')
+      subscribe(evt)
+    }
+    websocket.onclose = function (evt) {
+      onClose(evt)
+    }
+    websocket.onmessage = function (evt) {
+      onMessage(evt)
+    }
+    websocket.onerror = function (evt) {
+      onError(evt)
+    }
+  }
+
+  function subscribe (evt) {
+    onSend(
+      JSON.stringify({
+        command: 'subscribe',
+        identifier: JSON.stringify({
+          channel: 'ChatChannel',
+          room: '1'
+        })
+      })
+      )
+  }
+
+  function unsubscribe (evt) {
+    onSend(
+      JSON.stringify({
+        command: 'unsubscribe',
+        identifier: JSON.stringify({
+          channel: 'ChatChannel',
+          room: '1'
+        })
+      })
+      )
+  }
+
+  function onClose (evt) {
+    writeToScreen('DISCONNECTED')
+  }
+
+  function onMessage (evt) {
+    writeToScreen('<b style="color: green;">RESPONSE:</b> <code style="">' + evt.data + '</code>')
+  }
+
+  function onError (evt) {
+    writeToScreen('<span style="color: red;">ERROR:</span> ' + evt.data)
+  }
+
+  function onSend (message) {
+    writeToScreen("<b style='color: blue;'>SENT:</b> " + message)
+    websocket.send(message)
+  }
+
+  function writeToScreen (message) {
+    var pre = document.createElement('p')
+    pre.style.wordWrap = 'break-word'
+    pre.innerHTML = message
+    output.appendChild(pre)
+    window.scrollTo(0, document.body.scrollHeight)
+  }
+
+  window.addEventListener('load', init, false)
+</script>
+
+<h2>WebSocket Test</h2>
+
+<div id="output"></div>
+
+<button onclick="unsubscribe()">Unsubscribe</button>
+<button onclick="subscribe()">Subscribe</button>
