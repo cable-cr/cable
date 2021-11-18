@@ -179,8 +179,9 @@
     Overview
   </h2>
 
-  <p>Needs access to connection so we can subscribe to
-multiple channeels</p>
+  <p>On redis shard it tries to convert the return of command to Nil
+When returning an array, it raises an exception
+So we monkey patch to run the command, ignore it, and return Nil</p>
 
 
 
@@ -241,6 +242,8 @@ multiple channeels</p>
     
       <li class="entry-summary">
         <a href="#_connection:Redis::Connection-instance-method" class="signature"><strong>#_connection</strong> : Redis::Connection</a>
+        
+          <div class="summary"><p>Needs access to connection so we can subscribe to multiple channels</p></div>
         
       </li>
     
@@ -324,6 +327,12 @@ multiple channeels</p>
 
         <a class="method-permalink" href="#_connection:Redis::Connection-instance-method">#</a>
       </div>
+      
+        <div class="doc">
+          
+          <p>Needs access to connection so we can subscribe to
+multiple channels</p>
+        </div>
       
       <br/>
       <div>

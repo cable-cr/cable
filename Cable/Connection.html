@@ -160,7 +160,7 @@
 <div class="main-content">
 <h1 class="type-name">
 
-  <span class="kind">class</span> Cable::Connection
+  <span class="kind">abstract class</span> Cable::Connection
 
 </h1>
 
@@ -250,16 +250,6 @@
         
       </li>
     
-      <li class="entry-summary">
-        <a href="#build(request:HTTP::Request,socket:HTTP::WebSocket)-class-method" class="signature"><strong>.build</strong>(request : HTTP::Request, socket : HTTP::WebSocket)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#use_mock(mock,&)-class-method" class="signature"><strong>.use_mock</strong>(mock, &)</a>
-        
-      </li>
-    
   </ul>
 
 
@@ -290,7 +280,17 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#id:String-instance-method" class="signature"><strong>#id</strong> : String</a>
+        <a href="#connection_identifier=(connection_identifier:String)-instance-method" class="signature"><strong>#connection_identifier=</strong>(connection_identifier : String)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#connection_rejected?:Bool-instance-method" class="signature"><strong>#connection_rejected?</strong> : Bool</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#id:UUID-instance-method" class="signature"><strong>#id</strong> : UUID</a>
         
       </li>
     
@@ -320,7 +320,12 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#reject(channel:Cable::Channel)-instance-method" class="signature"><strong>#reject</strong>(channel : Cable::Channel)</a>
+        <a href="#reject(payload:Cable::Payload)-instance-method" class="signature"><strong>#reject</strong>(payload : Cable::Payload)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#reject_connection!-instance-method" class="signature"><strong>#reject_connection!</strong></a>
         
       </li>
     
@@ -451,34 +456,6 @@
       </div>
     </div>
   
-    <div class="entry-detail" id="build(request:HTTP::Request,socket:HTTP::WebSocket)-class-method">
-      <div class="signature">
-        
-        def self.<strong>build</strong>(request : HTTP::Request, socket : HTTP::WebSocket)
-
-        <a class="method-permalink" href="#build(request:HTTP::Request,socket:HTTP::WebSocket)-class-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="use_mock(mock,&)-class-method">
-      <div class="signature">
-        
-        def self.<strong>use_mock</strong>(mock, &)
-
-        <a class="method-permalink" href="#use_mock(mock,&)-class-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-      </div>
-    </div>
-  
 
 
 
@@ -507,7 +484,7 @@
   
     <div class="entry-detail" id="connect-instance-method">
       <div class="signature">
-        
+        abstract 
         def <strong>connect</strong>
 
         <a class="method-permalink" href="#connect-instance-method">#</a>
@@ -533,12 +510,40 @@
       </div>
     </div>
   
-    <div class="entry-detail" id="id:String-instance-method">
+    <div class="entry-detail" id="connection_identifier=(connection_identifier:String)-instance-method">
       <div class="signature">
         
-        def <strong>id</strong> : String
+        def <strong>connection_identifier=</strong>(connection_identifier : String)
 
-        <a class="method-permalink" href="#id:String-instance-method">#</a>
+        <a class="method-permalink" href="#connection_identifier=(connection_identifier:String)-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="connection_rejected?:Bool-instance-method">
+      <div class="signature">
+        
+        def <strong>connection_rejected?</strong> : Bool
+
+        <a class="method-permalink" href="#connection_rejected?:Bool-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="id:UUID-instance-method">
+      <div class="signature">
+        
+        def <strong>id</strong> : UUID
+
+        <a class="method-permalink" href="#id:UUID-instance-method">#</a>
       </div>
       
       <br/>
@@ -617,12 +622,26 @@
       </div>
     </div>
   
-    <div class="entry-detail" id="reject(channel:Cable::Channel)-instance-method">
+    <div class="entry-detail" id="reject(payload:Cable::Payload)-instance-method">
       <div class="signature">
         
-        def <strong>reject</strong>(channel : <a href="../Cable/Channel.html">Cable::Channel</a>)
+        def <strong>reject</strong>(payload : <a href="../Cable/Payload.html">Cable::Payload</a>)
 
-        <a class="method-permalink" href="#reject(channel:Cable::Channel)-instance-method">#</a>
+        <a class="method-permalink" href="#reject(payload:Cable::Payload)-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="reject_connection!-instance-method">
+      <div class="signature">
+        
+        def <strong>reject_connection!</strong>
+
+        <a class="method-permalink" href="#reject_connection!-instance-method">#</a>
       </div>
       
       <br/>

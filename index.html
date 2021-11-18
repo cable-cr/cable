@@ -240,7 +240,6 @@
         <span class="k">self</span>.current_user <span class="o">=</span>  <span class="t">UserQuery</span>.find(user_id)
       <span class="k">end</span>
     <span class="k">end</span>
-
   <span class="k">end</span>
 <span class="k">end</span></code></pre>
 
@@ -284,6 +283,16 @@
 
     <span class="c"># You could for example call any method on your user like a .logout one</span>
     <span class="c"># user.logout</span>
+  <span class="k">end</span>
+<span class="k">end</span></code></pre>
+
+<p>Reject channel subscription if the request is invalid:</p>
+
+<pre><code class="language-crystal"><span class="k">class</span> <span class="t">ChatChannel</span> <span class="o">&lt;</span> <span class="t">ApplicationCable</span><span class="t">::</span><span class="t">Channel</span>
+  <span class="k">def</span> <span class="m">subscribed</span>
+    reject <span class="k">if</span> user_not_allowed_to_join_chat_room?
+
+    stream_from <span class="s">&quot;chat_</span><span class="i">#{</span>params[<span class="s">&quot;room&quot;</span>]<span class="i">}</span><span class="s">&quot;</span>
   <span class="k">end</span>
 <span class="k">end</span></code></pre>
 
