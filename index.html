@@ -304,62 +304,35 @@
   </svg>
 </a>JavaScript</h2>
 
-<p>It works with <a href="https://www.npmjs.com/package/actioncable">ActionCable</a> JS Client out-of-the-box!! Yeah, that's really cool no? If you need to adapt, make a hack, or something like that?! No, you don't need! Just read the few lines below and start playing with Cable in 5 minutes!</p>
+<p>It works with <a href="https://www.npmjs.com/package/actioncable">ActionCable</a> JS Client out-of-the-box!! Yeah, that's really cool no? If you need to adapt, make a hack, or something like that?!</p>
 
-<p>If you are using Rails, then you already has a <code>app/assets/javascripts/cable.js</code> file that requires <code>action_cable</code>, you just need to connect to the right URL (don't forgot the settings you used), to authenticate using JWT use something like:</p>
+<p>No, you don't need! Just read the few lines below and start playing with Cable in 5 minutes!</p>
 
-<pre><code class="language-js">(function() {
-  this.App || (this.App = {});
+<h3><a id="action-cable-js-example" class="anchor" href="#action-cable-js-example">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>ActionCable JS Example</h3>
 
-  App.cable = ActionCable.createConsumer(
-    "ws://localhost:5000/cable?token=JWT_TOKEN" // if using the default options
-  );
-}.call(this));</code></pre>
+<p><code>/examples/action-cable-js-client.md</code></p>
 
-<p>then on your <code>app/assets/javascripts/channels/chat.js</code></p>
+<h3><a id="vanilla-js-examples" class="anchor" href="#vanilla-js-examples">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Vanilla JS Examples</h3>
 
-<pre><code class="language-js">App.channels || (App.channels = {});
+<p>If you want to use this shard with an iOS clients or vanilla JS using react etc. there is an example in the <code>/examples</code> folder.</p>
 
-App.channels["chat"] = App.cable.subscriptions.create(
-  {
-    channel: "ChatChannel",
-    room: "1"
-  },
-  {
-    connected: function() {
-      return console.log("ChatChannel connected");
-    },
-    disconnected: function() {
-      return console.log("ChatChannel disconnected");
-    },
-    received: function(data) {
-      return console.log("ChatChannel received", data);
-    },
-    rejected: function() {
-      return console.log("ChatChannel rejected");
-    },
-    away: function() {
-      return this.perform("away");
-    },
-    status: function(status) {
-      return this.perform("status", {
-        status: status
-      });
-    }
-  }
-);</code></pre>
+<blockquote>Note - If your using a vanilla - non action-cable JS client, you may want to disable the action cable response headers as they cause issues on the clients who don't know how to handle them. Set an Habitat disable_sec_websocket_protocol_header like so to disable those headers;</blockquote>
 
-<p>Then on your Browser console you can see the message:</p>
+<pre><code class="language-crystal"><span class="c"># config/cable.cr</span>
 
-<blockquote>ChatChannel connected</blockquote>
+<span class="t">Cable</span>.configure <span class="k">do</span> <span class="o">|</span>settings<span class="o">|</span>
+  settings.disable_sec_websocket_protocol_header <span class="o">=</span> <span class="n">true</span>
+<span class="k">end</span></code></pre>
 
-<p>After you load, then you can broadcast messages with:</p>
-
-<pre><code class="language-js">App.channels["chat"].send({ message: "Hello World" });</code></pre>
-
-<p>And performs an action with:</p>
-
-<pre><code class="language-js">App.channels["chat"].perform("status", { status: "My New Status" });</code></pre>
+<p>4</p>
 
 <h2><a id="todo" class="anchor" href="#todo">
   <svg class="octicon-link" aria-hidden="true">
