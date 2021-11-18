@@ -12,8 +12,9 @@ module Cable
     getter identifier
     getter connection
     getter stream_identifier : String?
+    getter reject_subscription : Bool = false
 
-    def initialize(@connection : Cable::Connection, @identifier : String, @params : Hash(String, Cable::Payload::RESULT), @reject_subscription : Bool = false)
+    def initialize(@connection : Cable::Connection, @identifier : String, @params : Hash(String, Cable::Payload::RESULT))
     end
 
     def reject
@@ -25,7 +26,6 @@ module Cable
     end
 
     def subscribed
-      # raise Exception.new("Implement the `subscribed` method")
     end
 
     def close

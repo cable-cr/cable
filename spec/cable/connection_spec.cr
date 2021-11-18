@@ -93,6 +93,10 @@ describe Cable::Connection do
       connect do |connection, socket|
         connection.identifier.should eq("98")
       end
+
+      connect(connection_class: ConnectionWithDifferentIndentifierTest) do |connection, socket|
+        connection.identifier.should eq("98")
+      end
     end
   end
 
@@ -116,6 +120,8 @@ describe Cable::Connection do
         # we check only the first that is the one we care about, the others make no sense to our test
         Cable::Logger.messages.should contain("An unauthorized connection attempt was rejected")
         socket.closed?.should be_truthy
+
+        Cable.server.connections.should eq({} of String => Cable::Connection)
       end
     end
   end
@@ -302,9 +308,11 @@ describe Cable::Connection do
         sleep 0.1
 
         # Even after broadcasting to Rejection channel, we can check the socket didn't receive it
+        socket.messages.size.should eq(3)
         socket.messages.should contain({"type" => "confirm_subscription", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
         socket.messages.should contain({"type" => "reject_subscription", "identifier" => {channel: "RejectionChannel"}.to_json}.to_json)
         socket.messages.should contain({"identifier" => {channel: "ChatChannel", room: "1"}.to_json, "message" => {"foo" => "bar"}}.to_json)
+        socket.messages.should_not contain({"identifier" => {channel: "RejectionChannel"}.to_json, "message" => {"foo" => "bar"}}.to_json)
 
         connection.close
         socket.close
@@ -374,6 +382,23 @@ private class ConnectionTest < Cable::Connection
   def connect
     if tk = token
       self.identifier = tk
+    end
+    self.current_user = User.new("user98@mail.com")
+    self.organization = Organization.new
+  end
+
+  def broadcast_to(channel, message)
+  end
+end
+
+private class ConnectionWithDifferentIndentifierTest < Cable::Connection
+  identified_by :identifier_test
+  owned_by current_user : User
+  owned_by organization : Organization
+
+  def connect
+    if tk = token
+      self.identifier_test = tk
     end
     self.current_user = User.new("user98@mail.com")
     self.organization = Organization.new

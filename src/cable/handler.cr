@@ -19,7 +19,9 @@ module Cable
       ws = HTTP::WebSocketHandler.new do |socket, context|
         connection = @connection_class.new(context.request, socket)
         connection_id = connection.connection_identifier
-        Cable.server.add_connection(connection)
+
+        # we should not add any connections which have been rejected
+        Cable.server.add_connection(connection) unless connection.connection_rejected?
 
         # Send welcome message to the client
         socket.send({type: "welcome"}.to_json)
@@ -34,6 +36,8 @@ module Cable
         socket.on_message do |message|
           begin
             connection.receive(message)
+          rescue e : Cable::Connection::UnathorizedConnectionException
+            # do nothing, this is planned
           rescue e : Exception
             Cable::Logger.info "Exception: #{e.message}"
           end

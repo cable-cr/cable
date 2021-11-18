@@ -1,34 +1,25 @@
 require "uuid"
 
 module Cable
-  class Connection
+  abstract class Connection
     class UnathorizedConnectionException < Exception; end
 
-    @@mock : Cable::Connection?
-
     property internal_identifier : String = "0"
+    property connection_identifier : String = ""
+
     getter token : String?
-    getter connection_identifier : String
+    getter? connection_rejected : Bool = false
+    getter socket
+    getter id : UUID
 
     CHANNELS = {} of String => Hash(String, Cable::Channel)
 
-    getter socket
-    getter id : String
-
     def identifier
-      ""
+      internal_identifier
     end
 
     macro identified_by(name)
-      @{{name.id}} : String = ""
-
-      def {{name.id}}=(value : String)
-        @{{name.id}} = value
-      end
-
-      def {{name.id}}
-        @{{name.id}}
-      end
+      property {{name.id}} = ""
 
       private def internal_identifier
         @{{name.id}}
@@ -36,49 +27,28 @@ module Cable
     end
 
     macro owned_by(type_definition)
-      @{{type_definition.var}} : {{type_definition.type}}?
-
-      def {{type_definition.var}}=(value : {{type_definition.type}})
-        @{{type_definition.var}} = value
-      end
-
-      def {{type_definition.var}}
-        @{{type_definition.var}}
-      end
-    end
-
-    def self.use_mock(mock, &block)
-      @@mock = mock
-
-      yield
-
-      @@mock = nil
-    end
-
-    def self.build(request : HTTP::Request, socket : HTTP::WebSocket)
-      if mock = @@mock
-        return mock
-      else
-        self.new(request, socket)
-      end
+      property {{type_definition.var}} : {{type_definition.type}}?
     end
 
     def initialize(@request : HTTP::Request, @socket : HTTP::WebSocket)
       @token = @request.query_params.fetch(Cable.settings.token, nil)
-      @id = UUID.random.to_s
-      @connection_identifier = ""
+      @id = UUID.random
 
       begin
         connect
-        @connection_identifier = "#{internal_identifier}-#{@id}"
+        # gather connection_identifier after the connection has gathered the id from identified_by(field)
+        self.connection_identifier = "#{internal_identifier}-#{@id}"
       rescue e : UnathorizedConnectionException
+        reject_connection!
         socket.close(HTTP::WebSocket::CloseCode::NormalClosure, "Farewell")
         Cable::Logger.info("An unauthorized connection attempt was rejected")
       end
     end
 
-    def connect
-      raise Exception.new("Implement the `connect` method")
+    abstract def connect
+
+    def reject_connection!
+      @connection_rejected = true
     end
 
     def close
@@ -112,7 +82,10 @@ module Cable
       Connection::CHANNELS[connection_identifier][payload.identifier] = channel
       channel.subscribed
 
-      return reject(channel) if channel.subscription_rejected?
+      if channel.subscription_rejected?
+        reject(payload)
+        return
+      end
 
       if stream_identifier = channel.stream_identifier
         Cable.server.subscribe_channel(channel: channel, identifier: stream_identifier)
@@ -131,10 +104,12 @@ module Cable
       end
     end
 
-    def reject(channel : Cable::Channel)
-      Connection::CHANNELS[connection_identifier].delete(channel.identifier)
-      Cable::Logger.info "#{channel.class.to_s} is transmitting the subscription rejection"
-      socket.send({type: "reject_subscription", identifier: channel.identifier}.to_json)
+    def reject(payload : Cable::Payload)
+      if channel = Connection::CHANNELS[connection_identifier].delete(payload.identifier)
+        channel.unsubscribed
+        Cable::Logger.info "#{channel.class.to_s} is transmitting the subscription rejection"
+        socket.send({type: "reject_subscription", identifier: payload.identifier}.to_json)
+      end
     end
 
     def message(payload : Cable::Payload)
