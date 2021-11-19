@@ -11,14 +11,13 @@ module Cable
     getter? connection_rejected : Bool = false
     getter socket
     getter id : UUID
+    getter started_at : Time = Time.utc
 
     CHANNELS = {} of String => Hash(String, Cable::Channel)
 
     def identifier
       internal_identifier
     end
-
-    getter started_at : Time = Time.utc
 
     macro identified_by(name)
       property {{name.id}} = ""
@@ -55,6 +54,7 @@ module Cable
 
     def close
       return true unless Connection::CHANNELS.has_key?(connection_identifier)
+
       Connection::CHANNELS[connection_identifier].each do |identifier, channel|
         channel.close
         Connection::CHANNELS[connection_identifier].delete(identifier)

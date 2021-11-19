@@ -23,9 +23,10 @@ module Cable
     getter redis_publish = Redis.new(url: Cable.settings.url)
     getter fiber_channel = ::Channel({String, String}).new
 
+    @channels = {} of String => Channels
+    @channel_mutex = Mutex.new
+
     def initialize
-      @channels = {} of String => Channels
-      @channel_mutex = Mutex.new
       subscribe
       process_subscribed_messages
     end
@@ -140,7 +141,7 @@ module Cable
         redis_subscribe.subscribe("_internal") do |on|
           on.message do |channel, message|
             if channel == "_internal" && message == "debug"
-              puts self.debug
+              debug
             else
               fiber_channel.send({channel, message})
               Cable::Logger.debug { "Cable::Server#subscribe channel:#{channel} message:#{message}" }

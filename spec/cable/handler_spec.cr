@@ -12,7 +12,7 @@ describe Cable::Handler do
 
     it "allows you to remove undesired actioncable headers" do
       Cable.settings.disable_sec_websocket_protocol_header = true
-      handler = Cable::Handler.new(ApplicationCable::Connection)
+      handler = Cable::Handler(ApplicationCable::Connection).new
       request = HTTP::Request.new("GET", "#{Cable.settings.route}?test_token=1", headers_without_sec_websocket_protocol)
 
       io_with_context = create_ws_request_and_return_io_and_context(handler, request)[0]
