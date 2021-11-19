@@ -16,14 +16,17 @@ module Cable
   end
 
   class Server
+    include Debug
+
     getter connections = {} of String => Connection
     getter redis_subscribe = Redis.new(url: Cable.settings.url)
     getter redis_publish = Redis.new(url: Cable.settings.url)
     getter fiber_channel = ::Channel({String, String}).new
 
+    @channels = {} of String => Channels
+    @channel_mutex = Mutex.new
+
     def initialize
-      @channels = {} of String => Channels
-      @channel_mutex = Mutex.new
       subscribe
       process_subscribed_messages
     end
@@ -89,14 +92,15 @@ module Cable
         if channel.connection.socket.closed?
           channel.close
         else
-          Cable::Logger.info "#{channel.class} transmitting #{parsed_message} (via streamed from #{channel.stream_identifier})"
+          Cable::Logger.info { "#{channel.class} transmitting #{parsed_message} (via streamed from #{channel.stream_identifier})" }
           channel.connection.socket.send({
             identifier: channel.identifier,
             message:    parsed_message,
           }.to_json)
         end
       end
-    rescue IO::Error
+    rescue e : IO::Error
+      Cable::Logger.error { "IO::Error Exception: #{e.message} -> #{self.class.name}#send_to_channels(channel, message)" }
     end
 
     def safe_decode_message(message)
@@ -108,27 +112,6 @@ module Cable
       end
     rescue JSON::ParseException
       message
-    end
-
-    def debug
-      Cable::Logger.debug "-" * 80
-      Cable::Logger.debug "Some Good Information"
-      Cable::Logger.debug "Connections"
-      @connections.each do |k, v|
-        Cable::Logger.debug "Connection Key: #{k}"
-      end
-      Cable::Logger.debug "Channels"
-      @channels.each do |k, v|
-        Cable::Logger.debug "Channel Key: #{k}"
-        Cable::Logger.debug "Channels"
-        v.each do |channel|
-          Cable::Logger.debug "From Channel: #{channel.connection.connection_identifier}"
-          Cable::Logger.debug "Params: #{channel.params}"
-          Cable::Logger.debug "ID: #{channel.identifier}"
-          Cable::Logger.debug "Stream ID:: #{channel.stream_identifier}"
-        end
-      end
-      Cable::Logger.debug "-" * 80
     end
 
     def shutdown
@@ -148,6 +131,7 @@ module Cable
         while received = fiber_channel.receive
           channel, message = received
           server.send_to_channels(channel, message)
+          Cable::Logger.debug { "Cable::Server#process_subscribed_messages channel:#{channel} message:#{message}" }
         end
       end
     end
@@ -157,9 +141,10 @@ module Cable
         redis_subscribe.subscribe("_internal") do |on|
           on.message do |channel, message|
             if channel == "_internal" && message == "debug"
-              puts self.debug
+              debug
             else
               fiber_channel.send({channel, message})
+              Cable::Logger.debug { "Cable::Server#subscribe channel:#{channel} message:#{message}" }
             end
           end
         end

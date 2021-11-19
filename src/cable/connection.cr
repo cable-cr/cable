@@ -11,6 +11,7 @@ module Cable
     getter? connection_rejected : Bool = false
     getter socket
     getter id : UUID
+    getter started_at : Time = Time.utc
 
     CHANNELS = {} of String => Hash(String, Cable::Channel)
 
@@ -41,7 +42,7 @@ module Cable
       rescue e : UnathorizedConnectionException
         reject_connection!
         socket.close(HTTP::WebSocket::CloseCode::NormalClosure, "Farewell")
-        Cable::Logger.info("An unauthorized connection attempt was rejected")
+        Cable::Logger.info { ("An unauthorized connection attempt was rejected") }
       end
     end
 
@@ -53,10 +54,16 @@ module Cable
 
     def close
       return true unless Connection::CHANNELS.has_key?(connection_identifier)
+
       Connection::CHANNELS[connection_identifier].each do |identifier, channel|
         channel.close
         Connection::CHANNELS[connection_identifier].delete(identifier)
+      rescue e : IO::Error
+        Cable::Logger.error { "IO::Error Exception: #{e.message} -> #{self.class.name}#close" }
       end
+
+      Cable::Logger.info { "Terminating connection #{connection_identifier}" }
+
       socket.close
     end
 
@@ -91,11 +98,11 @@ module Cable
 
       if stream_identifier = channel.stream_identifier
         Cable.server.subscribe_channel(channel: channel, identifier: stream_identifier)
-        Cable::Logger.info "#{channel.class.to_s} is streaming from #{stream_identifier}"
+        Cable::Logger.info { "#{channel.class} is streaming from #{stream_identifier}" }
       end
 
-      Cable::Logger.info "#{payload.channel} is transmitting the subscription confirmation"
-      socket.send({type: "confirm_subscription", identifier: payload.identifier}.to_json)
+      Cable::Logger.info { "#{payload.channel} is transmitting the subscription confirmation" }
+      socket.send({type: Cable.message(:confirmation), identifier: payload.identifier}.to_json)
 
       channel.run_after_subscribed_callbacks unless channel.subscription_rejected?
     end
@@ -110,29 +117,30 @@ module Cable
     def unsubscribe(payload : Cable::Payload)
       if channel = Connection::CHANNELS[connection_identifier].delete(payload.identifier)
         channel.close
-        Cable::Logger.info "#{payload.channel} is transmitting the unsubscribe confirmation"
-        socket.send({type: "confirm_unsubscription", identifier: payload.identifier}.to_json)
+        Cable::Logger.info { "#{payload.channel} is transmitting the unsubscribe confirmation" }
+        socket.send({type: Cable.message(:unsubscribe), identifier: payload.identifier}.to_json)
       end
     end
 
     def reject(payload : Cable::Payload)
       if channel = Connection::CHANNELS[connection_identifier].delete(payload.identifier)
         channel.unsubscribed
-        Cable::Logger.info "#{channel.class.to_s} is transmitting the subscription rejection"
-        socket.send({type: "reject_subscription", identifier: payload.identifier}.to_json)
+        Cable::Logger.info { "#{channel.class.to_s} is transmitting the subscription rejection" }
+        socket.send({type: Cable.message(:rejection), identifier: payload.identifier}.to_json)
       end
     end
 
     def message(payload : Cable::Payload)
       if channel = Connection::CHANNELS.dig?(connection_identifier, payload.identifier)
         if payload.action?
-          Cable::Logger.info "#{channel.class}#perform(\"#{payload.action}\", #{payload.data})"
+          Cable::Logger.info { "#{channel.class}#perform(\"#{payload.action}\", #{payload.data})" }
           channel.perform(payload.action, payload.data)
         else
           begin
-            Cable::Logger.info "#{channel.class}#receive(#{payload.data})"
+            Cable::Logger.info { "#{channel.class}#receive(#{payload.data})" }
             channel.receive(payload.data)
           rescue e : TypeCastError
+            Cable::Logger.error { "Exception: #{e.message} -> #{self.class.name}#message(payload) { #{payload.inspect} }" }
           end
         end
       end
