@@ -71,6 +71,11 @@
       
     </li>
   
+  <li class=" " data-id="cable/Cable/Channels" data-name="cable::channels">
+      <a href="../Cable/Channels.html">Channels</a>
+      
+    </li>
+  
   <li class="parent " data-id="cable/Cable/Connection" data-name="cable::connection">
       <a href="../Cable/Connection.html">Connection</a>
       
@@ -253,6 +258,8 @@
       <li class="entry-summary">
         <a href="#broadcast_to(channel:String,message:String)-class-method" class="signature"><strong>.broadcast_to</strong>(channel : String, message : String)</a>
         
+          <div class="summary"><p>It's important that we don't call message.to_json</p></div>
+        
       </li>
     
       <li class="entry-summary">
@@ -273,6 +280,21 @@
     Instance Method Summary
   </h2>
   <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#broadcast(message:Hash(String,String))-instance-method" class="signature"><strong>#broadcast</strong>(message : Hash(String, String))</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#broadcast(message:JSON::Any)-instance-method" class="signature"><strong>#broadcast</strong>(message : JSON::Any)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#broadcast(message:String)-instance-method" class="signature"><strong>#broadcast</strong>(message : String)</a>
+        
+      </li>
     
       <li class="entry-summary">
         <a href="#close-instance-method" class="signature"><strong>#close</strong></a>
@@ -315,6 +337,13 @@
       </li>
     
       <li class="entry-summary">
+        <a href="#run_after_subscribed_callbacks-instance-method" class="signature"><strong>#run_after_subscribed_callbacks</strong></a>
+        
+          <div class="summary"><p>@override in after_subscribed macro</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#stream_from(stream_identifier)-instance-method" class="signature"><strong>#stream_from</strong>(stream_identifier)</a>
         
       </li>
@@ -335,6 +364,27 @@
       </li>
     
       <li class="entry-summary">
+        <a href="#transmit(message:JSON::Any)-instance-method" class="signature"><strong>#transmit</strong>(message : JSON::Any)</a>
+        
+          <div class="summary"><p>broadcast single message to single connection for this channel</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#transmit(message:String)-instance-method" class="signature"><strong>#transmit</strong>(message : String)</a>
+        
+          <div class="summary"><p>broadcast single message to single connection for this channel</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#transmit(message:Hash(String,String))-instance-method" class="signature"><strong>#transmit</strong>(message : Hash(String, String))</a>
+        
+          <div class="summary"><p>broadcast single message to single connection for this channel</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#unsubscribed-instance-method" class="signature"><strong>#unsubscribed</strong></a>
         
       </li>
@@ -342,6 +392,25 @@
   </ul>
 
 
+
+  <h2>
+    <a id="macro-summary" class="anchor" href="#macro-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Macro Summary
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#after_subscribed(*callbacks)-macro" class="signature"><strong>after_subscribed</strong>(*callbacks)</a>
+        
+          <div class="summary"><p>Run <code>block</code> after the subscription is created.</p></div>
+        
+      </li>
+    
+  </ul>
 
 
 
@@ -427,6 +496,11 @@
         <a class="method-permalink" href="#broadcast_to(channel:String,message:String)-class-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>It's important that we don't call message.to_json</p>
+        </div>
+      
       <br/>
       <div>
         
@@ -458,6 +532,48 @@
 </a>
     Instance Method Detail
   </h2>
+  
+    <div class="entry-detail" id="broadcast(message:Hash(String,String))-instance-method">
+      <div class="signature">
+        
+        def <strong>broadcast</strong>(message : Hash(String, String))
+
+        <a class="method-permalink" href="#broadcast(message:Hash(String,String))-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="broadcast(message:JSON::Any)-instance-method">
+      <div class="signature">
+        
+        def <strong>broadcast</strong>(message : JSON::Any)
+
+        <a class="method-permalink" href="#broadcast(message:JSON::Any)-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="broadcast(message:String)-instance-method">
+      <div class="signature">
+        
+        def <strong>broadcast</strong>(message : String)
+
+        <a class="method-permalink" href="#broadcast(message:String)-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
   
     <div class="entry-detail" id="close-instance-method">
       <div class="signature">
@@ -571,6 +687,25 @@
       </div>
     </div>
   
+    <div class="entry-detail" id="run_after_subscribed_callbacks-instance-method">
+      <div class="signature">
+        
+        def <strong>run_after_subscribed_callbacks</strong>
+
+        <a class="method-permalink" href="#run_after_subscribed_callbacks-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>@override in after_subscribed macro</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
     <div class="entry-detail" id="stream_from(stream_identifier)-instance-method">
       <div class="signature">
         
@@ -627,6 +762,63 @@
       </div>
     </div>
   
+    <div class="entry-detail" id="transmit(message:JSON::Any)-instance-method">
+      <div class="signature">
+        
+        def <strong>transmit</strong>(message : JSON::Any)
+
+        <a class="method-permalink" href="#transmit(message:JSON::Any)-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>broadcast single message to single connection for this channel</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="transmit(message:String)-instance-method">
+      <div class="signature">
+        
+        def <strong>transmit</strong>(message : String)
+
+        <a class="method-permalink" href="#transmit(message:String)-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>broadcast single message to single connection for this channel</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="transmit(message:Hash(String,String))-instance-method">
+      <div class="signature">
+        
+        def <strong>transmit</strong>(message : Hash(String, String))
+
+        <a class="method-permalink" href="#transmit(message:Hash(String,String))-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>broadcast single message to single connection for this channel</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
     <div class="entry-detail" id="unsubscribed-instance-method">
       <div class="signature">
         
@@ -643,6 +835,35 @@
   
 
 
+
+  <h2>
+    <a id="macro-detail" class="anchor" href="#macro-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Macro Detail
+  </h2>
+  
+    <div class="entry-detail" id="after_subscribed(*callbacks)-macro">
+      <div class="signature">
+        
+        macro <strong>after_subscribed</strong>(*callbacks)
+
+        <a class="method-permalink" href="#after_subscribed(*callbacks)-macro">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Run <code>block</code> after the subscription is created.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
 
 
 </div>

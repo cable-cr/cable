@@ -71,6 +71,11 @@
       
     </li>
   
+  <li class=" " data-id="cable/Cable/Channels" data-name="cable::channels">
+      <a href="Cable/Channels.html">Channels</a>
+      
+    </li>
+  
   <li class="parent " data-id="cable/Cable/Connection" data-name="cable::connection">
       <a href="Cable/Connection.html">Connection</a>
       
@@ -293,6 +298,43 @@
     reject <span class="k">if</span> user_not_allowed_to_join_chat_room?
 
     stream_from <span class="s">&quot;chat_</span><span class="i">#{</span>params[<span class="s">&quot;room&quot;</span>]<span class="i">}</span><span class="s">&quot;</span>
+  <span class="k">end</span>
+<span class="k">end</span></code></pre>
+
+<p>Use callbacks to perform actions or transmit messages once the connection/channel has been subscribed.</p>
+
+<pre><code class="language-crystal"><span class="k">class</span> <span class="t">ChatChannel</span> <span class="o">&lt;</span> <span class="t">ApplicationCable</span><span class="t">::</span><span class="t">Channel</span>
+  <span class="c"># you can name these callbacks anything you want...</span>
+  <span class="c"># `after_subscribed` can accept 1 or more callbacks to be run in order</span>
+  after_subscribed <span class="n">:broadcast_welcome_pack_to_single_subscribed_user</span>,
+                   <span class="n">:announce_user_joining_to_everyone_else_in_the_channel</span>,
+                   <span class="n">:process_some_stuff</span>
+
+  <span class="k">def</span> <span class="m">subscribed</span>
+    stream_from <span class="s">&quot;chat_</span><span class="i">#{</span>params[<span class="s">&quot;room&quot;</span>]<span class="i">}</span><span class="s">&quot;</span>
+  <span class="k">end</span>
+
+  <span class="c"># If you want to ONLY send the current_user a message</span>
+  <span class="c"># and none of the other subscribers</span>
+  <span class="c">#</span>
+  <span class="c"># use -&gt; transmit(message), which accepts Hash(String, String) or String</span>
+  <span class="k">def</span> <span class="m">broadcast_welcome_pack_to_single_subscribed_user</span>
+    transmit({ <span class="s">&quot;welcome_pack&quot;</span> => <span class="s">&quot;some cool stuff for this single user&quot;</span> })
+  <span class="k">end</span>
+
+  <span class="c"># On the other hand,</span>
+  <span class="c"># if you want to broadcast a message</span>
+  <span class="c"># to all subscribers connected to this channel</span>
+  <span class="c">#</span>
+  <span class="c"># use -&gt; broadcast(message), which accepts Hash(String, String) or String</span>
+  <span class="k">def</span> <span class="m">announce_user_joining_to_everyone_else_in_the_channel</span>
+    broadcast(<span class="s">&quot;username xyz just joined&quot;</span>)
+  <span class="k">end</span>
+
+  <span class="c"># you don&#39;t need to use transmit functionality</span>
+  <span class="k">def</span> <span class="m">process_some_stuff</span>
+    send_welcome_email_to_user
+    update_their_profile
   <span class="k">end</span>
 <span class="k">end</span></code></pre>
 

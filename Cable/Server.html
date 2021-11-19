@@ -71,6 +71,11 @@
       
     </li>
   
+  <li class=" " data-id="cable/Cable/Channels" data-name="cable::channels">
+      <a href="../Cable/Channels.html">Channels</a>
+      
+    </li>
+  
   <li class="parent " data-id="cable/Cable/Connection" data-name="cable::connection">
       <a href="../Cable/Connection.html">Connection</a>
       
@@ -249,7 +254,9 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#publish(channel,message)-instance-method" class="signature"><strong>#publish</strong>(channel, message)</a>
+        <a href="#publish(channel:String,message:String)-instance-method" class="signature"><strong>#publish</strong>(channel : String, message : String)</a>
+        
+          <div class="summary"><p>redis only accepts strings, so we should be strict here</p></div>
         
       </li>
     
@@ -269,7 +276,12 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#send_to_channels(identifier,message)-instance-method" class="signature"><strong>#send_to_channels</strong>(identifier, message)</a>
+        <a href="#safe_decode_message(message)-instance-method" class="signature"><strong>#safe_decode_message</strong>(message)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#send_to_channels(channel_identifier,message)-instance-method" class="signature"><strong>#send_to_channels</strong>(channel_identifier, message)</a>
         
       </li>
     
@@ -412,13 +424,18 @@
       </div>
     </div>
   
-    <div class="entry-detail" id="publish(channel,message)-instance-method">
+    <div class="entry-detail" id="publish(channel:String,message:String)-instance-method">
       <div class="signature">
         
-        def <strong>publish</strong>(channel, message)
+        def <strong>publish</strong>(channel : String, message : String)
 
-        <a class="method-permalink" href="#publish(channel,message)-instance-method">#</a>
+        <a class="method-permalink" href="#publish(channel:String,message:String)-instance-method">#</a>
       </div>
+      
+        <div class="doc">
+          
+          <p>redis only accepts strings, so we should be strict here</p>
+        </div>
       
       <br/>
       <div>
@@ -468,12 +485,26 @@
       </div>
     </div>
   
-    <div class="entry-detail" id="send_to_channels(identifier,message)-instance-method">
+    <div class="entry-detail" id="safe_decode_message(message)-instance-method">
       <div class="signature">
         
-        def <strong>send_to_channels</strong>(identifier, message)
+        def <strong>safe_decode_message</strong>(message)
 
-        <a class="method-permalink" href="#send_to_channels(identifier,message)-instance-method">#</a>
+        <a class="method-permalink" href="#safe_decode_message(message)-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="send_to_channels(channel_identifier,message)-instance-method">
+      <div class="signature">
+        
+        def <strong>send_to_channels</strong>(channel_identifier, message)
+
+        <a class="method-permalink" href="#send_to_channels(channel_identifier,message)-instance-method">#</a>
       </div>
       
       <br/>
