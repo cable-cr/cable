@@ -102,7 +102,7 @@ module Cable
       end
 
       Cable::Logger.info { "#{payload.channel} is transmitting the subscription confirmation" }
-      socket.send({type: "confirm_subscription", identifier: payload.identifier}.to_json)
+      socket.send({type: Cable.message(:confirmation), identifier: payload.identifier}.to_json)
 
       channel.run_after_subscribed_callbacks unless channel.subscription_rejected?
     end
@@ -118,7 +118,7 @@ module Cable
       if channel = Connection::CHANNELS[connection_identifier].delete(payload.identifier)
         channel.close
         Cable::Logger.info { "#{payload.channel} is transmitting the unsubscribe confirmation" }
-        socket.send({type: "confirm_unsubscription", identifier: payload.identifier}.to_json)
+        socket.send({type: Cable.message(:unsubscribe), identifier: payload.identifier}.to_json)
       end
     end
 
@@ -126,7 +126,7 @@ module Cable
       if channel = Connection::CHANNELS[connection_identifier].delete(payload.identifier)
         channel.unsubscribed
         Cable::Logger.info { "#{channel.class.to_s} is transmitting the subscription rejection" }
-        socket.send({type: "reject_subscription", identifier: payload.identifier}.to_json)
+        socket.send({type: Cable.message(:rejection), identifier: payload.identifier}.to_json)
       end
     end
 

@@ -25,7 +25,7 @@ module Cable
     def initialize(@socket : HTTP::WebSocket)
       Tasker.every(Cable::WebsocketPinger.seconds.seconds) do
         raise PingStoppedException.new("Stopped") if @socket.closed?
-        @socket.send({type: "ping", message: Time.utc.to_unix}.to_json)
+        @socket.send({type: Cable.message(:ping), message: Time.utc.to_unix}.to_json)
       end
     end
   end

@@ -23,7 +23,7 @@ module Cable
         Cable.server.add_connection(connection) unless connection.connection_rejected?
 
         # Send welcome message to the client
-        socket.send({type: "welcome"}.to_json)
+        socket.send({type: Cable.message(:welcome)}.to_json)
 
         Cable::WebsocketPinger.build(socket)
 

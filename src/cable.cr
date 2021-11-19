@@ -14,6 +14,7 @@ module Cable
       ping:         "ping",
       confirmation: "confirm_subscription",
       rejection:    "reject_subscription",
+      unsubscribe:  "confirm_unsubscription",
     },
     disconnect_reasons: {
       unauthorized:    "unauthorized",
@@ -21,14 +22,19 @@ module Cable
       server_restart:  "server_restart",
     },
     default_mount_path: "/cable",
-    protocols:          ["actioncable-v1-json", "actioncable-unsupported"].freeze,
+    protocols:          ["actioncable-v1-json", "actioncable-unsupported"],
   }
 
   Habitat.create do
-    setting route : String = "/cable", example: "/cable"
+    setting route : String = Cable.message(:default_mount_path), example: "/cable"
     setting token : String = "token", example: "token"
     setting url : String = ENV.fetch("REDIS_URL", "redis://localhost:6379"), example: "redis://localhost:6379"
     setting disable_sec_websocket_protocol_header : Bool = false
   end
+
+  def self.message(event : Symbol)
+    INTERNAL[:message_types][event]
+  end
+
   # TODO: Put your code here
 end
