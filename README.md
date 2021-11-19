@@ -213,7 +213,32 @@ Cable.configure do |settings|
   settings.disable_sec_websocket_protocol_header = true
 end
 ```
-4
+
+## Debugging
+
+You can create a json endpoint to ping your server and check how things are going.
+
+```crystal
+
+# src/actions/debug/index.cr
+
+class Debug::Index < ApiAction
+  include RequireAuthToken
+
+  get "/debug" do
+    json(Cable.server.debug_json) # Cable.server.debug_json is provided by this shard
+  end
+end
+```
+
+Alternatively, you can ping redis directly using the redis-cli as follows;
+
+```bash
+PUBLISH _internal debug
+```
+
+This will dump a debug status into your logs
+
 ## TODO
 
 After reading the docs, I realized I'm using some weird naming for variables / methods, so
