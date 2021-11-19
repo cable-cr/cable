@@ -43,7 +43,7 @@ module Cable
 
     def close
       Cable.server.unsubscribe_channel(channel: self, identifier: @stream_identifier.not_nil!) unless @stream_identifier.nil?
-      Cable::Logger.info "#{self.class.name} stopped streaming from #{identifier}"
+      Cable::Logger.info { "#{self.class.name} stopped streaming from #{identifier}" }
       unsubscribed
     end
 
@@ -61,7 +61,7 @@ module Cable
     end
 
     def self.broadcast_to(channel : String, message : JSON::Any)
-      Cable::Logger.info "[ActionCable] Broadcasting to #{channel}: #{message}"
+      Cable::Logger.info { "[ActionCable] Broadcasting to #{channel}: #{message}" }
       Cable.server.publish(channel, message.to_json)
     end
 

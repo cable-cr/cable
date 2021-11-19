@@ -16,9 +16,6 @@ describe Cable::Connection do
 
         connection.close
         socket.close
-        Cable::Logger.messages.should contain("ChatChannel is streaming from chat_1")
-        Cable::Logger.messages.should contain("ChatChannel is transmitting the subscription confirmation")
-        Cable::Logger.messages.should contain("ChatChannel stopped streaming from {\"channel\":\"ChatChannel\",\"room\":\"1\"}")
       end
     end
 
@@ -43,9 +40,6 @@ describe Cable::Connection do
 
         connection.close
         socket.close
-        Cable::Logger.messages.should contain("ChatChannel is streaming from chat_1")
-        Cable::Logger.messages.should contain("ChatChannel is transmitting the subscription confirmation")
-        Cable::Logger.messages.should contain("ChatChannel stopped streaming from {\"channel\":\"ChatChannel\",\"room\":\"1\",\"person\":{\"name\":\"Foo\",\"age\":32,\"boom\":\"boom\"}}")
       end
     end
 
@@ -58,9 +52,6 @@ describe Cable::Connection do
 
         connection.close
         socket.close
-        Cable::Logger.messages.should contain("ChatChannel is streaming from chat_1")
-        Cable::Logger.messages.should contain("ChatChannel is transmitting the subscription confirmation")
-        Cable::Logger.messages.should contain("ChatChannel stopped streaming from {\"channel\":\"ChatChannel\",\"room\":\"1\",\"person\":{\"name\":\"Celso\",\"age\":32,\"boom\":\"boom\"}}")
       end
     end
 
@@ -94,10 +85,6 @@ describe Cable::Connection do
 
         connection.close
         socket.close
-        Cable::Logger.messages.should contain("ChatChannel is streaming from chat_1")
-        Cable::Logger.messages.should contain("ChatChannel is transmitting the subscription confirmation")
-        Cable::Logger.messages.should contain("ChatChannel stopped streaming from {\"channel\":\"ChatChannel\",\"room\":\"1\"}")
-        Cable::Logger.messages.should contain("ChatChannel is transmitting the unsubscribe confirmation")
       end
     end
   end
@@ -132,7 +119,6 @@ describe Cable::Connection do
         socket.messages.size.should eq(0)
 
         # we check only the first that is the one we care about, the others make no sense to our test
-        Cable::Logger.messages.should contain("An unauthorized connection attempt was rejected")
         socket.closed?.should be_truthy
 
         Cable.server.connections.should eq({} of String => Cable::Connection)
@@ -151,9 +137,6 @@ describe Cable::Connection do
 
         connection.close
         socket.close
-        Cable::Logger.messages.should contain("ChatChannel is streaming from chat_1")
-        Cable::Logger.messages.should contain("ChatChannel is transmitting the subscription confirmation")
-        Cable::Logger.messages.should contain("ChatChannel stopped streaming from {\"channel\":\"ChatChannel\",\"room\":\"1\"}")
       end
     end
 
@@ -169,12 +152,6 @@ describe Cable::Connection do
 
         connection.close
         socket.close
-        Cable::Logger.messages.should contain("ChatChannel is streaming from chat_1")
-        Cable::Logger.messages.should contain("ChatChannel is transmitting the subscription confirmation")
-        Cable::Logger.messages.should contain("ChatChannel#receive({\"message\" => \"Hello\"})")
-        Cable::Logger.messages.should contain("[ActionCable] Broadcasting to chat_1: {\"message\" => \"Hello\", \"current_user\" => \"98\"}")
-        Cable::Logger.messages.should contain("ChatChannel transmitting {\"message\" => \"Hello\", \"current_user\" => \"98\"} (via streamed from chat_1)")
-        Cable::Logger.messages.should contain("ChatChannel stopped streaming from {\"channel\":\"ChatChannel\",\"room\":\"1\"}")
       end
     end
 
@@ -190,12 +167,6 @@ describe Cable::Connection do
 
         connection.close
         socket.close
-        Cable::Logger.messages.should contain("ChatChannel is streaming from chat_1")
-        Cable::Logger.messages.should contain("ChatChannel is transmitting the subscription confirmation")
-        Cable::Logger.messages.should contain("ChatChannel#perform(\"invite\", {\"invite_id\" => \"4\"})")
-        Cable::Logger.messages.should contain("[ActionCable] Broadcasting to chat_1: {\"performed\" => \"invite\", \"params\" => \"4\"}")
-        Cable::Logger.messages.should contain("ChatChannel transmitting {\"performed\" => \"invite\", \"params\" => \"4\"} (via streamed from chat_1)")
-        Cable::Logger.messages.should contain("ChatChannel stopped streaming from {\"channel\":\"ChatChannel\",\"room\":\"1\"}")
       end
     end
   end
@@ -211,9 +182,6 @@ describe Cable::Connection do
 
         connection.close
         socket.close
-        Cable::Logger.messages.should contain("ChatChannel is streaming from chat_1")
-        Cable::Logger.messages.should contain("ChatChannel is transmitting the subscription confirmation")
-        Cable::Logger.messages.should contain("ChatChannel stopped streaming from {\"channel\":\"ChatChannel\",\"room\":\"1\"}")
       end
     end
   end
@@ -231,10 +199,6 @@ describe Cable::Connection do
 
         connection.close
         socket.close
-        Cable::Logger.messages.should contain("ChatChannel is streaming from chat_1")
-        Cable::Logger.messages.should contain("ChatChannel is transmitting the subscription confirmation")
-        Cable::Logger.messages.should contain("ChatChannel transmitting {\"hello\" => \"Broadcast!\"} (via streamed from chat_1)")
-        Cable::Logger.messages.should contain("ChatChannel stopped streaming from {\"channel\":\"ChatChannel\",\"room\":\"1\"}")
       end
     end
   end
@@ -253,11 +217,6 @@ describe Cable::Connection do
 
           connection.close
           socket.close
-          Cable::Logger.messages.should contain("ChatChannel is streaming from chat_1")
-          Cable::Logger.messages.should contain("ChatChannel is transmitting the subscription confirmation")
-          Cable::Logger.messages.should contain("[ActionCable] Broadcasting to chat_1: <turbo-stream></turbo-stream>")
-          Cable::Logger.messages.should contain("ChatChannel transmitting <turbo-stream></turbo-stream> (via streamed from chat_1)")
-          Cable::Logger.messages.should contain("ChatChannel stopped streaming from {\"channel\":\"ChatChannel\",\"room\":\"1\"}")
         end
       end
 
@@ -291,11 +250,6 @@ describe Cable::Connection do
 
           connection.close
           socket.close
-          Cable::Logger.messages.should contain("ChatChannel is streaming from chat_1")
-          Cable::Logger.messages.should contain("ChatChannel is transmitting the subscription confirmation")
-          Cable::Logger.messages.should contain("[ActionCable] Broadcasting to chat_1: {\"foo\" => \"bar\"}")
-          Cable::Logger.messages.should contain("ChatChannel transmitting {\"foo\" => \"bar\"} (via streamed from chat_1)")
-          Cable::Logger.messages.should contain("ChatChannel stopped streaming from {\"channel\":\"ChatChannel\",\"room\":\"1\"}")
         end
       end
     end
@@ -314,11 +268,6 @@ describe Cable::Connection do
 
           connection.close
           socket.close
-          Cable::Logger.messages.should contain("ChatChannel is streaming from chat_1")
-          Cable::Logger.messages.should contain("ChatChannel is transmitting the subscription confirmation")
-          Cable::Logger.messages.should contain("[ActionCable] Broadcasting to chat_1: {\"foo\" => \"bar\"}")
-          Cable::Logger.messages.should contain("ChatChannel transmitting {\"foo\" => \"bar\"} (via streamed from chat_1)")
-          Cable::Logger.messages.should contain("ChatChannel stopped streaming from {\"channel\":\"ChatChannel\",\"room\":\"1\"}")
         end
       end
     end
@@ -398,14 +347,7 @@ describe Cable::Connection do
 
         connection.close
         socket.close
-        Cable::Logger.messages.should contain("ChatChannel is streaming from chat_1")
-        Cable::Logger.messages.should contain("ChatChannel is transmitting the subscription confirmation")
-        Cable::Logger.messages.should contain("RejectionChannel is transmitting the subscription rejection")
-        Cable::Logger.messages.should contain("[ActionCable] Broadcasting to chat_1: {\"foo\" => \"bar\"}")
         # and here we can confirm the message was broadcasted
-        Cable::Logger.messages.should contain("ChatChannel transmitting {\"foo\" => \"bar\"} (via streamed from chat_1)")
-        Cable::Logger.messages.should contain("[ActionCable] Broadcasting to rejection: {\"foo\" => \"bar\"}")
-        Cable::Logger.messages.should contain("ChatChannel stopped streaming from {\"channel\":\"ChatChannel\",\"room\":\"1\"}")
       end
     end
   end
