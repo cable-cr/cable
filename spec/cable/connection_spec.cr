@@ -64,17 +64,17 @@ describe Cable::Connection do
       end
     end
 
-    it "accepts without params hash key" do
+    it "blocks the same connection from subscribing to the same channel multiple times" do
       connect do |connection, socket|
-        connection.receive({"command" => "subscribe", "identifier" => {channel: "AppearanceChannel"}.to_json}.to_json)
+        connection.receive({"command" => "subscribe", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
         sleep 0.1
-        connection.receive({"command" => "subscribe", "identifier" => {channel: "AppearanceChannel"}.to_json}.to_json)
+        connection.receive({"command" => "subscribe", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
         sleep 0.1
-        connection.receive({"command" => "subscribe", "identifier" => {channel: "AppearanceChannel"}.to_json}.to_json)
+        connection.receive({"command" => "subscribe", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
 
         # ensure we only allow subscribing to the same channel once from a connection
         socket.messages.size.should eq(1)
-        socket.messages.should contain({"type" => "confirm_subscription", "identifier" => {channel: "AppearanceChannel"}.to_json}.to_json)
+        socket.messages.should contain({"type" => "confirm_subscription", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
 
         connection.close
         socket.close

@@ -89,6 +89,11 @@ module Cable
         return
       end
 
+      if stream_identifier = channel.stream_identifier
+        Cable.server.subscribe_channel(channel: channel, identifier: stream_identifier)
+        Cable::Logger.info "#{channel.class.to_s} is streaming from #{stream_identifier}"
+      end
+
       Cable::Logger.info "#{payload.channel} is transmitting the subscription confirmation"
       socket.send({type: "confirm_subscription", identifier: payload.identifier}.to_json)
 

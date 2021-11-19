@@ -58,8 +58,6 @@ module Cable
 
     def stream_from(stream_identifier)
       @stream_identifier = stream_identifier
-      Cable.server.subscribe_channel(channel: self, identifier: stream_identifier)
-      Cable::Logger.info "#{self.class} is streaming from #{stream_identifier}"
     end
 
     def self.broadcast_to(channel : String, message : JSON::Any)
