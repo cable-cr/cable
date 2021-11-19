@@ -1,4 +1,9 @@
+require "mutex"
+require "set"
+
 module Cable
+  alias Channels = Set(Cable::Channel)
+
   def self.server
     @@server ||= Server.new
   end
@@ -11,17 +16,14 @@ module Cable
   end
 
   class Server
-    getter connections
-    getter redis_subscribe
-    getter redis_publish
-    getter fiber_channel
+    getter connections = {} of String => Connection
+    getter redis_subscribe = Redis.new(url: Cable.settings.url)
+    getter redis_publish = Redis.new(url: Cable.settings.url)
+    getter fiber_channel = ::Channel({String, String}).new
 
     def initialize
-      @connections = {} of String => Connection
-      @channels = {} of String => Array(Cable::Channel)
-      @redis_subscribe = Redis.new(url: Cable.settings.url)
-      @redis_publish = Redis.new(url: Cable.settings.url)
-      @fiber_channel = ::Channel({String, String}).new
+      @channels = {} of String => Channels
+      @channel_mutex = Mutex.new
       subscribe
       process_subscribed_messages
     end
@@ -31,18 +33,17 @@ module Cable
     end
 
     def remove_connection(connection_id)
-      connection = connections.delete(connection_id)
-      if connection.is_a?(Connection)
-        connection.close
-      end
+      connections.delete(connection_id).try(&.close)
     end
 
     def subscribe_channel(channel : Channel, identifier : String)
-      if !@channels.has_key?(identifier)
-        @channels[identifier] = [] of Cable::Channel
-      end
+      @channel_mutex.synchronize do
+        if !@channels.has_key?(identifier)
+          @channels[identifier] = Channels.new
+        end
 
-      @channels[identifier] << channel
+        @channels[identifier] << channel
+      end
 
       request = Redis::Request.new
       request << "subscribe"
@@ -51,48 +52,62 @@ module Cable
     end
 
     def unsubscribe_channel(channel : Channel, identifier : String)
-      if @channels.has_key?(identifier)
-        @channels[identifier].delete(channel)
+      @channel_mutex.synchronize do
+        if @channels.has_key?(identifier)
+          @channels[identifier].delete(channel)
 
-        if @channels[identifier].size == 0
+          if @channels[identifier].size == 0
+            request = Redis::Request.new
+            request << "unsubscribe"
+            request << identifier
+            redis_subscribe._connection.send(request)
+
+            @channels.delete(identifier)
+          end
+        else
           request = Redis::Request.new
           request << "unsubscribe"
           request << identifier
           redis_subscribe._connection.send(request)
-
-          @channels.delete(identifier)
         end
-      else
-        request = Redis::Request.new
-        request << "unsubscribe"
-        request << identifier
-        redis_subscribe._connection.send(request)
       end
     end
 
-    def publish(channel, message)
-      redis_publish.publish("#{channel}", message)
+    # redis only accepts strings, so we should be strict here
+    def publish(channel : String, message : String)
+      redis_publish.publish(channel, message)
     end
 
-    def send_to_channels(identifier, message)
-      parsed_message = JSON.parse(message)
+    def send_to_channels(channel_identifier, message)
+      return unless @channels.has_key?(channel_identifier)
 
-      if @channels.has_key?(identifier)
-        @channels[identifier].each do |channel|
-          # TODO: would be nice to have a test where we open two connections
-          # close one, and make sure the other one receives the message
-          if channel.connection.socket.closed?
-            @channels[identifier].delete(channel)
-          else
-            Cable::Logger.info "#{channel.class} transmitting #{parsed_message} (via streamed from #{channel.stream_identifier})"
-            channel.connection.socket.send({
-              identifier: channel.identifier,
-              message:    parsed_message,
-            }.to_json)
-          end
+      parsed_message = safe_decode_message(message)
+
+      @channels[channel_identifier].each do |channel|
+        # TODO: would be nice to have a test where we open two connections
+        # close one, and make sure the other one receives the message
+        if channel.connection.socket.closed?
+          channel.close
+        else
+          Cable::Logger.info "#{channel.class} transmitting #{parsed_message} (via streamed from #{channel.stream_identifier})"
+          channel.connection.socket.send({
+            identifier: channel.identifier,
+            message:    parsed_message,
+          }.to_json)
         end
       end
     rescue IO::Error
+    end
+
+    def safe_decode_message(message)
+      case message
+      when String
+        JSON.parse(message)
+      else
+        message
+      end
+    rescue JSON::ParseException
+      message
     end
 
     def debug
@@ -131,8 +146,7 @@ module Cable
       server = self
       spawn(name: "Cable::Server - process_subscribed_messages") do
         while received = fiber_channel.receive
-          channel = received[0]
-          message = received[1]
+          channel, message = received
           server.send_to_channels(channel, message)
         end
       end

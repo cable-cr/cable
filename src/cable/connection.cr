@@ -96,6 +96,8 @@ module Cable
 
       Cable::Logger.info "#{payload.channel} is transmitting the subscription confirmation"
       socket.send({type: "confirm_subscription", identifier: payload.identifier}.to_json)
+
+      channel.run_after_subscribed_callbacks unless channel.subscription_rejected?
     end
 
     # ensure we only allow subscribing to the same channel once from a connection
@@ -122,8 +124,7 @@ module Cable
     end
 
     def message(payload : Cable::Payload)
-      if Connection::CHANNELS[connection_identifier].has_key?(payload.identifier)
-        channel = Connection::CHANNELS[connection_identifier][payload.identifier]
+      if channel = Connection::CHANNELS.dig?(connection_identifier, payload.identifier)
         if payload.action?
           Cable::Logger.info "#{channel.class}#perform(\"#{payload.action}\", #{payload.data})"
           channel.perform(payload.action, payload.data)
@@ -138,7 +139,7 @@ module Cable
     end
 
     def self.broadcast_to(channel : String, message : String)
-      Cable.server.publish("#{channel}", message)
+      Cable.server.publish(channel, message)
     end
   end
 end

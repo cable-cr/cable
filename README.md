@@ -132,6 +132,45 @@ class ChatChannel < ApplicationCable::Channel
 end
 ```
 
+Use callbacks to perform actions or transmit messages once the connection/channel has been subscribed.
+
+```crystal
+class ChatChannel < ApplicationCable::Channel
+  # you can name these callbacks anything you want...
+  # `after_subscribed` can accept 1 or more callbacks to be run in order
+  after_subscribed :broadcast_welcome_pack_to_single_subscribed_user,
+                   :announce_user_joining_to_everyone_else_in_the_channel,
+                   :process_some_stuff
+
+  def subscribed
+    stream_from "chat_#{params["room"]}"
+  end
+
+  # If you want to ONLY send the current_user a message
+  # and none of the other subscribers
+  #
+  # use -> transmit(message), which accepts Hash(String, String) or String
+  def broadcast_welcome_pack_to_single_subscribed_user
+    transmit({ "welcome_pack" => "some cool stuff for this single user" })
+  end
+
+  # On the other hand,
+  # if you want to broadcast a message
+  # to all subscribers connected to this channel
+  #
+  # use -> broadcast(message), which accepts Hash(String, String) or String
+  def announce_user_joining_to_everyone_else_in_the_channel
+    broadcast("username xyz just joined")
+  end
+
+  # you don't need to use transmit functionality
+  def process_some_stuff
+    send_welcome_email_to_user
+    update_their_profile
+  end
+end
+```
+
 Check below on the JavaScript section how to communicate with the Cable backend
 
 ## JavaScript
