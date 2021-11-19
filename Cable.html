@@ -91,18 +91,18 @@
       
     </li>
   
+  <li class=" " data-id="cable/Cable/Debug" data-name="cable::debug">
+      <a href="Cable/Debug.html">Debug</a>
+      
+    </li>
+  
   <li class=" " data-id="cable/Cable/HabitatSettings" data-name="cable::habitatsettings">
       <a href="Cable/HabitatSettings.html">HabitatSettings</a>
       
     </li>
   
-  <li class=" " data-id="cable/Cable/Handler" data-name="cable::handler">
+  <li class=" " data-id="cable/Cable/Handler" data-name="cable::handler(t)">
       <a href="Cable/Handler.html">Handler</a>
-      
-    </li>
-  
-  <li class=" " data-id="cable/Cable/Logger" data-name="cable::logger">
-      <a href="Cable/Logger.html">Logger</a>
       
     </li>
   
@@ -238,12 +238,17 @@
   <dl>
     
       <dt class="entry-const" id="HABITAT_SETTINGS">
-        <strong>HABITAT_SETTINGS</strong> = <code>[{decl: route : <span class="t">String</span> <span class="o">=</span> <span class="s">&quot;/cable&quot;</span>, example: <span class="s">&quot;/cable&quot;</span>, validation: <span class="n">nil</span>}, {decl: token : <span class="t">String</span> <span class="o">=</span> <span class="s">&quot;token&quot;</span>, example: <span class="s">&quot;token&quot;</span>, validation: <span class="n">nil</span>}, {decl: url : <span class="t">String</span> <span class="o">=</span> <span class="t">ENV</span>.fetch(<span class="s">&quot;REDIS_URL&quot;</span>, <span class="s">&quot;redis://localhost:6379&quot;</span>), example: <span class="s">&quot;redis://localhost:6379&quot;</span>, validation: <span class="n">nil</span>}, {decl: disable_sec_websocket_protocol_header : <span class="t">Bool</span> <span class="o">=</span> <span class="n">false</span>, example: <span class="n">nil</span>, validation: <span class="n">nil</span>}] <span class="k">of</span> <span class="t">Nil</span></code>
+        <strong>HABITAT_SETTINGS</strong> = <code>[{decl: route : <span class="t">String</span> <span class="o">=</span> <span class="t">Cable</span>.message(<span class="n">:default_mount_path</span>), example: <span class="s">&quot;/cable&quot;</span>, validation: <span class="n">nil</span>}, {decl: token : <span class="t">String</span> <span class="o">=</span> <span class="s">&quot;token&quot;</span>, example: <span class="s">&quot;token&quot;</span>, validation: <span class="n">nil</span>}, {decl: url : <span class="t">String</span> <span class="o">=</span> <span class="t">ENV</span>.fetch(<span class="s">&quot;REDIS_URL&quot;</span>, <span class="s">&quot;redis://localhost:6379&quot;</span>), example: <span class="s">&quot;redis://localhost:6379&quot;</span>, validation: <span class="n">nil</span>}, {decl: disable_sec_websocket_protocol_header : <span class="t">Bool</span> <span class="o">=</span> <span class="n">false</span>, example: <span class="n">nil</span>, validation: <span class="n">nil</span>}] <span class="k">of</span> <span class="t">Nil</span></code>
       </dt>
       
     
       <dt class="entry-const" id="INTERNAL">
-        <strong>INTERNAL</strong> = <code>{message_types: {welcome: <span class="s">&quot;welcome&quot;</span>, disconnect: <span class="s">&quot;disconnect&quot;</span>, ping: <span class="s">&quot;ping&quot;</span>, confirmation: <span class="s">&quot;confirm_subscription&quot;</span>, rejection: <span class="s">&quot;reject_subscription&quot;</span>}, disconnect_reasons: {unauthorized: <span class="s">&quot;unauthorized&quot;</span>, invalid_request: <span class="s">&quot;invalid_request&quot;</span>, server_restart: <span class="s">&quot;server_restart&quot;</span>}, default_mount_path: <span class="s">&quot;/cable&quot;</span>, protocols: [<span class="s">&quot;actioncable-v1-json&quot;</span>, <span class="s">&quot;actioncable-unsupported&quot;</span>].freeze}</code>
+        <strong>INTERNAL</strong> = <code>{message_types: {welcome: <span class="s">&quot;welcome&quot;</span>, disconnect: <span class="s">&quot;disconnect&quot;</span>, ping: <span class="s">&quot;ping&quot;</span>, confirmation: <span class="s">&quot;confirm_subscription&quot;</span>, rejection: <span class="s">&quot;reject_subscription&quot;</span>, unsubscribe: <span class="s">&quot;confirm_unsubscription&quot;</span>}, disconnect_reasons: {unauthorized: <span class="s">&quot;unauthorized&quot;</span>, invalid_request: <span class="s">&quot;invalid_request&quot;</span>, server_restart: <span class="s">&quot;server_restart&quot;</span>}, default_mount_path: <span class="s">&quot;/cable&quot;</span>, protocols: [<span class="s">&quot;actioncable-v1-json&quot;</span>, <span class="s">&quot;actioncable-unsupported&quot;</span>]}</code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="Logger">
+        <strong>Logger</strong> = <code><span class="t">Log</span>.<span class="k">for</span>(<span class="k">self</span>)</code>
       </dt>
       
     
@@ -270,6 +275,11 @@
     
       <li class="entry-summary">
         <a href="#configure(&)-class-method" class="signature"><strong>.configure</strong>(&)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#message(event:Symbol)-class-method" class="signature"><strong>.message</strong>(event : Symbol)</a>
         
       </li>
     
@@ -355,6 +365,20 @@
         def self.<strong>configure</strong>(&)
 
         <a class="method-permalink" href="#configure(&)-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="message(event:Symbol)-class-method">
+      <div class="signature">
+        
+        def self.<strong>message</strong>(event : Symbol)
+
+        <a class="method-permalink" href="#message(event:Symbol)-class-method">#</a>
       </div>
       
       <br/>

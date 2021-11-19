@@ -91,18 +91,18 @@
       
     </li>
   
+  <li class=" " data-id="cable/Cable/Debug" data-name="cable::debug">
+      <a href="Cable/Debug.html">Debug</a>
+      
+    </li>
+  
   <li class=" " data-id="cable/Cable/HabitatSettings" data-name="cable::habitatsettings">
       <a href="Cable/HabitatSettings.html">HabitatSettings</a>
       
     </li>
   
-  <li class=" " data-id="cable/Cable/Handler" data-name="cable::handler">
+  <li class=" " data-id="cable/Cable/Handler" data-name="cable::handler(t)">
       <a href="Cable/Handler.html">Handler</a>
-      
-    </li>
-  
-  <li class=" " data-id="cable/Cable/Logger" data-name="cable::logger">
-      <a href="Cable/Logger.html">Logger</a>
       
     </li>
   
@@ -210,7 +210,9 @@
 <pre><code class="language-crystal"><span class="k">class</span> <span class="t">AppServer</span> <span class="o">&lt;</span> <span class="t">Lucky</span><span class="t">::</span><span class="t">BaseAppServer</span>
   <span class="k">def</span> <span class="m">middleware</span>
     [
-      <span class="t">Cable</span><span class="t">::</span><span class="t">Handler</span>.<span class="k">new</span>(<span class="t">ApplicationCable</span><span class="t">::</span><span class="t">Connection</span>),
+      <span class="t">Cable</span><span class="t">::</span><span class="t">Handler</span>(<span class="t">ApplicationCable</span><span class="t">::</span><span class="t">Connection</span>).<span class="k">new</span>, <span class="c"># place before the middleware below</span>
+      <span class="t">Honeybadger</span><span class="t">::</span><span class="t">Handler</span>.<span class="k">new</span>,
+      <span class="t">Lucky</span><span class="t">::</span><span class="t">ErrorHandler</span>.<span class="k">new</span>(action: <span class="t">Errors</span><span class="t">::</span><span class="t">Show</span>),
       <span class="t">Lucky</span><span class="t">::</span><span class="t">RouteHandler</span>.<span class="k">new</span>,
     ]
    <span class="k">end</span>
@@ -222,6 +224,19 @@
   settings.route <span class="o">=</span> <span class="s">&quot;/cable&quot;</span>    <span class="c"># the URL your JS Client will connect</span>
   settings.token <span class="o">=</span> <span class="s">&quot;token&quot;</span>     <span class="c"># The query string parameter used to get the token</span>
 <span class="k">end</span></code></pre>
+
+<p>You may want to tune how to report logging</p>
+
+<pre><code class="language-crystal"><span class="c"># config/log.cr</span>
+
+log_levels <span class="o">=</span> {
+  <span class="s">&quot;debug&quot;</span> => <span class="t">Log</span><span class="t">::</span><span class="t">Severity</span><span class="t">::</span><span class="t">Debug</span>,
+  <span class="s">&quot;info&quot;</span>  => <span class="t">Log</span><span class="t">::</span><span class="t">Severity</span><span class="t">::</span><span class="t">Info</span>,
+  <span class="s">&quot;error&quot;</span> => <span class="t">Log</span><span class="t">::</span><span class="t">Severity</span><span class="t">::</span><span class="t">Error</span>,
+}
+
+<span class="c"># use the `CABLE_DEBUG_LEVEL` env var to choose any of the 3 log levels above</span>
+<span class="t">Cable</span><span class="t">::</span><span class="t">Logger</span>.level <span class="o">=</span> log_levels[<span class="t">ENV</span>.fetch(<span class="s">&quot;CABLE_DEBUG_LEVEL&quot;</span>, <span class="s">&quot;info&quot;</span>)]</code></pre>
 
 <p>Then you need to implement a few classes</p>
 
@@ -374,7 +389,30 @@
   settings.disable_sec_websocket_protocol_header <span class="o">=</span> <span class="n">true</span>
 <span class="k">end</span></code></pre>
 
-<p>4</p>
+<h2><a id="debugging" class="anchor" href="#debugging">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Debugging</h2>
+
+<p>You can create a json endpoint to ping your server and check how things are going.</p>
+
+<pre><code class="language-crystal">
+<span class="c"># src/actions/debug/index.cr</span>
+
+<span class="k">class</span> <span class="t">Debug</span><span class="t">::</span><span class="t">Index</span> <span class="o">&lt;</span> <span class="t">ApiAction</span>
+  <span class="k">include</span> <span class="t">RequireAuthToken</span>
+
+  get <span class="s">&quot;/debug&quot;</span> <span class="k">do</span>
+    json(<span class="t">Cable</span>.server.debug_json) <span class="c"># Cable.server.debug_json is provided by this shard</span>
+  <span class="k">end</span>
+<span class="k">end</span></code></pre>
+
+<p>Alternatively, you can ping redis directly using the redis-cli as follows;</p>
+
+<pre><code class="language-bash">PUBLISH _internal debug</code></pre>
+
+<p>This will dump a debug status into your logs</p>
 
 <h2><a id="todo" class="anchor" href="#todo">
   <svg class="octicon-link" aria-hidden="true">

@@ -13,7 +13,7 @@
 <script type="text/javascript" src="../js/doc.js"></script>
 
   <meta name="repository-name" content="cable">
-  <title>Cable::Logger - cable 0.1.0</title>
+  <title>Cable::Debug - cable 0.1.0</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../";
   </script>
@@ -91,18 +91,18 @@
       
     </li>
   
+  <li class=" current" data-id="cable/Cable/Debug" data-name="cable::debug">
+      <a href="../Cable/Debug.html">Debug</a>
+      
+    </li>
+  
   <li class=" " data-id="cable/Cable/HabitatSettings" data-name="cable::habitatsettings">
       <a href="../Cable/HabitatSettings.html">HabitatSettings</a>
       
     </li>
   
-  <li class=" " data-id="cable/Cable/Handler" data-name="cable::handler">
+  <li class=" " data-id="cable/Cable/Handler" data-name="cable::handler(t)">
       <a href="../Cable/Handler.html">Handler</a>
-      
-    </li>
-  
-  <li class=" current" data-id="cable/Cable/Logger" data-name="cable::logger">
-      <a href="../Cable/Logger.html">Logger</a>
       
     </li>
   
@@ -165,12 +165,11 @@
 <div class="main-content">
 <h1 class="type-name">
 
-  <span class="kind">class</span> Cable::Logger
+  <span class="kind">module</span> Cable::Debug
 
 </h1>
 
 
-  <ul class="superclass-hierarchy"><li class="superclass"><a href="../Cable/Logger.html">Cable::Logger</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
 
 
 
@@ -184,6 +183,19 @@
 
 
 
+  <h2>
+    <a id="direct-including-types" class="anchor" href="#direct-including-types">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Direct including types
+  </h2>
+  <ul class="other-types-list">
+    
+      <li class="other-type"><a href="../Cable/Server.html">Cable::Server</a></li>
+    
+  </ul>
 
 
 
@@ -200,66 +212,29 @@
 
 
 
-  
-    <h2>
-      <a id="constant-summary" class="anchor" href="#constant-summary">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-      Constant Summary
-    </h2>
-  
-  <dl>
-    
-      <dt class="entry-const" id="LOG">
-        <strong>LOG</strong> = <code><span class="t">::</span><span class="t">Log</span>.<span class="k">for</span>(<span class="s">&quot;cable&quot;</span>)</code>
-      </dt>
-      
-    
-  </dl>
+
 
 
 
 
 
   <h2>
-    <a id="class-method-summary" class="anchor" href="#class-method-summary">
+    <a id="instance-method-summary" class="anchor" href="#instance-method-summary">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
 </a>
-    Class Method Summary
+    Instance Method Summary
   </h2>
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#debug(message)-class-method" class="signature"><strong>.debug</strong>(message)</a>
+        <a href="#debug-instance-method" class="signature"><strong>#debug</strong></a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#info(message)-class-method" class="signature"><strong>.info</strong>(message)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#messages-class-method" class="signature"><strong>.messages</strong></a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#reset_messages-class-method" class="signature"><strong>.reset_messages</strong></a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#show_output-class-method" class="signature"><strong>.show_output</strong></a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#suppress_output-class-method" class="signature"><strong>.suppress_output</strong></a>
+        <a href="#debug_json-instance-method" class="signature"><strong>#debug_json</strong></a>
         
       </li>
     
@@ -269,50 +244,30 @@
 
 
 
-
-
 <div class="methods-inherited">
-  
-    
-
-
-    
-
-
-    
-
-
-  
-    
-
-
-    
-
-
-    
-
-
   
 </div>
 
 
 
 
+
+
   <h2>
-    <a id="class-method-detail" class="anchor" href="#class-method-detail">
+    <a id="instance-method-detail" class="anchor" href="#instance-method-detail">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
 </a>
-    Class Method Detail
+    Instance Method Detail
   </h2>
   
-    <div class="entry-detail" id="debug(message)-class-method">
+    <div class="entry-detail" id="debug-instance-method">
       <div class="signature">
         
-        def self.<strong>debug</strong>(message)
+        def <strong>debug</strong>
 
-        <a class="method-permalink" href="#debug(message)-class-method">#</a>
+        <a class="method-permalink" href="#debug-instance-method">#</a>
       </div>
       
       <br/>
@@ -321,12 +276,12 @@
       </div>
     </div>
   
-    <div class="entry-detail" id="info(message)-class-method">
+    <div class="entry-detail" id="debug_json-instance-method">
       <div class="signature">
         
-        def self.<strong>info</strong>(message)
+        def <strong>debug_json</strong>
 
-        <a class="method-permalink" href="#info(message)-class-method">#</a>
+        <a class="method-permalink" href="#debug_json-instance-method">#</a>
       </div>
       
       <br/>
@@ -335,64 +290,6 @@
       </div>
     </div>
   
-    <div class="entry-detail" id="messages-class-method">
-      <div class="signature">
-        
-        def self.<strong>messages</strong>
-
-        <a class="method-permalink" href="#messages-class-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="reset_messages-class-method">
-      <div class="signature">
-        
-        def self.<strong>reset_messages</strong>
-
-        <a class="method-permalink" href="#reset_messages-class-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="show_output-class-method">
-      <div class="signature">
-        
-        def self.<strong>show_output</strong>
-
-        <a class="method-permalink" href="#show_output-class-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="suppress_output-class-method">
-      <div class="signature">
-        
-        def self.<strong>suppress_output</strong>
-
-        <a class="method-permalink" href="#suppress_output-class-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-      </div>
-    </div>
-  
-
-
 
 
 

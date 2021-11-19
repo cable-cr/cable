@@ -91,18 +91,18 @@
       
     </li>
   
+  <li class=" " data-id="cable/Cable/Debug" data-name="cable::debug">
+      <a href="../Cable/Debug.html">Debug</a>
+      
+    </li>
+  
   <li class=" " data-id="cable/Cable/HabitatSettings" data-name="cable::habitatsettings">
       <a href="../Cable/HabitatSettings.html">HabitatSettings</a>
       
     </li>
   
-  <li class=" " data-id="cable/Cable/Handler" data-name="cable::handler">
+  <li class=" " data-id="cable/Cable/Handler" data-name="cable::handler(t)">
       <a href="../Cable/Handler.html">Handler</a>
-      
-    </li>
-  
-  <li class=" " data-id="cable/Cable/Logger" data-name="cable::logger">
-      <a href="../Cable/Logger.html">Logger</a>
       
     </li>
   
@@ -282,7 +282,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#broadcast(message:Hash(String,String))-instance-method" class="signature"><strong>#broadcast</strong>(message : Hash(String, String))</a>
+        <a href="#broadcast(message:String)-instance-method" class="signature"><strong>#broadcast</strong>(message : String)</a>
         
       </li>
     
@@ -292,7 +292,7 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#broadcast(message:String)-instance-method" class="signature"><strong>#broadcast</strong>(message : String)</a>
+        <a href="#broadcast(message:Hash(String,String))-instance-method" class="signature"><strong>#broadcast</strong>(message : Hash(String, String))</a>
         
       </li>
     
@@ -328,11 +328,6 @@
     
       <li class="entry-summary">
         <a href="#reject-instance-method" class="signature"><strong>#reject</strong></a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#reject_subscription:Bool-instance-method" class="signature"><strong>#reject_subscription</strong> : Bool</a>
         
       </li>
     
@@ -533,12 +528,12 @@
     Instance Method Detail
   </h2>
   
-    <div class="entry-detail" id="broadcast(message:Hash(String,String))-instance-method">
+    <div class="entry-detail" id="broadcast(message:String)-instance-method">
       <div class="signature">
         
-        def <strong>broadcast</strong>(message : Hash(String, String))
+        def <strong>broadcast</strong>(message : String)
 
-        <a class="method-permalink" href="#broadcast(message:Hash(String,String))-instance-method">#</a>
+        <a class="method-permalink" href="#broadcast(message:String)-instance-method">#</a>
       </div>
       
       <br/>
@@ -561,12 +556,12 @@
       </div>
     </div>
   
-    <div class="entry-detail" id="broadcast(message:String)-instance-method">
+    <div class="entry-detail" id="broadcast(message:Hash(String,String))-instance-method">
       <div class="signature">
         
-        def <strong>broadcast</strong>(message : String)
+        def <strong>broadcast</strong>(message : Hash(String, String))
 
-        <a class="method-permalink" href="#broadcast(message:String)-instance-method">#</a>
+        <a class="method-permalink" href="#broadcast(message:Hash(String,String))-instance-method">#</a>
       </div>
       
       <br/>
@@ -665,20 +660,6 @@
         def <strong>reject</strong>
 
         <a class="method-permalink" href="#reject-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="reject_subscription:Bool-instance-method">
-      <div class="signature">
-        
-        def <strong>reject_subscription</strong> : Bool
-
-        <a class="method-permalink" href="#reject_subscription:Bool-instance-method">#</a>
       </div>
       
       <br/>
