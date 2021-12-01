@@ -16,9 +16,9 @@ jobs:
         shard_file:
           - shard.yml
         crystal_version:
-          - 0.36.1
           - 1.0.0
           - 1.1.1
+          - 1.2.2
     runs-on: ubuntu-latest
     container: crystallang/crystal:${{ matrix.crystal_version }}-alpine
     services:
