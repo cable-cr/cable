@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="generator" content="Crystal Docs 0.35.1">
-<meta name="crystal_docs.project_version" content="0.1.0">
+<meta name="generator" content="Crystal Docs 1.1.1">
+<meta name="crystal_docs.project_version" content="master">
 <meta name="crystal_docs.project_name" content="cable">
 
 
@@ -13,7 +13,7 @@
 <script type="text/javascript" src="js/doc.js"></script>
 
   <meta name="repository-name" content="cable">
-  <title>Redis - cable 0.1.0</title>
+  <title>Redis - cable master</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "";
   </script>
@@ -39,7 +39,7 @@
       </h1>
 
       <span class="project-version">
-        0.1.0
+        master
       </span>
     </div>
   </div>
@@ -226,6 +226,48 @@ So we monkey patch to run the command, ignore it, and return Nil</p>
     Defined in:
   </h2>
   
+    
+      <a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/lib/redis/src/redis.cr#L37" target="_blank">
+        lib/redis/src/redis.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/lib/redis/src/redis/command_execution/future_oriented.cr#L1" target="_blank">
+        lib/redis/src/redis/command_execution/future_oriented.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/lib/redis/src/redis/command_execution/value_oriented.cr#L1" target="_blank">
+        lib/redis/src/redis/command_execution/value_oriented.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/lib/redis/src/redis/commands.cr#L1" target="_blank">
+        lib/redis/src/redis/commands.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/lib/redis/src/redis/strategy/base.cr#L1" target="_blank">
+        lib/redis/src/redis/strategy/base.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/src/cable/monkeypatch/redis.cr#L4" target="_blank">
+        cable/monkeypatch/redis.cr
+      </a>
+    
+    <br/>
+  
 
 
 
@@ -246,7 +288,7 @@ So we monkey patch to run the command, ignore it, and return Nil</p>
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#_connection:Redis::Connection-instance-method" class="signature"><strong>#_connection</strong> : Redis::Connection</a>
+        <a href="#_connection%3ARedis%3A%3AConnection-instance-method" class="signature"><strong>#_connection</strong> : Redis::Connection</a>
         
           <div class="summary"><p>Needs access to connection so we can subscribe to multiple channels</p></div>
         
@@ -265,7 +307,7 @@ So we monkey patch to run the command, ignore it, and return Nil</p>
   <h3>Instance methods inherited from module <code>Redis::CommandExecution::ValueOriented</code></h3>
   
   
-    <a href="Redis/CommandExecution/ValueOriented.html#void_command(request:Request):Nil-instance-method" class="tooltip">
+    <a href="Redis/CommandExecution/ValueOriented.html#void_command%28request%3ARequest%29%3ANil-instance-method" class="tooltip">
       <span>void_command(request : Request) : Nil</span>
     void_command</a>
     
@@ -330,7 +372,7 @@ So we monkey patch to run the command, ignore it, and return Nil</p>
         
         def <strong>_connection</strong> : Redis::Connection
 
-        <a class="method-permalink" href="#_connection:Redis::Connection-instance-method">#</a>
+        <a class="method-permalink" href="#_connection%3ARedis%3A%3AConnection-instance-method">#</a>
       </div>
       
         <div class="doc">
@@ -341,6 +383,8 @@ multiple channels</p>
       
       <br/>
       <div>
+        
+          [<a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/src/cable/monkeypatch/redis.cr#L15" target="_blank">View source</a>]
         
       </div>
     </div>

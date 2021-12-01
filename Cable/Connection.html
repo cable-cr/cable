@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="generator" content="Crystal Docs 0.35.1">
-<meta name="crystal_docs.project_version" content="0.1.0">
+<meta name="generator" content="Crystal Docs 1.1.1">
+<meta name="crystal_docs.project_version" content="master">
 <meta name="crystal_docs.project_name" content="cable">
 
 
@@ -13,7 +13,7 @@
 <script type="text/javascript" src="../js/doc.js"></script>
 
   <meta name="repository-name" content="cable">
-  <title>Cable::Connection - cable 0.1.0</title>
+  <title>Cable::Connection - cable master</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../";
   </script>
@@ -39,7 +39,7 @@
       </h1>
 
       <span class="project-version">
-        0.1.0
+        master
       </span>
     </div>
   </div>
@@ -197,6 +197,13 @@
     Defined in:
   </h2>
   
+    
+      <a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/src/cable/connection.cr#L4" target="_blank">
+        cable/connection.cr
+      </a>
+    
+    <br/>
+  
 
 
 
@@ -232,7 +239,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new(request:HTTP::Request,socket:HTTP::WebSocket)-class-method" class="signature"><strong>.new</strong>(request : HTTP::Request, socket : HTTP::WebSocket)</a>
+        <a href="#new%28request%3AHTTP%3A%3ARequest%2Csocket%3AHTTP%3A%3AWebSocket%29-class-method" class="signature"><strong>.new</strong>(request : HTTP::Request, socket : HTTP::WebSocket)</a>
         
       </li>
     
@@ -251,7 +258,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#broadcast_to(channel:String,message:String)-class-method" class="signature"><strong>.broadcast_to</strong>(channel : String, message : String)</a>
+        <a href="#broadcast_to%28channel%3AString%2Cmessage%3AString%29-class-method" class="signature"><strong>.broadcast_to</strong>(channel : String, message : String)</a>
         
       </li>
     
@@ -280,29 +287,29 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#connection_identifier:String-instance-method" class="signature"><strong>#connection_identifier</strong> : String</a>
+        <a href="#connection_identifier%3AString-instance-method" class="signature"><strong>#connection_identifier</strong> : String</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#connection_identifier=(connection_identifier:String)-instance-method" class="signature"><strong>#connection_identifier=</strong>(connection_identifier : String)</a>
+        <a href="#connection_identifier%3D%28connection_identifier%3AString%29-instance-method" class="signature"><strong>#connection_identifier=</strong>(connection_identifier : String)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#connection_rejected?:Bool-instance-method" class="signature"><strong>#connection_rejected?</strong> : Bool</a>
+        <a href="#connection_rejected%3F%3ABool-instance-method" class="signature"><strong>#connection_rejected?</strong> : Bool</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#connection_requesting_duplicate_channel_subscription?(payload)-instance-method" class="signature"><strong>#connection_requesting_duplicate_channel_subscription?</strong>(payload)</a>
+        <a href="#connection_requesting_duplicate_channel_subscription%3F%28payload%29-instance-method" class="signature"><strong>#connection_requesting_duplicate_channel_subscription?</strong>(payload)</a>
         
           <div class="summary"><p>ensure we only allow subscribing to the same channel once from a connection</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#id:UUID-instance-method" class="signature"><strong>#id</strong> : UUID</a>
+        <a href="#id%3AUUID-instance-method" class="signature"><strong>#id</strong> : UUID</a>
         
       </li>
     
@@ -312,32 +319,32 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#internal_identifier:String-instance-method" class="signature"><strong>#internal_identifier</strong> : String</a>
+        <a href="#internal_identifier%3AString-instance-method" class="signature"><strong>#internal_identifier</strong> : String</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#internal_identifier=(internal_identifier:String)-instance-method" class="signature"><strong>#internal_identifier=</strong>(internal_identifier : String)</a>
+        <a href="#internal_identifier%3D%28internal_identifier%3AString%29-instance-method" class="signature"><strong>#internal_identifier=</strong>(internal_identifier : String)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#message(payload:Cable::Payload)-instance-method" class="signature"><strong>#message</strong>(payload : Cable::Payload)</a>
+        <a href="#message%28payload%3ACable%3A%3APayload%29-instance-method" class="signature"><strong>#message</strong>(payload : Cable::Payload)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#receive(message)-instance-method" class="signature"><strong>#receive</strong>(message)</a>
+        <a href="#receive%28message%29-instance-method" class="signature"><strong>#receive</strong>(message)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#reject(payload:Cable::Payload)-instance-method" class="signature"><strong>#reject</strong>(payload : Cable::Payload)</a>
+        <a href="#reject%28payload%3ACable%3A%3APayload%29-instance-method" class="signature"><strong>#reject</strong>(payload : Cable::Payload)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#reject_connection!-instance-method" class="signature"><strong>#reject_connection!</strong></a>
+        <a href="#reject_connection%21-instance-method" class="signature"><strong>#reject_connection!</strong></a>
         
       </li>
     
@@ -347,27 +354,27 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#socket:HTTP::WebSocket-instance-method" class="signature"><strong>#socket</strong> : HTTP::WebSocket</a>
+        <a href="#socket%3AHTTP%3A%3AWebSocket-instance-method" class="signature"><strong>#socket</strong> : HTTP::WebSocket</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#started_at:Time-instance-method" class="signature"><strong>#started_at</strong> : Time</a>
+        <a href="#started_at%3ATime-instance-method" class="signature"><strong>#started_at</strong> : Time</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#subscribe(payload:Cable::Payload)-instance-method" class="signature"><strong>#subscribe</strong>(payload : Cable::Payload)</a>
+        <a href="#subscribe%28payload%3ACable%3A%3APayload%29-instance-method" class="signature"><strong>#subscribe</strong>(payload : Cable::Payload)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#token:String?-instance-method" class="signature"><strong>#token</strong> : String?</a>
+        <a href="#token%3AString%3F-instance-method" class="signature"><strong>#token</strong> : String?</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#unsubscribe(payload:Cable::Payload)-instance-method" class="signature"><strong>#unsubscribe</strong>(payload : Cable::Payload)</a>
+        <a href="#unsubscribe%28payload%3ACable%3A%3APayload%29-instance-method" class="signature"><strong>#unsubscribe</strong>(payload : Cable::Payload)</a>
         
       </li>
     
@@ -386,12 +393,12 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#identified_by(name)-macro" class="signature"><strong>identified_by</strong>(name)</a>
+        <a href="#identified_by%28name%29-macro" class="signature"><strong>identified_by</strong>(name)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#owned_by(type_definition)-macro" class="signature"><strong>owned_by</strong>(type_definition)</a>
+        <a href="#owned_by%28type_definition%29-macro" class="signature"><strong>owned_by</strong>(type_definition)</a>
         
       </li>
     
@@ -438,11 +445,13 @@
         
         def self.<strong>new</strong>(request : HTTP::Request, socket : HTTP::WebSocket)
 
-        <a class="method-permalink" href="#new(request:HTTP::Request,socket:HTTP::WebSocket)-class-method">#</a>
+        <a class="method-permalink" href="#new%28request%3AHTTP%3A%3ARequest%2Csocket%3AHTTP%3A%3AWebSocket%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
+        
+          [<a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/src/cable/connection.cr#L34" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -464,11 +473,13 @@
         
         def self.<strong>broadcast_to</strong>(channel : String, message : String)
 
-        <a class="method-permalink" href="#broadcast_to(channel:String,message:String)-class-method">#</a>
+        <a class="method-permalink" href="#broadcast_to%28channel%3AString%2Cmessage%3AString%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
+        
+          [<a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/src/cable/connection.cr#L149" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -496,6 +507,8 @@
       <br/>
       <div>
         
+          [<a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/src/cable/connection.cr#L55" target="_blank">View source</a>]
+        
       </div>
     </div>
   
@@ -510,6 +523,8 @@
       <br/>
       <div>
         
+          [<a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/src/cable/connection.cr#L49" target="_blank">View source</a>]
+        
       </div>
     </div>
   
@@ -518,11 +533,13 @@
         
         def <strong>connection_identifier</strong> : String
 
-        <a class="method-permalink" href="#connection_identifier:String-instance-method">#</a>
+        <a class="method-permalink" href="#connection_identifier%3AString-instance-method">#</a>
       </div>
       
       <br/>
       <div>
+        
+          [<a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/src/cable/connection.cr#L8" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -532,11 +549,13 @@
         
         def <strong>connection_identifier=</strong>(connection_identifier : String)
 
-        <a class="method-permalink" href="#connection_identifier=(connection_identifier:String)-instance-method">#</a>
+        <a class="method-permalink" href="#connection_identifier%3D%28connection_identifier%3AString%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
+        
+          [<a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/src/cable/connection.cr#L8" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -546,11 +565,13 @@
         
         def <strong>connection_rejected?</strong> : Bool
 
-        <a class="method-permalink" href="#connection_rejected?:Bool-instance-method">#</a>
+        <a class="method-permalink" href="#connection_rejected%3F%3ABool-instance-method">#</a>
       </div>
       
       <br/>
       <div>
+        
+          [<a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/src/cable/connection.cr#L11" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -560,7 +581,7 @@
         
         def <strong>connection_requesting_duplicate_channel_subscription?</strong>(payload)
 
-        <a class="method-permalink" href="#connection_requesting_duplicate_channel_subscription?(payload)-instance-method">#</a>
+        <a class="method-permalink" href="#connection_requesting_duplicate_channel_subscription%3F%28payload%29-instance-method">#</a>
       </div>
       
         <div class="doc">
@@ -571,6 +592,8 @@
       <br/>
       <div>
         
+          [<a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/src/cable/connection.cr#L111" target="_blank">View source</a>]
+        
       </div>
     </div>
   
@@ -579,11 +602,13 @@
         
         def <strong>id</strong> : UUID
 
-        <a class="method-permalink" href="#id:UUID-instance-method">#</a>
+        <a class="method-permalink" href="#id%3AUUID-instance-method">#</a>
       </div>
       
       <br/>
       <div>
+        
+          [<a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/src/cable/connection.cr#L13" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -599,6 +624,8 @@
       <br/>
       <div>
         
+          [<a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/src/cable/connection.cr#L18" target="_blank">View source</a>]
+        
       </div>
     </div>
   
@@ -607,11 +634,13 @@
         
         def <strong>internal_identifier</strong> : String
 
-        <a class="method-permalink" href="#internal_identifier:String-instance-method">#</a>
+        <a class="method-permalink" href="#internal_identifier%3AString-instance-method">#</a>
       </div>
       
       <br/>
       <div>
+        
+          [<a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/src/cable/connection.cr#L7" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -621,11 +650,13 @@
         
         def <strong>internal_identifier=</strong>(internal_identifier : String)
 
-        <a class="method-permalink" href="#internal_identifier=(internal_identifier:String)-instance-method">#</a>
+        <a class="method-permalink" href="#internal_identifier%3D%28internal_identifier%3AString%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
+        
+          [<a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/src/cable/connection.cr#L7" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -635,11 +666,13 @@
         
         def <strong>message</strong>(payload : <a href="../Cable/Payload.html">Cable::Payload</a>)
 
-        <a class="method-permalink" href="#message(payload:Cable::Payload)-instance-method">#</a>
+        <a class="method-permalink" href="#message%28payload%3ACable%3A%3APayload%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
+        
+          [<a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/src/cable/connection.cr#L133" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -649,11 +682,13 @@
         
         def <strong>receive</strong>(message)
 
-        <a class="method-permalink" href="#receive(message)-instance-method">#</a>
+        <a class="method-permalink" href="#receive%28message%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
+        
+          [<a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/src/cable/connection.cr#L74" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -663,11 +698,13 @@
         
         def <strong>reject</strong>(payload : <a href="../Cable/Payload.html">Cable::Payload</a>)
 
-        <a class="method-permalink" href="#reject(payload:Cable::Payload)-instance-method">#</a>
+        <a class="method-permalink" href="#reject%28payload%3ACable%3A%3APayload%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
+        
+          [<a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/src/cable/connection.cr#L125" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -677,11 +714,13 @@
         
         def <strong>reject_connection!</strong>
 
-        <a class="method-permalink" href="#reject_connection!-instance-method">#</a>
+        <a class="method-permalink" href="#reject_connection%21-instance-method">#</a>
       </div>
       
       <br/>
       <div>
+        
+          [<a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/src/cable/connection.cr#L51" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -697,6 +736,8 @@
       <br/>
       <div>
         
+          [<a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/src/cable/connection.cr#L70" target="_blank">View source</a>]
+        
       </div>
     </div>
   
@@ -705,11 +746,13 @@
         
         def <strong>socket</strong> : HTTP::WebSocket
 
-        <a class="method-permalink" href="#socket:HTTP::WebSocket-instance-method">#</a>
+        <a class="method-permalink" href="#socket%3AHTTP%3A%3AWebSocket-instance-method">#</a>
       </div>
       
       <br/>
       <div>
+        
+          [<a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/src/cable/connection.cr#L12" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -719,11 +762,13 @@
         
         def <strong>started_at</strong> : Time
 
-        <a class="method-permalink" href="#started_at:Time-instance-method">#</a>
+        <a class="method-permalink" href="#started_at%3ATime-instance-method">#</a>
       </div>
       
       <br/>
       <div>
+        
+          [<a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/src/cable/connection.cr#L14" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -733,11 +778,13 @@
         
         def <strong>subscribe</strong>(payload : <a href="../Cable/Payload.html">Cable::Payload</a>)
 
-        <a class="method-permalink" href="#subscribe(payload:Cable::Payload)-instance-method">#</a>
+        <a class="method-permalink" href="#subscribe%28payload%3ACable%3A%3APayload%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
+        
+          [<a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/src/cable/connection.cr#L82" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -747,11 +794,13 @@
         
         def <strong>token</strong> : String?
 
-        <a class="method-permalink" href="#token:String?-instance-method">#</a>
+        <a class="method-permalink" href="#token%3AString%3F-instance-method">#</a>
       </div>
       
       <br/>
       <div>
+        
+          [<a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/src/cable/connection.cr#L10" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -761,11 +810,13 @@
         
         def <strong>unsubscribe</strong>(payload : <a href="../Cable/Payload.html">Cable::Payload</a>)
 
-        <a class="method-permalink" href="#unsubscribe(payload:Cable::Payload)-instance-method">#</a>
+        <a class="method-permalink" href="#unsubscribe%28payload%3ACable%3A%3APayload%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
+        
+          [<a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/src/cable/connection.cr#L117" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -787,11 +838,13 @@
         
         macro <strong>identified_by</strong>(name)
 
-        <a class="method-permalink" href="#identified_by(name)-macro">#</a>
+        <a class="method-permalink" href="#identified_by%28name%29-macro">#</a>
       </div>
       
       <br/>
       <div>
+        
+          [<a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/src/cable/connection.cr#L22" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -801,11 +854,13 @@
         
         macro <strong>owned_by</strong>(type_definition)
 
-        <a class="method-permalink" href="#owned_by(type_definition)-macro">#</a>
+        <a class="method-permalink" href="#owned_by%28type_definition%29-macro">#</a>
       </div>
       
       <br/>
       <div>
+        
+          [<a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/src/cable/connection.cr#L30" target="_blank">View source</a>]
         
       </div>
     </div>

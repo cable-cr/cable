@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="generator" content="Crystal Docs 0.35.1">
-<meta name="crystal_docs.project_version" content="0.1.0">
+<meta name="generator" content="Crystal Docs 1.1.1">
+<meta name="crystal_docs.project_version" content="master">
 <meta name="crystal_docs.project_name" content="cable">
 
 
@@ -13,7 +13,7 @@
 <script type="text/javascript" src="../js/doc.js"></script>
 
   <meta name="repository-name" content="cable">
-  <title>Cable::Channel - cable 0.1.0</title>
+  <title>Cable::Channel - cable master</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../";
   </script>
@@ -39,7 +39,7 @@
       </h1>
 
       <span class="project-version">
-        0.1.0
+        master
       </span>
     </div>
   </div>
@@ -197,6 +197,13 @@
     Defined in:
   </h2>
   
+    
+      <a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/src/cable/channel.cr#L2" target="_blank">
+        cable/channel.cr
+      </a>
+    
+    <br/>
+  
 
 
 
@@ -232,7 +239,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new(connection:Cable::Connection,identifier:String,params:Hash(String,Cable::Payload::RESULT))-class-method" class="signature"><strong>.new</strong>(connection : Cable::Connection, identifier : String, params : Hash(String, Cable::Payload::RESULT))</a>
+        <a href="#new%28connection%3ACable%3A%3AConnection%2Cidentifier%3AString%2Cparams%3AHash%28String%2CCable%3A%3APayload%3A%3ARESULT%29%29-class-method" class="signature"><strong>.new</strong>(connection : Cable::Connection, identifier : String, params : Hash(String, Cable::Payload::RESULT))</a>
         
       </li>
     
@@ -251,19 +258,19 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#broadcast_to(channel:String,message:JSON::Any)-class-method" class="signature"><strong>.broadcast_to</strong>(channel : String, message : JSON::Any)</a>
+        <a href="#broadcast_to%28channel%3AString%2Cmessage%3AJSON%3A%3AAny%29-class-method" class="signature"><strong>.broadcast_to</strong>(channel : String, message : JSON::Any)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#broadcast_to(channel:String,message:String)-class-method" class="signature"><strong>.broadcast_to</strong>(channel : String, message : String)</a>
+        <a href="#broadcast_to%28channel%3AString%2Cmessage%3AString%29-class-method" class="signature"><strong>.broadcast_to</strong>(channel : String, message : String)</a>
         
           <div class="summary"><p>It's important that we don't call message.to_json</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#broadcast_to(channel:String,message:Hash(String,String))-class-method" class="signature"><strong>.broadcast_to</strong>(channel : String, message : Hash(String, String))</a>
+        <a href="#broadcast_to%28channel%3AString%2Cmessage%3AHash%28String%2CString%29%29-class-method" class="signature"><strong>.broadcast_to</strong>(channel : String, message : Hash(String, String))</a>
         
       </li>
     
@@ -282,17 +289,17 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#broadcast(message:String)-instance-method" class="signature"><strong>#broadcast</strong>(message : String)</a>
+        <a href="#broadcast%28message%3AString%29-instance-method" class="signature"><strong>#broadcast</strong>(message : String)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#broadcast(message:JSON::Any)-instance-method" class="signature"><strong>#broadcast</strong>(message : JSON::Any)</a>
+        <a href="#broadcast%28message%3AJSON%3A%3AAny%29-instance-method" class="signature"><strong>#broadcast</strong>(message : JSON::Any)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#broadcast(message:Hash(String,String))-instance-method" class="signature"><strong>#broadcast</strong>(message : Hash(String, String))</a>
+        <a href="#broadcast%28message%3AHash%28String%2CString%29%29-instance-method" class="signature"><strong>#broadcast</strong>(message : Hash(String, String))</a>
         
       </li>
     
@@ -302,27 +309,27 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#connection:Cable::Connection-instance-method" class="signature"><strong>#connection</strong> : Cable::Connection</a>
+        <a href="#connection%3ACable%3A%3AConnection-instance-method" class="signature"><strong>#connection</strong> : Cable::Connection</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#identifier:String-instance-method" class="signature"><strong>#identifier</strong> : String</a>
+        <a href="#identifier%3AString-instance-method" class="signature"><strong>#identifier</strong> : String</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#params:Hash(String,Cable::Payload::RESULT)-instance-method" class="signature"><strong>#params</strong> : Hash(String, Cable::Payload::RESULT)</a>
+        <a href="#params%3AHash%28String%2CCable%3A%3APayload%3A%3ARESULT%29-instance-method" class="signature"><strong>#params</strong> : Hash(String, Cable::Payload::RESULT)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#perform(action,message)-instance-method" class="signature"><strong>#perform</strong>(action, message)</a>
+        <a href="#perform%28action%2Cmessage%29-instance-method" class="signature"><strong>#perform</strong>(action, message)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#receive(message)-instance-method" class="signature"><strong>#receive</strong>(message)</a>
+        <a href="#receive%28message%29-instance-method" class="signature"><strong>#receive</strong>(message)</a>
         
       </li>
     
@@ -339,12 +346,12 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#stream_from(stream_identifier)-instance-method" class="signature"><strong>#stream_from</strong>(stream_identifier)</a>
+        <a href="#stream_from%28stream_identifier%29-instance-method" class="signature"><strong>#stream_from</strong>(stream_identifier)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#stream_identifier:String?-instance-method" class="signature"><strong>#stream_identifier</strong> : String?</a>
+        <a href="#stream_identifier%3AString%3F-instance-method" class="signature"><strong>#stream_identifier</strong> : String?</a>
         
       </li>
     
@@ -354,26 +361,26 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#subscription_rejected?:Bool-instance-method" class="signature"><strong>#subscription_rejected?</strong> : Bool</a>
+        <a href="#subscription_rejected%3F%3ABool-instance-method" class="signature"><strong>#subscription_rejected?</strong> : Bool</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#transmit(message:JSON::Any)-instance-method" class="signature"><strong>#transmit</strong>(message : JSON::Any)</a>
+        <a href="#transmit%28message%3AString%29-instance-method" class="signature"><strong>#transmit</strong>(message : String)</a>
         
           <div class="summary"><p>broadcast single message to single connection for this channel</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#transmit(message:String)-instance-method" class="signature"><strong>#transmit</strong>(message : String)</a>
+        <a href="#transmit%28message%3AJSON%3A%3AAny%29-instance-method" class="signature"><strong>#transmit</strong>(message : JSON::Any)</a>
         
           <div class="summary"><p>broadcast single message to single connection for this channel</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#transmit(message:Hash(String,String))-instance-method" class="signature"><strong>#transmit</strong>(message : Hash(String, String))</a>
+        <a href="#transmit%28message%3AHash%28String%2CString%29%29-instance-method" class="signature"><strong>#transmit</strong>(message : Hash(String, String))</a>
         
           <div class="summary"><p>broadcast single message to single connection for this channel</p></div>
         
@@ -399,7 +406,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#after_subscribed(*callbacks)-macro" class="signature"><strong>after_subscribed</strong>(*callbacks)</a>
+        <a href="#after_subscribed%28%2Acallbacks%29-macro" class="signature"><strong>after_subscribed</strong>(*callbacks)</a>
         
           <div class="summary"><p>Run <code>block</code> after the subscription is created.</p></div>
         
@@ -448,11 +455,13 @@
         
         def self.<strong>new</strong>(connection : <a href="../Cable/Connection.html">Cable::Connection</a>, identifier : String, params : Hash(String, <a href="../Cable/Payload/RESULT.html">Cable::Payload::RESULT</a>))
 
-        <a class="method-permalink" href="#new(connection:Cable::Connection,identifier:String,params:Hash(String,Cable::Payload::RESULT))-class-method">#</a>
+        <a class="method-permalink" href="#new%28connection%3ACable%3A%3AConnection%2Cidentifier%3AString%2Cparams%3AHash%28String%2CCable%3A%3APayload%3A%3ARESULT%29%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
+        
+          [<a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/src/cable/channel.cr#L30" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -474,11 +483,13 @@
         
         def self.<strong>broadcast_to</strong>(channel : String, message : JSON::Any)
 
-        <a class="method-permalink" href="#broadcast_to(channel:String,message:JSON::Any)-class-method">#</a>
+        <a class="method-permalink" href="#broadcast_to%28channel%3AString%2Cmessage%3AJSON%3A%3AAny%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
+        
+          [<a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/src/cable/channel.cr#L59" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -488,7 +499,7 @@
         
         def self.<strong>broadcast_to</strong>(channel : String, message : String)
 
-        <a class="method-permalink" href="#broadcast_to(channel:String,message:String)-class-method">#</a>
+        <a class="method-permalink" href="#broadcast_to%28channel%3AString%2Cmessage%3AString%29-class-method">#</a>
       </div>
       
         <div class="doc">
@@ -499,6 +510,8 @@
       <br/>
       <div>
         
+          [<a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/src/cable/channel.cr#L65" target="_blank">View source</a>]
+        
       </div>
     </div>
   
@@ -507,11 +520,13 @@
         
         def self.<strong>broadcast_to</strong>(channel : String, message : Hash(String, String))
 
-        <a class="method-permalink" href="#broadcast_to(channel:String,message:Hash(String,String))-class-method">#</a>
+        <a class="method-permalink" href="#broadcast_to%28channel%3AString%2Cmessage%3AHash%28String%2CString%29%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
+        
+          [<a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/src/cable/channel.cr#L70" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -533,11 +548,13 @@
         
         def <strong>broadcast</strong>(message : String)
 
-        <a class="method-permalink" href="#broadcast(message:String)-instance-method">#</a>
+        <a class="method-permalink" href="#broadcast%28message%3AString%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
+        
+          [<a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/src/cable/channel.cr#L75" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -547,11 +564,13 @@
         
         def <strong>broadcast</strong>(message : JSON::Any)
 
-        <a class="method-permalink" href="#broadcast(message:JSON::Any)-instance-method">#</a>
+        <a class="method-permalink" href="#broadcast%28message%3AJSON%3A%3AAny%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
+        
+          [<a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/src/cable/channel.cr#L84" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -561,11 +580,13 @@
         
         def <strong>broadcast</strong>(message : Hash(String, String))
 
-        <a class="method-permalink" href="#broadcast(message:Hash(String,String))-instance-method">#</a>
+        <a class="method-permalink" href="#broadcast%28message%3AHash%28String%2CString%29%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
+        
+          [<a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/src/cable/channel.cr#L93" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -581,6 +602,8 @@
       <br/>
       <div>
         
+          [<a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/src/cable/channel.cr#L40" target="_blank">View source</a>]
+        
       </div>
     </div>
   
@@ -589,11 +612,13 @@
         
         def <strong>connection</strong> : <a href="../Cable/Connection.html">Cable::Connection</a>
 
-        <a class="method-permalink" href="#connection:Cable::Connection-instance-method">#</a>
+        <a class="method-permalink" href="#connection%3ACable%3A%3AConnection-instance-method">#</a>
       </div>
       
       <br/>
       <div>
+        
+          [<a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/src/cable/channel.cr#L26" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -603,11 +628,13 @@
         
         def <strong>identifier</strong> : String
 
-        <a class="method-permalink" href="#identifier:String-instance-method">#</a>
+        <a class="method-permalink" href="#identifier%3AString-instance-method">#</a>
       </div>
       
       <br/>
       <div>
+        
+          [<a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/src/cable/channel.cr#L25" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -617,11 +644,13 @@
         
         def <strong>params</strong> : Hash(String, <a href="../Cable/Payload/RESULT.html">Cable::Payload::RESULT</a>)
 
-        <a class="method-permalink" href="#params:Hash(String,Cable::Payload::RESULT)-instance-method">#</a>
+        <a class="method-permalink" href="#params%3AHash%28String%2CCable%3A%3APayload%3A%3ARESULT%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
+        
+          [<a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/src/cable/channel.cr#L24" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -631,11 +660,13 @@
         
         def <strong>perform</strong>(action, message)
 
-        <a class="method-permalink" href="#perform(action,message)-instance-method">#</a>
+        <a class="method-permalink" href="#perform%28action%2Cmessage%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
+        
+          [<a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/src/cable/channel.cr#L52" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -645,11 +676,13 @@
         
         def <strong>receive</strong>(message)
 
-        <a class="method-permalink" href="#receive(message)-instance-method">#</a>
+        <a class="method-permalink" href="#receive%28message%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
+        
+          [<a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/src/cable/channel.cr#L49" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -664,6 +697,8 @@
       
       <br/>
       <div>
+        
+          [<a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/src/cable/channel.cr#L33" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -684,6 +719,8 @@
       <br/>
       <div>
         
+          [<a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/src/cable/channel.cr#L12" target="_blank">View source</a>]
+        
       </div>
     </div>
   
@@ -692,11 +729,13 @@
         
         def <strong>stream_from</strong>(stream_identifier)
 
-        <a class="method-permalink" href="#stream_from(stream_identifier)-instance-method">#</a>
+        <a class="method-permalink" href="#stream_from%28stream_identifier%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
+        
+          [<a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/src/cable/channel.cr#L55" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -706,11 +745,13 @@
         
         def <strong>stream_identifier</strong> : String?
 
-        <a class="method-permalink" href="#stream_identifier:String?-instance-method">#</a>
+        <a class="method-permalink" href="#stream_identifier%3AString%3F-instance-method">#</a>
       </div>
       
       <br/>
       <div>
+        
+          [<a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/src/cable/channel.cr#L27" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -726,6 +767,8 @@
       <br/>
       <div>
         
+          [<a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/src/cable/channel.cr#L37" target="_blank">View source</a>]
+        
       </div>
     </div>
   
@@ -734,30 +777,13 @@
         
         def <strong>subscription_rejected?</strong> : Bool
 
-        <a class="method-permalink" href="#subscription_rejected?:Bool-instance-method">#</a>
+        <a class="method-permalink" href="#subscription_rejected%3F%3ABool-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="transmit(message:JSON::Any)-instance-method">
-      <div class="signature">
-        
-        def <strong>transmit</strong>(message : JSON::Any)
-
-        <a class="method-permalink" href="#transmit(message:JSON::Any)-instance-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>broadcast single message to single connection for this channel</p>
-        </div>
-      
-      <br/>
-      <div>
+          [<a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/src/cable/channel.cr#L28" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -767,7 +793,7 @@
         
         def <strong>transmit</strong>(message : String)
 
-        <a class="method-permalink" href="#transmit(message:String)-instance-method">#</a>
+        <a class="method-permalink" href="#transmit%28message%3AString%29-instance-method">#</a>
       </div>
       
         <div class="doc">
@@ -777,6 +803,29 @@
       
       <br/>
       <div>
+        
+          [<a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/src/cable/channel.cr#L103" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="transmit(message:JSON::Any)-instance-method">
+      <div class="signature">
+        
+        def <strong>transmit</strong>(message : JSON::Any)
+
+        <a class="method-permalink" href="#transmit%28message%3AJSON%3A%3AAny%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>broadcast single message to single connection for this channel</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/src/cable/channel.cr#L112" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -786,7 +835,7 @@
         
         def <strong>transmit</strong>(message : Hash(String, String))
 
-        <a class="method-permalink" href="#transmit(message:Hash(String,String))-instance-method">#</a>
+        <a class="method-permalink" href="#transmit%28message%3AHash%28String%2CString%29%29-instance-method">#</a>
       </div>
       
         <div class="doc">
@@ -796,6 +845,8 @@
       
       <br/>
       <div>
+        
+          [<a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/src/cable/channel.cr#L121" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -810,6 +861,8 @@
       
       <br/>
       <div>
+        
+          [<a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/src/cable/channel.cr#L46" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -831,7 +884,7 @@
         
         macro <strong>after_subscribed</strong>(*callbacks)
 
-        <a class="method-permalink" href="#after_subscribed(*callbacks)-macro">#</a>
+        <a class="method-permalink" href="#after_subscribed%28%2Acallbacks%29-macro">#</a>
       </div>
       
         <div class="doc">
@@ -841,6 +894,8 @@
       
       <br/>
       <div>
+        
+          [<a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/src/cable/channel.cr#L16" target="_blank">View source</a>]
         
       </div>
     </div>

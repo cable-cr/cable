@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="generator" content="Crystal Docs 0.35.1">
-<meta name="crystal_docs.project_version" content="0.1.0">
+<meta name="generator" content="Crystal Docs 1.1.1">
+<meta name="crystal_docs.project_version" content="master">
 <meta name="crystal_docs.project_name" content="cable">
 
 
@@ -13,7 +13,7 @@
 <script type="text/javascript" src="../js/doc.js"></script>
 
   <meta name="repository-name" content="cable">
-  <title>Cable::Server - cable 0.1.0</title>
+  <title>Cable::Server - cable master</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../";
   </script>
@@ -39,7 +39,7 @@
       </h1>
 
       <span class="project-version">
-        0.1.0
+        master
       </span>
     </div>
   </div>
@@ -211,6 +211,13 @@
     Defined in:
   </h2>
   
+    
+      <a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/src/cable/server.cr#L18" target="_blank">
+        cable/server.cr
+      </a>
+    
+    <br/>
+  
 
 
 
@@ -248,49 +255,49 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#add_connection(connection)-instance-method" class="signature"><strong>#add_connection</strong>(connection)</a>
+        <a href="#add_connection%28connection%29-instance-method" class="signature"><strong>#add_connection</strong>(connection)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#connections:Hash(String,Cable::Connection)-instance-method" class="signature"><strong>#connections</strong> : Hash(String, Cable::Connection)</a>
+        <a href="#connections%3AHash%28String%2CCable%3A%3AConnection%29-instance-method" class="signature"><strong>#connections</strong> : Hash(String, Cable::Connection)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#fiber_channel:Channel(%7BString,String%7D)-instance-method" class="signature"><strong>#fiber_channel</strong> : Channel({String, String})</a>
+        <a href="#fiber_channel%3AChannel%28%7BString%2CString%7D%29-instance-method" class="signature"><strong>#fiber_channel</strong> : Channel({String, String})</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#publish(channel:String,message:String)-instance-method" class="signature"><strong>#publish</strong>(channel : String, message : String)</a>
+        <a href="#publish%28channel%3AString%2Cmessage%3AString%29-instance-method" class="signature"><strong>#publish</strong>(channel : String, message : String)</a>
         
           <div class="summary"><p>redis only accepts strings, so we should be strict here</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#redis_publish:Redis-instance-method" class="signature"><strong>#redis_publish</strong> : Redis</a>
+        <a href="#redis_publish%3ARedis-instance-method" class="signature"><strong>#redis_publish</strong> : Redis</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#redis_subscribe:Redis-instance-method" class="signature"><strong>#redis_subscribe</strong> : Redis</a>
+        <a href="#redis_subscribe%3ARedis-instance-method" class="signature"><strong>#redis_subscribe</strong> : Redis</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#remove_connection(connection_id)-instance-method" class="signature"><strong>#remove_connection</strong>(connection_id)</a>
+        <a href="#remove_connection%28connection_id%29-instance-method" class="signature"><strong>#remove_connection</strong>(connection_id)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#safe_decode_message(message)-instance-method" class="signature"><strong>#safe_decode_message</strong>(message)</a>
+        <a href="#safe_decode_message%28message%29-instance-method" class="signature"><strong>#safe_decode_message</strong>(message)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#send_to_channels(channel_identifier,message)-instance-method" class="signature"><strong>#send_to_channels</strong>(channel_identifier, message)</a>
+        <a href="#send_to_channels%28channel_identifier%2Cmessage%29-instance-method" class="signature"><strong>#send_to_channels</strong>(channel_identifier, message)</a>
         
       </li>
     
@@ -300,12 +307,12 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#subscribe_channel(channel:Channel,identifier:String)-instance-method" class="signature"><strong>#subscribe_channel</strong>(channel : Channel, identifier : String)</a>
+        <a href="#subscribe_channel%28channel%3AChannel%2Cidentifier%3AString%29-instance-method" class="signature"><strong>#subscribe_channel</strong>(channel : Channel, identifier : String)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#unsubscribe_channel(channel:Channel,identifier:String)-instance-method" class="signature"><strong>#unsubscribe_channel</strong>(channel : Channel, identifier : String)</a>
+        <a href="#unsubscribe_channel%28channel%3AChannel%2Cidentifier%3AString%29-instance-method" class="signature"><strong>#unsubscribe_channel</strong>(channel : Channel, identifier : String)</a>
         
       </li>
     
@@ -384,6 +391,8 @@
       <br/>
       <div>
         
+          [<a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/src/cable/server.cr#L29" target="_blank">View source</a>]
+        
       </div>
     </div>
   
@@ -406,11 +415,13 @@
         
         def <strong>add_connection</strong>(connection)
 
-        <a class="method-permalink" href="#add_connection(connection)-instance-method">#</a>
+        <a class="method-permalink" href="#add_connection%28connection%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
+        
+          [<a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/src/cable/server.cr#L34" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -420,11 +431,13 @@
         
         def <strong>connections</strong> : Hash(String, <a href="../Cable/Connection.html">Cable::Connection</a>)
 
-        <a class="method-permalink" href="#connections:Hash(String,Cable::Connection)-instance-method">#</a>
+        <a class="method-permalink" href="#connections%3AHash%28String%2CCable%3A%3AConnection%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
+        
+          [<a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/src/cable/server.cr#L21" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -434,11 +447,13 @@
         
         def <strong>fiber_channel</strong> : Channel({String, String})
 
-        <a class="method-permalink" href="#fiber_channel:Channel(%7BString,String%7D)-instance-method">#</a>
+        <a class="method-permalink" href="#fiber_channel%3AChannel%28%7BString%2CString%7D%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
+        
+          [<a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/src/cable/server.cr#L24" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -448,7 +463,7 @@
         
         def <strong>publish</strong>(channel : String, message : String)
 
-        <a class="method-permalink" href="#publish(channel:String,message:String)-instance-method">#</a>
+        <a class="method-permalink" href="#publish%28channel%3AString%2Cmessage%3AString%29-instance-method">#</a>
       </div>
       
         <div class="doc">
@@ -459,6 +474,8 @@
       <br/>
       <div>
         
+          [<a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/src/cable/server.cr#L80" target="_blank">View source</a>]
+        
       </div>
     </div>
   
@@ -467,11 +484,13 @@
         
         def <strong>redis_publish</strong> : <a href="../Redis.html">Redis</a>
 
-        <a class="method-permalink" href="#redis_publish:Redis-instance-method">#</a>
+        <a class="method-permalink" href="#redis_publish%3ARedis-instance-method">#</a>
       </div>
       
       <br/>
       <div>
+        
+          [<a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/src/cable/server.cr#L23" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -481,11 +500,13 @@
         
         def <strong>redis_subscribe</strong> : <a href="../Redis.html">Redis</a>
 
-        <a class="method-permalink" href="#redis_subscribe:Redis-instance-method">#</a>
+        <a class="method-permalink" href="#redis_subscribe%3ARedis-instance-method">#</a>
       </div>
       
       <br/>
       <div>
+        
+          [<a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/src/cable/server.cr#L22" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -495,11 +516,13 @@
         
         def <strong>remove_connection</strong>(connection_id)
 
-        <a class="method-permalink" href="#remove_connection(connection_id)-instance-method">#</a>
+        <a class="method-permalink" href="#remove_connection%28connection_id%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
+        
+          [<a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/src/cable/server.cr#L38" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -509,11 +532,13 @@
         
         def <strong>safe_decode_message</strong>(message)
 
-        <a class="method-permalink" href="#safe_decode_message(message)-instance-method">#</a>
+        <a class="method-permalink" href="#safe_decode_message%28message%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
+        
+          [<a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/src/cable/server.cr#L106" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -523,11 +548,13 @@
         
         def <strong>send_to_channels</strong>(channel_identifier, message)
 
-        <a class="method-permalink" href="#send_to_channels(channel_identifier,message)-instance-method">#</a>
+        <a class="method-permalink" href="#send_to_channels%28channel_identifier%2Cmessage%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
+        
+          [<a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/src/cable/server.cr#L84" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -543,6 +570,8 @@
       <br/>
       <div>
         
+          [<a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/src/cable/server.cr#L117" target="_blank">View source</a>]
+        
       </div>
     </div>
   
@@ -551,11 +580,13 @@
         
         def <strong>subscribe_channel</strong>(channel : <a href="../Cable/Channel.html">Channel</a>, identifier : String)
 
-        <a class="method-permalink" href="#subscribe_channel(channel:Channel,identifier:String)-instance-method">#</a>
+        <a class="method-permalink" href="#subscribe_channel%28channel%3AChannel%2Cidentifier%3AString%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
+        
+          [<a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/src/cable/server.cr#L42" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -565,11 +596,13 @@
         
         def <strong>unsubscribe_channel</strong>(channel : <a href="../Cable/Channel.html">Channel</a>, identifier : String)
 
-        <a class="method-permalink" href="#unsubscribe_channel(channel:Channel,identifier:String)-instance-method">#</a>
+        <a class="method-permalink" href="#unsubscribe_channel%28channel%3AChannel%2Cidentifier%3AString%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
+        
+          [<a href="https://github.com/cable-cr/cable/blob/58b8f6f0061c34979ddb3fef47a91100573dd5ef/src/cable/server.cr#L57" target="_blank">View source</a>]
         
       </div>
     </div>
