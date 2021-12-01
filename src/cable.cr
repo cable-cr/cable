@@ -5,7 +5,7 @@ require "./cable/**"
 
 # TODO: Write documentation for `Cable`
 module Cable
-  VERSION = "0.1.0"
+  VERSION = "0.2.0"
 
   INTERNAL = {
     message_types: {
@@ -35,6 +35,4 @@ module Cable
   def self.message(event : Symbol)
     INTERNAL[:message_types][event]
   end
-
-  # TODO: Put your code here
 end
