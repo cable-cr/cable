@@ -19,8 +19,20 @@ module Cable
     include Debug
 
     getter connections = {} of String => Connection
+
+    getter redis_publish do
+      if Cable.settings.pool_redis_publish
+        Redis::PooledClient.new(
+          url: Cable.settings.url,
+          pool_size: Cable.settings.redis_pool_size,
+          pool_timeout: Cable.settings.redis_pool_timeout
+        )
+      else
+        Redis.new(url: Cable.settings.url)
+      end
+    end
+
     getter redis_subscribe = Redis.new(url: Cable.settings.url)
-    getter redis_publish = Redis.new(url: Cable.settings.url)
     getter fiber_channel = ::Channel({String, String}).new
 
     @channels = {} of String => Channels
