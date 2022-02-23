@@ -206,7 +206,7 @@ If you want to use this shard with an iOS clients or vanilla JS using react etc.
 
 > Note - If your using a vanilla - non action-cable JS client, you may want to disable the action cable response headers as they cause issues on the clients who don't know how to handle them. Set an Habitat disable_sec_websocket_protocol_header like so to disable those headers;
 
-```
+```crystal
 # config/cable.cr
 
 Cable.configure do |settings|
