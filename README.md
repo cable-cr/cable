@@ -45,6 +45,15 @@ After that, you can configure your `Cable`, the defaults are:
 Cable.configure do |settings|
   settings.route = "/cable"    # the URL your JS Client will connect
   settings.token = "token"     # The query string parameter used to get the token
+  settings.url = ENV.fetch("REDIS_URL", "redis://localhost:6379")
+
+  # See Vanilla JS example below for more info
+  settings.disable_sec_websocket_protocol_header = false
+
+  # Use a single publish connection by default.
+  settings.pool_redis_publish = false # set to `true` to enable a pooled connection on publish
+  settings.redis_pool_size = 5
+  settings.redis_pool_timeout = 5.0
 end
 ```
 
