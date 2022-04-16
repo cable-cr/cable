@@ -211,6 +211,15 @@
 <pre><code class="language-crystal"><span class="t">Cable</span>.configure <span class="k">do</span> <span class="o">|</span>settings<span class="o">|</span>
   settings.route <span class="o">=</span> <span class="s">&quot;/cable&quot;</span>    <span class="c"># the URL your JS Client will connect</span>
   settings.token <span class="o">=</span> <span class="s">&quot;token&quot;</span>     <span class="c"># The query string parameter used to get the token</span>
+  settings.url <span class="o">=</span> <span class="t">ENV</span>.fetch(<span class="s">&quot;REDIS_URL&quot;</span>, <span class="s">&quot;redis://localhost:6379&quot;</span>)
+
+  <span class="c"># See Vanilla JS example below for more info</span>
+  settings.disable_sec_websocket_protocol_header <span class="o">=</span> <span class="n">false</span>
+
+  <span class="c"># Use a single publish connection by default.</span>
+  settings.pool_redis_publish <span class="o">=</span> <span class="n">false</span> <span class="c"># set to `true` to enable a pooled connection on publish</span>
+  settings.redis_pool_size <span class="o">=</span> <span class="n">5</span>
+  settings.redis_pool_timeout <span class="o">=</span> <span class="n">5.0</span>
 <span class="k">end</span></code></pre>
 <p>You may want to tune how to report logging</p>
 <pre><code class="language-crystal"><span class="c"># config/log.cr</span>
