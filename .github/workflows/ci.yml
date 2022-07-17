@@ -21,6 +21,7 @@ jobs:
           - 1.2.2
           - 1.3.2
           - 1.4.0
+          - latest
     runs-on: ubuntu-latest
     container: crystallang/crystal:${{ matrix.crystal_version }}-alpine
     services:
