@@ -30,9 +30,7 @@ module Cable
     setting token : String = "token", example: "token"
     setting url : String = ENV.fetch("REDIS_URL", "redis://localhost:6379"), example: "redis://localhost:6379"
     setting disable_sec_websocket_protocol_header : Bool = false
-    setting pool_redis_publish : Bool = false
-    setting redis_pool_size : Int32 = 5
-    setting redis_pool_timeout : Float64 = 5.0
+    setting redis_ping_interval : Time::Span = 15.seconds
   end
 
   def self.message(event : Symbol)

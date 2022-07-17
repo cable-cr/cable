@@ -15,7 +15,7 @@ module Cable
         context.response.headers["Sec-WebSocket-Protocol"] = "actioncable-v1-json"
       end
 
-      ws = HTTP::WebSocketHandler.new do |socket, context|
+      ws = HTTP::WebSocketHandler.new do |socket, _context|
         connection = T.new(context.request, socket)
         connection_id = connection.connection_identifier
 
@@ -25,6 +25,7 @@ module Cable
         # Send welcome message to the client
         socket.send({type: Cable.message(:welcome)}.to_json)
 
+        Cable::RedisPinger.start(Cable.server)
         Cable::WebsocketPinger.build(socket)
 
         socket.on_ping do
@@ -38,6 +39,10 @@ module Cable
             connection.receive(message)
           rescue e : Cable::Connection::UnathorizedConnectionException
             # do nothing, this is planned
+          rescue e : IO::Error
+            Cable::Logger.error { "#{e.class.name} Exception: #{e.message} -> #{self.class.name}#call { socket.on_message(message) }" }
+            # Redis may have some error, restart Cable
+            Cable.restart
           rescue e : Exception
             Cable::Logger.error { "Exception: #{e.message}" }
           end

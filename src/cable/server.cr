@@ -19,20 +19,10 @@ module Cable
     include Debug
 
     getter connections = {} of String => Connection
-
-    getter redis_publish do
-      if Cable.settings.pool_redis_publish
-        Redis::PooledClient.new(
-          url: Cable.settings.url,
-          pool_size: Cable.settings.redis_pool_size,
-          pool_timeout: Cable.settings.redis_pool_timeout
-        )
-      else
-        Redis.new(url: Cable.settings.url)
-      end
-    end
-
-    getter redis_subscribe = Redis.new(url: Cable.settings.url)
+    # Use the pooled connections
+    getter redis_publish = Redis::Client.new(URI.parse(Cable.settings.url))
+    # Use a single connection
+    getter redis_subscribe = Redis::Connection.new(URI.parse(Cable.settings.url))
     getter fiber_channel = ::Channel({String, String}).new
 
     @channels = {} of String => Channels
@@ -60,10 +50,7 @@ module Cable
         @channels[identifier] << channel
       end
 
-      request = Redis::Request.new
-      request << "subscribe"
-      request << identifier
-      redis_subscribe._connection.send(request)
+      redis_subscribe.subscribe(identifier)
     end
 
     def unsubscribe_channel(channel : Channel, identifier : String)
@@ -72,18 +59,12 @@ module Cable
           @channels[identifier].delete(channel)
 
           if @channels[identifier].size == 0
-            request = Redis::Request.new
-            request << "unsubscribe"
-            request << identifier
-            redis_subscribe._connection.send(request)
+            redis_subscribe.unsubscribe(identifier)
 
             @channels.delete(identifier)
           end
         else
-          request = Redis::Request.new
-          request << "unsubscribe"
-          request << identifier
-          redis_subscribe._connection.send(request)
+          redis_subscribe.unsubscribe(identifier)
         end
       end
     end
@@ -127,12 +108,12 @@ module Cable
     end
 
     def shutdown
-      request = Redis::Request.new
-      request << "unsubscribe"
-      redis_subscribe._connection.send(request)
+      # TODO: This seems to make the specs hang
+      # redis_subscribe.run({"unsubscribe"})
+      redis_subscribe.unsubscribe("")
       redis_subscribe.close
       redis_publish.close
-      connections.each do |k, v|
+      connections.each do |_, v|
         v.close
       end
     end
@@ -150,9 +131,11 @@ module Cable
 
     private def subscribe
       spawn(name: "Cable::Server - subscribe") do
-        redis_subscribe.subscribe("_internal") do |on|
-          on.message do |channel, message|
-            if channel == "_internal" && message == "debug"
+        redis_subscribe.subscribe("_internal") do |subscription|
+          subscription.on_message do |channel, message|
+            if channel == "_internal" && message == "ping"
+              Cable::Logger.debug { "Cable::Server#subscribe channel:#{channel} message:PONG" }
+            elsif channel == "_internal" && message == "debug"
               debug
             else
               fiber_channel.send({channel, message})
