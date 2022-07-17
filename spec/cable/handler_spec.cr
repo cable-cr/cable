@@ -216,8 +216,7 @@ private def start_server
 
   spawn do
     # Make pinger real fast so we don't need to wait
-    http_ref = nil
-    http_server = http_ref = HTTP::Server.new([Cable::Handler(ApplicationCable::Connection).new])
+    http_server = HTTP::Server.new([Cable::Handler(ApplicationCable::Connection).new])
     address = http_server.bind_unused_port
     address_chan.send(address)
     http_server.listen

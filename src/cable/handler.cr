@@ -9,7 +9,7 @@ module Cable
 
       remote_address = context.request.remote_address
       path = context.request.path
-      Cable::Logger.info { "Started GET \"#{path}\" [WebSocket] for #{remote_address} at #{Time.utc.to_s}" }
+      Cable::Logger.info { "Started GET \"#{path}\" [WebSocket] for #{remote_address} at #{Time.utc}" }
 
       unless Cable.settings.disable_sec_websocket_protocol_header
         context.response.headers["Sec-WebSocket-Protocol"] = "actioncable-v1-json"
@@ -50,7 +50,7 @@ module Cable
 
         socket.on_close do
           Cable.server.remove_connection(connection_id)
-          Cable::Logger.info { "Finished \"#{path}\" [WebSocket] for #{remote_address} at #{Time.utc.to_s}" }
+          Cable::Logger.info { "Finished \"#{path}\" [WebSocket] for #{remote_address} at #{Time.utc}" }
         end
       end
 

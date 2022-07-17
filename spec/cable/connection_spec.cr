@@ -1,8 +1,8 @@
 require "../spec_helper"
 
 describe Cable::Connection do
-  it "matches the right route" do
-    connect do |connection, socket|
+  pending "matches the right route" do
+    connect do |_connection, _socket|
     end
   end
 
@@ -91,11 +91,11 @@ describe Cable::Connection do
 
   describe ".identified_by" do
     it "uses the right identifier name for it" do
-      connect do |connection, socket|
+      connect do |connection, _socket|
         connection.identifier.should eq("98")
       end
 
-      connect(connection_class: ConnectionWithDifferentIndentifierTest) do |connection, socket|
+      connect(connection_class: ConnectionWithDifferentIndentifierTest) do |connection, _socket|
         connection.identifier.should eq("98")
       end
     end
@@ -103,7 +103,7 @@ describe Cable::Connection do
 
   describe ".owned_by" do
     it "uses the right identifier name for it" do
-      connect do |connection, socket|
+      connect do |connection, _socket|
         connection.current_user.not_nil!.email.should eq("user98@mail.com")
         connection.organization.not_nil!.name.should eq("Acme Inc.")
       end
@@ -475,7 +475,7 @@ def builds_request(token : String)
     "Sec-WebSocket-Protocol" => "actioncable-v1-json, actioncable-unsupported",
     "Sec-WebSocket-Version"  => "13",
   }
-  request = HTTP::Request.new("GET", "#{Cable.settings.route}?test_token=#{token}", headers)
+  HTTP::Request.new("GET", "#{Cable.settings.route}?test_token=#{token}", headers)
 end
 
 def builds_request(token : Nil)
@@ -486,7 +486,7 @@ def builds_request(token : Nil)
     "Sec-WebSocket-Protocol" => "actioncable-v1-json, actioncable-unsupported",
     "Sec-WebSocket-Version"  => "13",
   }
-  request = HTTP::Request.new("GET", "#{Cable.settings.route}", headers)
+  HTTP::Request.new("GET", "#{Cable.settings.route}", headers)
 end
 
 private class DummySocket < HTTP::WebSocket

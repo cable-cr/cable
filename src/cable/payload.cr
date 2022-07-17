@@ -72,11 +72,11 @@ module Cable
         end
       end
 
-      return params_result
+      params_result
     end
 
     private def process_hash(hash : JSON::Any)
-      return process_hash(hash.as_h)
+      process_hash(hash.as_h)
     end
   end
 end
