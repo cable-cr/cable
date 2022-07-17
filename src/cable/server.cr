@@ -131,7 +131,7 @@ module Cable
 
     private def subscribe_to_internal
       spawn(name: "Cable::Server - subscribe") do
-        begin
+        # begin
           redis_subscribe.subscribe("_internal") do |subscription|
             subscription.on_message do |channel, message|
               if channel == "_internal" && message == "ping"
@@ -144,9 +144,9 @@ module Cable
               end
             end
           end
-        rescue e : IO::Error
-          # why is redis_subscribe.@socket.closed? here??
-        end
+        # rescue e : IO::Error
+        #   # why is redis_subscribe.@socket.closed? here??
+        # end
       end
     end
   end
