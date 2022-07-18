@@ -104,7 +104,6 @@ describe Cable::Handler do
 
   describe "server broadcast to channels" do
     it "sends and clients receives the message" do
-      Cable.restart
       address_chan = start_server
       listen_address = address_chan.receive
 
