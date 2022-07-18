@@ -108,9 +108,7 @@ module Cable
     end
 
     def shutdown
-      # TODO: This seems to make the specs hang
-      # redis_subscribe.run({"unsubscribe"})
-      redis_subscribe.unsubscribe("")
+      redis_subscribe.unsubscribe
       redis_subscribe.close
       redis_publish.close
       connections.each do |_, v|
@@ -131,22 +129,18 @@ module Cable
 
     private def subscribe_to_internal
       spawn(name: "Cable::Server - subscribe") do
-        # begin
-          redis_subscribe.subscribe("_internal") do |subscription|
-            subscription.on_message do |channel, message|
-              if channel == "_internal" && message == "ping"
-                Cable::Logger.debug { "Cable::Server#subscribe channel:#{channel} message:PONG" }
-              elsif channel == "_internal" && message == "debug"
-                debug
-              else
-                fiber_channel.send({channel, message})
-                Cable::Logger.debug { "Cable::Server#subscribe channel:#{channel} message:#{message}" }
-              end
+        redis_subscribe.subscribe("_internal") do |subscription|
+          subscription.on_message do |channel, message|
+            if channel == "_internal" && message == "ping"
+              Cable::Logger.debug { "Cable::Server#subscribe channel:#{channel} message:PONG" }
+            elsif channel == "_internal" && message == "debug"
+              debug
+            else
+              fiber_channel.send({channel, message})
+              Cable::Logger.debug { "Cable::Server#subscribe channel:#{channel} message:#{message}" }
             end
           end
-        # rescue e : IO::Error
-        #   # why is redis_subscribe.@socket.closed? here??
-        # end
+        end
       end
     end
   end
