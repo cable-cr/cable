@@ -108,7 +108,12 @@ module Cable
     end
 
     def shutdown
-      redis_subscribe.unsubscribe
+      begin
+        redis_subscribe.unsubscribe
+      rescue e : IO::Error
+        # the @writer IO is closed already
+        Cable::Logger.debug { "Cable::Server#shutdown Connection to redis was severed: #{e.message}" }
+      end
       redis_subscribe.close
       redis_publish.close
       connections.each do |_, v|
