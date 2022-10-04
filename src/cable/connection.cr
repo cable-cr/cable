@@ -62,6 +62,7 @@ module Cable
         Cable::Logger.error { "IO::Error Exception: #{e.message} -> #{self.class.name}#close" }
       end
 
+      Connection::CHANNELS.delete(connection_identifier)
       Cable::Logger.info { "Terminating connection #{connection_identifier}" }
 
       socket.close
