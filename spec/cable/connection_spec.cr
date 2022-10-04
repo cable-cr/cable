@@ -1,9 +1,12 @@
 require "../spec_helper"
 
 describe Cable::Connection do
-  it "matches the right route" do
-    connect do |connection, socket|
+  it "removes the connection channel on close" do
+    connect do |connection, _socket|
+      connection.receive({"command" => "subscribe", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
+      ConnectionTest::CHANNELS.keys.size.should eq(1)
     end
+    ConnectionTest::CHANNELS.keys.size.should eq(0)
   end
 
   describe "#subscribe" do
