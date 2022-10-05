@@ -25,7 +25,7 @@ module Cable
         # Send welcome message to the client
         socket.send({type: Cable.message(:welcome)}.to_json)
 
-        Cable::WebsocketPinger.build(socket)
+        ws_pinger = Cable::WebsocketPinger.build(socket)
 
         socket.on_ping do
           socket.pong context.request.path
@@ -44,6 +44,7 @@ module Cable
         end
 
         socket.on_close do
+          ws_pinger.stop
           Cable.server.remove_connection(connection_id)
           Cable::Logger.info { "Finished \"#{path}\" [WebSocket] for #{remote_address} at #{Time.utc.to_s}" }
         end

@@ -5,6 +5,7 @@ module Cable
     class PingStoppedException < Exception; end
 
     @@seconds : Int32 | Float64 = 3
+    @task : Tasker::Task
 
     def self.run_every(value : Int32 | Float64, &block)
       @@seconds = value
@@ -23,10 +24,15 @@ module Cable
     end
 
     def initialize(@socket : HTTP::WebSocket)
-      Tasker.every(Cable::WebsocketPinger.seconds.seconds) do
+      @task = Tasker.every(Cable::WebsocketPinger.seconds.seconds) do
+        Logger.debug { "Pinging websocket" }
         raise PingStoppedException.new("Stopped") if @socket.closed?
         @socket.send({type: Cable.message(:ping), message: Time.utc.to_unix}.to_json)
       end
+    end
+
+    def stop
+      @task.cancel
     end
   end
 end
