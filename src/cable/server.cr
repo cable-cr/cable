@@ -24,6 +24,9 @@ module Cable
     # Use a single connection
     getter redis_subscribe = Redis::Connection.new(URI.parse(Cable.settings.url))
     getter fiber_channel = ::Channel({String, String}).new
+    getter pinger : Cable::RedisPinger do
+      Cable::RedisPinger.new(self)
+    end
 
     @channels = {} of String => Channels
     @channel_mutex = Mutex.new
@@ -114,6 +117,7 @@ module Cable
         # the @writer IO is closed already
         Cable::Logger.debug { "Cable::Server#shutdown Connection to redis was severed: #{e.message}" }
       end
+      pinger.stop
       redis_subscribe.close
       redis_publish.close
       connections.each do |_, v|

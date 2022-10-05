@@ -1,32 +1,19 @@
 module Cable
   class RedisPinger
-    @@started : Bool = false
-    class_getter interval : Time::Span = Cable.settings.redis_ping_interval
-
-    def self.run_every(value : Time::Span)
-      @@interval = value
-
-      yield
-
-      @@interval = Cable.settings.redis_ping_interval
-    end
-
-    def self.start(server : Cable::Server)
-      new(server).start unless @@started
-      @@started = true
-    end
+    private getter task : Tasker::Task
 
     def initialize(@server : Cable::Server)
-    end
-
-    def start
-      Tasker.every(Cable::RedisPinger.interval) do
+      @task = Tasker.every(Cable.settings.redis_ping_interval) do
         check_redis_subscribe
         check_redis_publish
       rescue e
         # Restart cable if something happened
         Cable.restart
       end
+    end
+
+    def stop
+      @task.cancel
     end
 
     # since @server.redis_subscribe connection is called on a block loop

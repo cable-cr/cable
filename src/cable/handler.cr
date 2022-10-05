@@ -25,7 +25,6 @@ module Cable
         # Send welcome message to the client
         socket.send({type: Cable.message(:welcome)}.to_json)
 
-        Cable::RedisPinger.start(Cable.server)
         ws_pinger = Cable::WebsocketPinger.build(socket)
 
         socket.on_ping do
