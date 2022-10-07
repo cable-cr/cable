@@ -59,10 +59,32 @@ describe Cable::Handler do
         seq += 1
         ws2.close if seq >= messages.size
       end
+      ws2.on_close do |code, _reason|
+        code.should eq(HTTP::WebSocket::CloseCode::AbnormalClosure)
+      end
       ws2.send({"command" => "subscribe", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
 
       ws2.run
+
+      # should be 1 connection open
+      Cable.server.connections.size.should eq(1)
     end
+
+    # TODO: Error writing to socket: Broken pipe (IO::Error)
+    # it "rejected" do
+    #   address_chan = start_server
+    #   listen_address = address_chan.receive
+
+    #   ws2 = HTTP::WebSocket.new("ws://#{listen_address}/updates?test_token=reject")
+    #   ws2.on_close do |code, reason|
+    #     code.should eq(HTTP::WebSocket::CloseCode::NormalClosure)
+    #     reason.should eq("Farewell")
+    #   end
+    #   ws2.run
+
+    #   # should be zero connections open
+    #   Cable.server.connections.size.should eq(0)
+    # end
   end
 
   describe "receive message from client" do

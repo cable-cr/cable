@@ -4,6 +4,10 @@ module Cable
   class Handler(T)
     include HTTP::Handler
 
+    def on_error(&@on_error : Exception ->) : self
+      self
+    end
+
     def call(context)
       return call_next(context) unless ws_route_found?(context) && websocket_upgrade_request?(context)
 
@@ -20,7 +24,11 @@ module Cable
         connection_id = connection.connection_identifier
 
         # we should not add any connections which have been rejected
-        Cable.server.add_connection(connection) unless connection.connection_rejected?
+        if connection.connection_rejected?
+          Cable::Logger.info { "Connection rejected" }
+        else
+          Cable.server.add_connection(connection)
+        end
 
         # Send welcome message to the client
         socket.send({type: Cable.message(:welcome)}.to_json)
@@ -36,13 +44,20 @@ module Cable
         socket.on_message do |message|
           begin
             connection.receive(message)
+          rescue e : KeyError
+            # handle unknown/malformed messages
+            socket.close(HTTP::WebSocket::CloseCode::InvalidFramePayloadData, "Invalid message")
+            Cable::Logger.error { "KeyError Exception: #{e.message}" }
           rescue e : Cable::Connection::UnathorizedConnectionException
             # do nothing, this is planned
+            socket.close(HTTP::WebSocket::CloseCode::NormalClosure, "Farewell")
           rescue e : IO::Error
             Cable::Logger.error { "#{e.class.name} Exception: #{e.message} -> #{self.class.name}#call { socket.on_message(message) }" }
             # Redis may have some error, restart Cable
+            socket.close(HTTP::WebSocket::CloseCode::NormalClosure, "Farewell")
             Cable.restart
           rescue e : Exception
+            socket.close(HTTP::WebSocket::CloseCode::InternalServerError, "Internal Server Error")
             Cable::Logger.error { "Exception: #{e.message}" }
           end
         end

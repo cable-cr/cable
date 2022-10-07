@@ -31,8 +31,8 @@ module Cable
       property {{type_definition.var}} : {{type_definition.type}}?
     end
 
-    def initialize(@request : HTTP::Request, @socket : HTTP::WebSocket)
-      @token = @request.query_params.fetch(Cable.settings.token, nil)
+    def initialize(request : HTTP::Request, @socket : HTTP::WebSocket)
+      @token = request.query_params.fetch(Cable.settings.token, nil)
       @id = UUID.random
 
       begin
@@ -56,13 +56,13 @@ module Cable
       return true unless Connection::CHANNELS.has_key?(connection_identifier)
 
       Connection::CHANNELS[connection_identifier].each do |identifier, channel|
-        channel.close
         Connection::CHANNELS[connection_identifier].delete(identifier)
+        channel.close
       rescue e : IO::Error
         Cable::Logger.error { "IO::Error Exception: #{e.message} -> #{self.class.name}#close" }
       end
 
-      Connection::CHANNELS.delete(connection_identifier)
+      Connection::CHANNELS.delete(connection_identifier) if Connection::CHANNELS.has_key?(connection_identifier)
       Cable::Logger.info { "Terminating connection #{connection_identifier}" }
 
       socket.close
