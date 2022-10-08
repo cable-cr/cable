@@ -259,6 +259,140 @@ describe Cable::Handler do
       io_with_context = create_ws_request_and_return_io_and_context(handler, request)[0]
       io_with_context.to_s.should contain("404 Not Found")
     end
+
+    it "restarts the server if too many errors" do
+      address_chan = start_server
+      listen_address = address_chan.receive
+
+      # no errors
+      Cable.server.errors.should eq(0)
+
+      # connect
+      Cable.server.connections.size.should eq(0)
+      ws2 = HTTP::WebSocket.new("ws://#{listen_address}/updates?test_token=ws2")
+      Cable.server.connections.size.should eq(1)
+      ws3 = HTTP::WebSocket.new("ws://#{listen_address}/updates?test_token=ws3")
+      Cable.server.connections.size.should eq(2)
+      ws4 = HTTP::WebSocket.new("ws://#{listen_address}/updates?test_token=ws4")
+      Cable.server.connections.size.should eq(3)
+      ws5 = HTTP::WebSocket.new("ws://#{listen_address}/updates?test_token=ws5")
+      Cable.server.connections.size.should eq(4)
+
+      connections = Cable.server.connections.keys
+      connections.any? { |c| c.starts_with?("ws2") }.should eq(true)
+      connections.any? { |c| c.starts_with?("ws3") }.should eq(true)
+      connections.any? { |c| c.starts_with?("ws4") }.should eq(true)
+      connections.any? { |c| c.starts_with?("ws5") }.should eq(true)
+
+      messages = [
+        {type: "welcome"}.to_json,
+        {type: "confirm_subscription", identifier: {channel: "ChatChannel", room: "1"}.to_json}.to_json,
+        {identifier: {channel: "ChatChannel", room: "1"}.to_json, message: {message: "test", current_user: "ws2"}}.to_json,
+      ]
+      seq = 0
+      ping_seq = 0
+      ws2.on_message do |str|
+        if str.match(/\{"type":"ping","message":[0-9]{8,12}\}/) && ping_seq < 2
+          ping_seq += 1
+          next
+        end
+        str.should eq(messages[seq])
+        seq += 1
+        ws2.close if seq >= messages.size
+      end
+      # subscribe
+      ws2.send({"command" => "subscribe", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
+
+      sleep 0.2
+
+      # send message
+      ws2.send({"command" => "message", "identifier" => {channel: "ChatChannel", room: "1"}.to_json, "data" => {message: "test"}.to_json}.to_json)
+      # raise error
+      ws2.send({"command" => "message", "identifier" => {channel: "ChatChannel", room: "1"}.to_json, "data" => {message: "raise"}.to_json}.to_json)
+
+      ws2.run
+
+      # 1 error
+      Cable.server.errors.should eq(1)
+
+      # connection 1 will be disconnected due to error
+      Cable.server.connections.size.should eq(3)
+      connections = Cable.server.connections.keys
+      connections.any? { |c| c.starts_with?("ws2") }.should eq(false)
+
+      messages = [
+        {type: "welcome"}.to_json,
+        {type: "confirm_subscription", identifier: {channel: "ChatChannel", room: "1"}.to_json}.to_json,
+        {identifier: {channel: "ChatChannel", room: "1"}.to_json, message: {message: "test", current_user: "ws3"}}.to_json,
+      ]
+      seq = 0
+      ping_seq = 0
+      ws3.on_message do |str|
+        if str.match(/\{"type":"ping","message":[0-9]{8,12}\}/) && ping_seq < 2
+          ping_seq += 1
+          next
+        end
+        str.should eq(messages[seq])
+        seq += 1
+        ws3.close if seq >= messages.size
+      end
+      # subscribe
+      ws3.send({"command" => "subscribe", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
+
+      sleep 0.2
+
+      # send message
+      ws3.send({"command" => "message", "identifier" => {channel: "ChatChannel", room: "1"}.to_json, "data" => {message: "test"}.to_json}.to_json)
+      # raise error
+      ws3.send({"command" => "message", "identifier" => {channel: "ChatChannel", room: "1"}.to_json, "data" => {message: "raise"}.to_json}.to_json)
+
+      ws3.run
+
+      # 2 errors
+      Cable.server.errors.should eq(2)
+
+      # connection 1 will be disconnected due to error
+      Cable.server.connections.size.should eq(2)
+      connections = Cable.server.connections.keys
+      connections.any? { |c| c.starts_with?("ws3") }.should eq(false)
+
+      messages = [
+        {type: "welcome"}.to_json,
+        {type: "confirm_subscription", identifier: {channel: "ChatChannel", room: "1"}.to_json}.to_json,
+        {identifier: {channel: "ChatChannel", room: "1"}.to_json, message: {message: "test", current_user: "ws3"}}.to_json,
+      ]
+      seq = 0
+      ping_seq = 0
+      ws4.on_message do |str|
+        if str.match(/\{"type":"ping","message":[0-9]{8,12}\}/) && ping_seq < 2
+          ping_seq += 1
+          next
+        end
+        str.should eq(messages[seq])
+        seq += 1
+        ws4.close if seq >= messages.size
+      end
+      # subscribe
+      ws4.send({"command" => "subscribe", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
+
+      sleep 0.2
+
+      # send message
+      ws4.send({"command" => "message", "identifier" => {channel: "ChatChannel", room: "1"}.to_json, "data" => {message: "test"}.to_json}.to_json)
+      # raise error
+      ws4.send({"command" => "message", "identifier" => {channel: "ChatChannel", room: "1"}.to_json, "data" => {message: "raise"}.to_json}.to_json)
+
+      ws4.run
+
+      sleep 0.2
+
+      # we should have 1 connectoon ws5 open
+      # but since the server restarted due to volume of errors
+      # all connections will be closed
+      # errors will be reset
+      Cable.server.errors.should eq(0)
+      Cable.server.connections.size.should eq(0)
+    end
   end
 end
 

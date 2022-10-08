@@ -33,6 +33,8 @@ module Cable
     setting pool_redis_publish : Bool = false
     setting redis_pool_size : Int32 = 5
     setting redis_pool_timeout : Float64 = 5.0
+    setting redis_ping_interval : Time::Span = 15.seconds
+    setting restart_error_allowance : Int32 = 20
   end
 
   def self.message(event : Symbol)

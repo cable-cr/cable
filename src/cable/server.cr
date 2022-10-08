@@ -11,6 +11,7 @@ module Cable
   def self.restart
     if current_server = @@server
       current_server.shutdown
+      Cable::Logger.error { "Cable.restart" }
     end
     @@server = Server.new
   end
@@ -32,8 +33,12 @@ module Cable
       end
     end
 
+    getter errors = 0
     getter redis_subscribe = Redis.new(url: Cable.settings.url)
     getter fiber_channel = ::Channel({String, String}).new
+    getter pinger : Cable::RedisPinger do
+      Cable::RedisPinger.new(self)
+    end
 
     @channels = {} of String => Channels
     @channel_mutex = Mutex.new
@@ -127,13 +132,29 @@ module Cable
     end
 
     def shutdown
-      request = Redis::Request.new
-      request << "unsubscribe"
-      redis_subscribe._connection.send(request)
-      redis_subscribe.close
-      redis_publish.close
+      begin
+        request = Redis::Request.new
+        request << "unsubscribe"
+        redis_subscribe._connection.send(request)
+        redis_subscribe.close
+        redis_publish.close
+      rescue e : IO::Error
+        # the @writer IO is closed already
+        Cable::Logger.debug { "Cable::Server#shutdown Connection to redis was severed: #{e.message}" }
+      end
+      pinger.stop
       connections.each do |k, v|
         v.close
+      end
+    end
+
+    def restart?
+      errors > Cable.settings.restart_error_allowance
+    end
+
+    def count_error!
+      @channel_mutex.synchronize do
+        @errors += 1
       end
     end
 
@@ -152,7 +173,9 @@ module Cable
       spawn(name: "Cable::Server - subscribe") do
         redis_subscribe.subscribe("_internal") do |on|
           on.message do |channel, message|
-            if channel == "_internal" && message == "debug"
+            if channel == "_internal" && message == "ping"
+              Cable::Logger.debug { "Cable::Server#subscribe -> PONG" }
+            elsif channel == "_internal" && message == "debug"
               debug
             else
               fiber_channel.send({channel, message})
