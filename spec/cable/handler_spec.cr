@@ -49,6 +49,8 @@ describe Cable::Handler do
 
       ws2 = HTTP::WebSocket.new("ws://#{listen_address}/updates?test_token=1")
 
+      Cable.server.connections.size.should eq(1)
+
       messages = [
         {type: "welcome"}.to_json,
         {type: "confirm_subscription", identifier: {channel: "ChatChannel", room: "1"}.to_json}.to_json,
@@ -59,9 +61,72 @@ describe Cable::Handler do
         seq += 1
         ws2.close if seq >= messages.size
       end
+      ws2.on_close do |code, _reason|
+        code.should eq(HTTP::WebSocket::CloseCode::AbnormalClosure)
+      end
       ws2.send({"command" => "subscribe", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
 
       ws2.run
+
+      Cable.server.connections.size.should eq(1)
+    end
+
+    it "malformed data from client" do
+      address_chan = start_server
+      listen_address = address_chan.receive
+
+      ws2 = HTTP::WebSocket.new("ws://#{listen_address}/updates?test_token=1")
+
+      Cable.server.connections.size.should eq(1)
+
+      # to avoid IO::Error from mock client connection failure
+      begin
+        # invalid identifier json string
+        ws2.send({"command" => "subscribe", "identifier" => "{\"channel\"\"ChatChannel\",\"room\":\"1\"}"}.to_json)
+        ws2.run
+      rescue
+      end
+
+      Cable.server.connections.size.should eq(0)
+    end
+
+    it "malformed keys from client" do
+      address_chan = start_server
+      listen_address = address_chan.receive
+
+      ws2 = HTTP::WebSocket.new("ws://#{listen_address}/updates?test_token=1")
+
+      Cable.server.connections.size.should eq(1)
+
+      # to avoid IO::Error from mock client connection failure
+      begin
+        # typo in command vs commands
+        ws2.send({"commands" => "subscribe", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
+        ws2.run
+      rescue
+      end
+
+      Cable.server.connections.size.should eq(0)
+    end
+
+    it "rejected" do
+      address_chan = start_server
+      listen_address = address_chan.receive
+
+      ws2 = HTTP::WebSocket.new("ws://#{listen_address}/updates?test_token=reject")
+
+      # we never get a connection from the server
+      # its rejected before we get a chance to send a message
+      Cable.server.connections.size.should eq(0)
+
+      # to avoid IO::Error from mock client connection failure
+      begin
+        ws2.run
+      rescue
+      end
+
+      # should be zero connections open
+      Cable.server.connections.size.should eq(0)
     end
   end
 

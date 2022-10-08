@@ -6,6 +6,8 @@ module ApplicationCable
       if tk = token
         self.identifier = tk
       end
+
+      reject_unauthorized_connection if token == "reject"
     end
   end
 end

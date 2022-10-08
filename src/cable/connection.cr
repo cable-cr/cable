@@ -10,7 +10,6 @@ module Cable
     getter token : String?
     getter? connection_rejected : Bool = false
     getter socket
-    getter id : UUID
     getter started_at : Time = Time.utc
 
     CHANNELS = {} of String => Hash(String, Cable::Channel)
@@ -31,14 +30,13 @@ module Cable
       property {{type_definition.var}} : {{type_definition.type}}?
     end
 
-    def initialize(@request : HTTP::Request, @socket : HTTP::WebSocket)
-      @token = @request.query_params.fetch(Cable.settings.token, nil)
-      @id = UUID.random
+    def initialize(request : HTTP::Request, @socket : HTTP::WebSocket)
+      @token = request.query_params.fetch(Cable.settings.token, nil)
 
       begin
         connect
         # gather connection_identifier after the connection has gathered the id from identified_by(field)
-        self.connection_identifier = "#{internal_identifier}-#{@id}"
+        self.connection_identifier = "#{internal_identifier}-#{UUID.random}"
       rescue e : UnathorizedConnectionException
         reject_connection!
         socket.close(HTTP::WebSocket::CloseCode::NormalClosure, "Farewell")
@@ -56,8 +54,9 @@ module Cable
       return true unless Connection::CHANNELS.has_key?(connection_identifier)
 
       Connection::CHANNELS[connection_identifier].each do |identifier, channel|
-        channel.close
+        # the ordering here is important
         Connection::CHANNELS[connection_identifier].delete(identifier)
+        channel.close
       rescue e : IO::Error
         Cable::Logger.error { "IO::Error Exception: #{e.message} -> #{self.class.name}#close" }
       end
