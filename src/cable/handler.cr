@@ -33,12 +33,31 @@ module Cable
         end
 
         # Handle incoming message and echo back to the client
+        #
+        # **Exceptions**
+        # turns out, if you close socket in this block
+        # the socket.on_close blocked is not called 100% of the time
+        # so we need to do it manually
         socket.on_message do |message|
           begin
             connection.receive(message)
+          rescue e : KeyError | JSON::ParseException
+            # handle unknown/malformed messages
+            socket.close(HTTP::WebSocket::CloseCode::InvalidFramePayloadData, "Invalid message")
+            Cable.server.remove_connection(connection_id)
+            Cable::Logger.error { "KeyError Exception: #{e.message}" }
           rescue e : Cable::Connection::UnathorizedConnectionException
-            # do nothing, this is planned
+            # handle unauthorized connections
+            # no need to log them
+            socket.close(HTTP::WebSocket::CloseCode::NormalClosure, "Farewell")
+            # most of the time, we will have already removed the connection
+            # since the connection is rejected before any messages are received
+            # but just in case, we will try remove it anyways
+            Cable.server.remove_connection(connection_id)
           rescue e : Exception
+            # handle all other exceptions
+            socket.close(HTTP::WebSocket::CloseCode::InternalServerError, "Internal Server Error")
+            Cable.server.remove_connection(connection_id)
             Cable::Logger.error { "Exception: #{e.message}" }
           end
         end
