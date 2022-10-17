@@ -54,6 +54,8 @@ Cable.configure do |settings|
   settings.pool_redis_publish = false # set to `true` to enable a pooled connection on publish
   settings.redis_pool_size = 5
   settings.redis_pool_timeout = 5.0
+  settings.redis_ping_interval = 15.seconds
+  settings.restart_error_allowance = 20
 end
 ```
 
@@ -196,6 +198,64 @@ class ChatChannel < ApplicationCable::Channel
   end
 end
 ```
+
+## Redis
+
+Redis has complexities that need to be considered;
+
+1. Redis Pub/Sub works really well until you lose the connection...
+2. Redis connections can go stale without activity.
+3. Redis DB's have a buffer related to the message sizes called [Output Buffer Limits](https://redis.io/docs/reference/clients/#output-buffer-limits). Exceeding this buffer will not disconnect the connection. It just yields it dead. You cannot know about this except by monitoring logs/metrics.
+
+Here are some ways this shard can help with this.
+
+### Restarting the server
+
+When the first connection is made, the cable server spawns a single pub/sub connection for all subscriptions.
+If the connection dies at any point, the server will continue to throw errors unless someone manually restarts the server...
+
+The cable server provides an automated failure rate monitoring/restart function to automate the restart process.
+
+When the server encounters (n) errors are trying to connect to the Redis connection, it restarts the server.
+The error rate allowance avoids a vicious cycle > of clients attempting to connect vs server restarts while Redis is down.
+Generally, if the Redis connection is down, you'll exceed this error allowance quickly. So you may encounter severe back-to-back restarts if Redis is down for a substantial time.
+
+> NOTE: The automated restart process will also kill all the current client WS connections.
+> However, this trade-off allows a fault-tolerant system vs leaving a dead Redis connection hanging around with no pub/sub activity.
+
+You can change this setting. However, we advise not going below 20.
+
+```crystal
+Cable.configure do |settings|
+ settings.restart_error_allowance = 20 # default is 20.
+ settings.restart_error_allowance = 0 # Use 0 to disable this
+end
+```
+
+> NOTE: An error log `Cable.restart` will be invoked whenever a restart happens. We highly advise you to monitor these logs.
+
+### Maintain Redis connection activity
+
+When the first connection is made, the cable server starts a Redis PING/PONG task, which runs every 15 seconds. This helps to keep the Redis connection from going stale.
+
+You can change this setting. However, we advise not going over 60 seconds.
+
+```crystal
+Cable.configure do |settings|
+ settings.redis_ping_interval = 15.seconds # default is 15.
+end
+```
+
+### Increase your Redis [Output Buffer Limits](https://redis.io/docs/reference/clients/#output-buffer-limits)
+
+> Technically, this shard cannot help with this.
+
+Exceeding this buffer should be avoided to ensure a stable pub/sub connection.
+
+Options;
+
+1. Double or triple this setting on your Redis DB. 32Mb is usually the default.
+2. Ensure you truncate the message sizes client side.
 
 Check below on the JavaScript section how to communicate with the Cable backend
 

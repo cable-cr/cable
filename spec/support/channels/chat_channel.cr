@@ -12,6 +12,7 @@ class ChatChannel < ApplicationCable::Channel
       broadcast_message["message"] = message["message"].to_s
     end
     broadcast_message["current_user"] = connection.identifier
+    raise IO::Error.new("Invalid message") if broadcast_message["message"] == "raise"
     ChatChannel.broadcast_to("chat_#{params["room"]}", broadcast_message)
   end
 

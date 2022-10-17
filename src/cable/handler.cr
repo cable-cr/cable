@@ -58,6 +58,9 @@ module Cable
             # handle all other exceptions
             socket.close(HTTP::WebSocket::CloseCode::InternalServerError, "Internal Server Error")
             Cable.server.remove_connection(connection_id)
+            # handle restart
+            Cable.server.count_error!
+            Cable.restart if Cable.server.restart?
             Cable::Logger.error { "Exception: #{e.message}" }
           end
         end
