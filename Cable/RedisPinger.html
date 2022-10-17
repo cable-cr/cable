@@ -13,7 +13,7 @@
 <script type="text/javascript" src="../js/doc.js"></script>
 
   <meta name="repository-name" content="cable">
-  <title>Cable::WebsocketPinger - cable master</title>
+  <title>Cable::RedisPinger - cable master</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../";
   </script>
@@ -126,7 +126,7 @@
       
     </li>
   
-  <li class=" " data-id="cable/Cable/RedisPinger" data-name="cable::redispinger">
+  <li class=" current" data-id="cable/Cable/RedisPinger" data-name="cable::redispinger">
       <a href="../Cable/RedisPinger.html">RedisPinger</a>
       
     </li>
@@ -136,7 +136,7 @@
       
     </li>
   
-  <li class="parent open current" data-id="cable/Cable/WebsocketPinger" data-name="cable::websocketpinger">
+  <li class="parent " data-id="cable/Cable/WebsocketPinger" data-name="cable::websocketpinger">
       <a href="../Cable/WebsocketPinger.html">WebsocketPinger</a>
       
         <ul>
@@ -170,12 +170,12 @@
 <div class="main-content">
 <h1 class="type-name">
 
-  <span class="kind">class</span> Cable::WebsocketPinger
+  <span class="kind">class</span> Cable::RedisPinger
 
 </h1>
 
 
-  <ul class="superclass-hierarchy"><li class="superclass"><a href="../Cable/WebsocketPinger.html">Cable::WebsocketPinger</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../Cable/RedisPinger.html">Cable::RedisPinger</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
 
 
 
@@ -203,8 +203,8 @@
   </h2>
   
     
-      <a href="https://github.com/cable-cr/cable/blob/7418fef8020548e6c3f928b5dc4ee45cd81bef6b/src/cable/websocket_pinger.cr#L4" target="_blank">
-        cable/websocket_pinger.cr
+      <a href="https://github.com/cable-cr/cable/blob/7418fef8020548e6c3f928b5dc4ee45cd81bef6b/src/cable/redis_pinger.cr#L4" target="_blank">
+        cable/redis_pinger.cr
       </a>
     
     <br/>
@@ -225,40 +225,13 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new%28socket%3AHTTP%3A%3AWebSocket%29-class-method" class="signature"><strong>.new</strong>(socket : HTTP::WebSocket)</a>
+        <a href="#new%28server%3ACable%3A%3AServer%29-class-method" class="signature"><strong>.new</strong>(server : Cable::Server)</a>
         
       </li>
     
   </ul>
 
 
-
-  <h2>
-    <a id="class-method-summary" class="anchor" href="#class-method-summary">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Class Method Summary
-  </h2>
-  <ul class="list-summary">
-    
-      <li class="entry-summary">
-        <a href="#build%28socket%3AHTTP%3A%3AWebSocket%29-class-method" class="signature"><strong>.build</strong>(socket : HTTP::WebSocket)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#run_every%28value%3AInt32%7CFloat64%2C%26%29-class-method" class="signature"><strong>.run_every</strong>(value : Int32 | Float64, &)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#seconds-class-method" class="signature"><strong>.seconds</strong></a>
-        
-      </li>
-    
-  </ul>
 
 
 
@@ -271,6 +244,16 @@
     Instance Method Summary
   </h2>
   <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#check_redis_publish-instance-method" class="signature"><strong>#check_redis_publish</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#check_redis_subscribe-instance-method" class="signature"><strong>#check_redis_subscribe</strong></a>
+        
+      </li>
     
       <li class="entry-summary">
         <a href="#stop-instance-method" class="signature"><strong>#stop</strong></a>
@@ -317,82 +300,24 @@
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new(socket:HTTP::WebSocket)-class-method">
+    <div class="entry-detail" id="new(server:Cable::Server)-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(socket : HTTP::WebSocket)
+        def self.<strong>new</strong>(server : <a href="../Cable/Server.html">Cable::Server</a>)
 
-        <a class="method-permalink" href="#new%28socket%3AHTTP%3A%3AWebSocket%29-class-method">#</a>
+        <a class="method-permalink" href="#new%28server%3ACable%3A%3AServer%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/cable-cr/cable/blob/7418fef8020548e6c3f928b5dc4ee45cd81bef6b/src/cable/websocket_pinger.cr#L26" target="_blank">View source</a>]
+          [<a href="https://github.com/cable-cr/cable/blob/7418fef8020548e6c3f928b5dc4ee45cd81bef6b/src/cable/redis_pinger.cr#L7" target="_blank">View source</a>]
         
       </div>
     </div>
   
 
 
-
-  <h2>
-    <a id="class-method-detail" class="anchor" href="#class-method-detail">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Class Method Detail
-  </h2>
-  
-    <div class="entry-detail" id="build(socket:HTTP::WebSocket)-class-method">
-      <div class="signature">
-        
-        def self.<strong>build</strong>(socket : HTTP::WebSocket)
-
-        <a class="method-permalink" href="#build%28socket%3AHTTP%3A%3AWebSocket%29-class-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/cable-cr/cable/blob/7418fef8020548e6c3f928b5dc4ee45cd81bef6b/src/cable/websocket_pinger.cr#L18" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="run_every(value:Int32|Float64,&amp;)-class-method">
-      <div class="signature">
-        
-        def self.<strong>run_every</strong>(value : Int32 | Float64, &)
-
-        <a class="method-permalink" href="#run_every%28value%3AInt32%7CFloat64%2C%26%29-class-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/cable-cr/cable/blob/7418fef8020548e6c3f928b5dc4ee45cd81bef6b/src/cable/websocket_pinger.cr#L10" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="seconds-class-method">
-      <div class="signature">
-        
-        def self.<strong>seconds</strong>
-
-        <a class="method-permalink" href="#seconds-class-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/cable-cr/cable/blob/7418fef8020548e6c3f928b5dc4ee45cd81bef6b/src/cable/websocket_pinger.cr#L22" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
 
 
 
@@ -405,6 +330,38 @@
     Instance Method Detail
   </h2>
   
+    <div class="entry-detail" id="check_redis_publish-instance-method">
+      <div class="signature">
+        
+        def <strong>check_redis_publish</strong>
+
+        <a class="method-permalink" href="#check_redis_publish-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/cable-cr/cable/blob/7418fef8020548e6c3f928b5dc4ee45cd81bef6b/src/cable/redis_pinger.cr#L27" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="check_redis_subscribe-instance-method">
+      <div class="signature">
+        
+        def <strong>check_redis_subscribe</strong>
+
+        <a class="method-permalink" href="#check_redis_subscribe-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/cable-cr/cable/blob/7418fef8020548e6c3f928b5dc4ee45cd81bef6b/src/cable/redis_pinger.cr#L23" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
     <div class="entry-detail" id="stop-instance-method">
       <div class="signature">
         
@@ -416,7 +373,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/cable-cr/cable/blob/7418fef8020548e6c3f928b5dc4ee45cd81bef6b/src/cable/websocket_pinger.cr#L33" target="_blank">View source</a>]
+          [<a href="https://github.com/cable-cr/cable/blob/7418fef8020548e6c3f928b5dc4ee45cd81bef6b/src/cable/redis_pinger.cr#L19" target="_blank">View source</a>]
         
       </div>
     </div>

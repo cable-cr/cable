@@ -126,6 +126,11 @@
       
     </li>
   
+  <li class=" " data-id="cable/Cable/RedisPinger" data-name="cable::redispinger">
+      <a href="../Cable/RedisPinger.html">RedisPinger</a>
+      
+    </li>
+  
   <li class=" current" data-id="cable/Cable/Server" data-name="cable::server">
       <a href="../Cable/Server.html">Server</a>
       
@@ -212,7 +217,7 @@
   </h2>
   
     
-      <a href="https://github.com/cable-cr/cable/blob/f01263ef7f67e8410b79fed5bf696985099dc678/src/cable/server.cr#L18" target="_blank">
+      <a href="https://github.com/cable-cr/cable/blob/7418fef8020548e6c3f928b5dc4ee45cd81bef6b/src/cable/server.cr#L19" target="_blank">
         cable/server.cr
       </a>
     
@@ -265,7 +270,22 @@
       </li>
     
       <li class="entry-summary">
+        <a href="#count_error%21-instance-method" class="signature"><strong>#count_error!</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#errors%3AInt32-instance-method" class="signature"><strong>#errors</strong> : Int32</a>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#fiber_channel%3AChannel%28%7BString%2CString%7D%29-instance-method" class="signature"><strong>#fiber_channel</strong> : Channel({String, String})</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#pinger%3ACable%3A%3ARedisPinger-instance-method" class="signature"><strong>#pinger</strong> : Cable::RedisPinger</a>
         
       </li>
     
@@ -288,6 +308,11 @@
     
       <li class="entry-summary">
         <a href="#remove_connection%28connection_id%29-instance-method" class="signature"><strong>#remove_connection</strong>(connection_id)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#restart%3F-instance-method" class="signature"><strong>#restart?</strong></a>
         
       </li>
     
@@ -391,7 +416,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/cable-cr/cable/blob/f01263ef7f67e8410b79fed5bf696985099dc678/src/cable/server.cr#L41" target="_blank">View source</a>]
+          [<a href="https://github.com/cable-cr/cable/blob/7418fef8020548e6c3f928b5dc4ee45cd81bef6b/src/cable/server.cr#L46" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -421,7 +446,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/cable-cr/cable/blob/f01263ef7f67e8410b79fed5bf696985099dc678/src/cable/server.cr#L46" target="_blank">View source</a>]
+          [<a href="https://github.com/cable-cr/cable/blob/7418fef8020548e6c3f928b5dc4ee45cd81bef6b/src/cable/server.cr#L51" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -437,7 +462,39 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/cable-cr/cable/blob/f01263ef7f67e8410b79fed5bf696985099dc678/src/cable/server.cr#L21" target="_blank">View source</a>]
+          [<a href="https://github.com/cable-cr/cable/blob/7418fef8020548e6c3f928b5dc4ee45cd81bef6b/src/cable/server.cr#L22" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="count_error!-instance-method">
+      <div class="signature">
+        
+        def <strong>count_error!</strong>
+
+        <a class="method-permalink" href="#count_error%21-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/cable-cr/cable/blob/7418fef8020548e6c3f928b5dc4ee45cd81bef6b/src/cable/server.cr#L155" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="errors:Int32-instance-method">
+      <div class="signature">
+        
+        def <strong>errors</strong> : Int32
+
+        <a class="method-permalink" href="#errors%3AInt32-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/cable-cr/cable/blob/7418fef8020548e6c3f928b5dc4ee45cd81bef6b/src/cable/server.cr#L36" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -453,7 +510,23 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/cable-cr/cable/blob/f01263ef7f67e8410b79fed5bf696985099dc678/src/cable/server.cr#L36" target="_blank">View source</a>]
+          [<a href="https://github.com/cable-cr/cable/blob/7418fef8020548e6c3f928b5dc4ee45cd81bef6b/src/cable/server.cr#L38" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="pinger:Cable::RedisPinger-instance-method">
+      <div class="signature">
+        
+        def <strong>pinger</strong> : <a href="../Cable/RedisPinger.html">Cable::RedisPinger</a>
+
+        <a class="method-permalink" href="#pinger%3ACable%3A%3ARedisPinger-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/cable-cr/cable/blob/7418fef8020548e6c3f928b5dc4ee45cd81bef6b/src/cable/server.cr#L39" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -474,7 +547,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/cable-cr/cable/blob/f01263ef7f67e8410b79fed5bf696985099dc678/src/cable/server.cr#L92" target="_blank">View source</a>]
+          [<a href="https://github.com/cable-cr/cable/blob/7418fef8020548e6c3f928b5dc4ee45cd81bef6b/src/cable/server.cr#L97" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -490,7 +563,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/cable-cr/cable/blob/f01263ef7f67e8410b79fed5bf696985099dc678/src/cable/server.cr#L23" target="_blank">View source</a>]
+          [<a href="https://github.com/cable-cr/cable/blob/7418fef8020548e6c3f928b5dc4ee45cd81bef6b/src/cable/server.cr#L24" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -506,7 +579,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/cable-cr/cable/blob/f01263ef7f67e8410b79fed5bf696985099dc678/src/cable/server.cr#L35" target="_blank">View source</a>]
+          [<a href="https://github.com/cable-cr/cable/blob/7418fef8020548e6c3f928b5dc4ee45cd81bef6b/src/cable/server.cr#L37" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -522,7 +595,23 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/cable-cr/cable/blob/f01263ef7f67e8410b79fed5bf696985099dc678/src/cable/server.cr#L50" target="_blank">View source</a>]
+          [<a href="https://github.com/cable-cr/cable/blob/7418fef8020548e6c3f928b5dc4ee45cd81bef6b/src/cable/server.cr#L55" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="restart?-instance-method">
+      <div class="signature">
+        
+        def <strong>restart?</strong>
+
+        <a class="method-permalink" href="#restart%3F-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/cable-cr/cable/blob/7418fef8020548e6c3f928b5dc4ee45cd81bef6b/src/cable/server.cr#L151" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -538,7 +627,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/cable-cr/cable/blob/f01263ef7f67e8410b79fed5bf696985099dc678/src/cable/server.cr#L118" target="_blank">View source</a>]
+          [<a href="https://github.com/cable-cr/cable/blob/7418fef8020548e6c3f928b5dc4ee45cd81bef6b/src/cable/server.cr#L123" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -554,7 +643,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/cable-cr/cable/blob/f01263ef7f67e8410b79fed5bf696985099dc678/src/cable/server.cr#L96" target="_blank">View source</a>]
+          [<a href="https://github.com/cable-cr/cable/blob/7418fef8020548e6c3f928b5dc4ee45cd81bef6b/src/cable/server.cr#L101" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -570,7 +659,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/cable-cr/cable/blob/f01263ef7f67e8410b79fed5bf696985099dc678/src/cable/server.cr#L129" target="_blank">View source</a>]
+          [<a href="https://github.com/cable-cr/cable/blob/7418fef8020548e6c3f928b5dc4ee45cd81bef6b/src/cable/server.cr#L134" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -586,7 +675,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/cable-cr/cable/blob/f01263ef7f67e8410b79fed5bf696985099dc678/src/cable/server.cr#L54" target="_blank">View source</a>]
+          [<a href="https://github.com/cable-cr/cable/blob/7418fef8020548e6c3f928b5dc4ee45cd81bef6b/src/cable/server.cr#L59" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -602,7 +691,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/cable-cr/cable/blob/f01263ef7f67e8410b79fed5bf696985099dc678/src/cable/server.cr#L69" target="_blank">View source</a>]
+          [<a href="https://github.com/cable-cr/cable/blob/7418fef8020548e6c3f928b5dc4ee45cd81bef6b/src/cable/server.cr#L74" target="_blank">View source</a>]
         
       </div>
     </div>

@@ -126,6 +126,11 @@
       
     </li>
   
+  <li class=" " data-id="cable/Cable/RedisPinger" data-name="cable::redispinger">
+      <a href="Cable/RedisPinger.html">RedisPinger</a>
+      
+    </li>
+  
   <li class=" " data-id="cable/Cable/Server" data-name="cable::server">
       <a href="Cable/Server.html">Server</a>
       
@@ -220,6 +225,8 @@
   settings.pool_redis_publish <span class="o">=</span> <span class="n">false</span> <span class="c"># set to `true` to enable a pooled connection on publish</span>
   settings.redis_pool_size <span class="o">=</span> <span class="n">5</span>
   settings.redis_pool_timeout <span class="o">=</span> <span class="n">5.0</span>
+  settings.redis_ping_interval <span class="o">=</span> <span class="n">15</span>.seconds
+  settings.restart_error_allowance <span class="o">=</span> <span class="n">20</span>
 <span class="k">end</span></code></pre>
 <p>You may want to tune how to report logging</p>
 <pre><code class="language-crystal"><span class="c"># config/log.cr</span>
@@ -336,6 +343,65 @@ log_levels <span class="o">=</span> {
     update_their_profile
   <span class="k">end</span>
 <span class="k">end</span></code></pre>
+<h2><a id="redis" class="anchor" href="#redis">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Redis</h2>
+<p>Redis has complexities that need to be considered;</p>
+<ol>
+<li>Redis Pub/Sub works really well until you lose the connection...</li>
+<li>Redis connections can go stale without activity.</li>
+<li>Redis DB's have a buffer related to the message sizes called <a href="https://redis.io/docs/reference/clients/#output-buffer-limits">Output Buffer Limits</a>. Exceeding this buffer will not disconnect the connection. It just yields it dead. You cannot know about this except by monitoring logs/metrics.</li>
+</ol>
+<p>Here are some ways this shard can help with this.</p>
+<h3><a id="restarting-the-server" class="anchor" href="#restarting-the-server">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Restarting the server</h3>
+<p>When the first connection is made, the cable server spawns a single pub/sub connection for all subscriptions.
+If the connection dies at any point, the server will continue to throw errors unless someone manually restarts the server...</p>
+<p>The cable server provides an automated failure rate monitoring/restart function to automate the restart process.</p>
+<p>When the server encounters (n) errors are trying to connect to the Redis connection, it restarts the server.
+The error rate allowance avoids a vicious cycle &gt; of clients attempting to connect vs server restarts while Redis is down.
+Generally, if the Redis connection is down, you'll exceed this error allowance quickly. So you may encounter severe back-to-back restarts if Redis is down for a substantial time.</p>
+<blockquote>
+<p><span class="flag purple">NOTE</span>  The automated restart process will also kill all the current client WS connections.
+However, this trade-off allows a fault-tolerant system vs leaving a dead Redis connection hanging around with no pub/sub activity.</p>
+</blockquote>
+<p>You can change this setting. However, we advise not going below 20.</p>
+<pre><code class="language-crystal"><span class="t">Cable</span>.configure <span class="k">do</span> <span class="o">|</span>settings<span class="o">|</span>
+ settings.restart_error_allowance <span class="o">=</span> <span class="n">20</span> <span class="c"># default is 20.</span>
+ settings.restart_error_allowance <span class="o">=</span> <span class="n">0</span> <span class="c"># Use 0 to disable this</span>
+<span class="k">end</span></code></pre>
+<blockquote>
+<p><span class="flag purple">NOTE</span>  An error log <code>Cable.restart</code> will be invoked whenever a restart happens. We highly advise you to monitor these logs.</p>
+</blockquote>
+<h3><a id="maintain-redis-connection-activity" class="anchor" href="#maintain-redis-connection-activity">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Maintain Redis connection activity</h3>
+<p>When the first connection is made, the cable server starts a Redis PING/PONG task, which runs every 15 seconds. This helps to keep the Redis connection from going stale.</p>
+<p>You can change this setting. However, we advise not going over 60 seconds.</p>
+<pre><code class="language-crystal"><span class="t">Cable</span>.configure <span class="k">do</span> <span class="o">|</span>settings<span class="o">|</span>
+ settings.redis_ping_interval <span class="o">=</span> <span class="n">15</span>.seconds <span class="c"># default is 15.</span>
+<span class="k">end</span></code></pre>
+<h3><a id="increase-your-redis-output-buffer-limits" class="anchor" href="#increase-your-redis-output-buffer-limits">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Increase your Redis <a href="https://redis.io/docs/reference/clients/#output-buffer-limits">Output Buffer Limits</a></h3>
+<blockquote>
+<p>Technically, this shard cannot help with this.</p>
+</blockquote>
+<p>Exceeding this buffer should be avoided to ensure a stable pub/sub connection.</p>
+<p>Options;</p>
+<ol>
+<li>Double or triple this setting on your Redis DB. 32Mb is usually the default.</li>
+<li>Ensure you truncate the message sizes client side.</li>
+</ol>
 <p>Check below on the JavaScript section how to communicate with the Cable backend</p>
 <h2><a id="java-script" class="anchor" href="#java-script">
   <svg class="octicon-link" aria-hidden="true">

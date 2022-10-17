@@ -126,6 +126,11 @@
       
     </li>
   
+  <li class=" " data-id="cable/Cable/RedisPinger" data-name="cable::redispinger">
+      <a href="Cable/RedisPinger.html">RedisPinger</a>
+      
+    </li>
+  
   <li class=" " data-id="cable/Cable/Server" data-name="cable::server">
       <a href="Cable/Server.html">Server</a>
       
@@ -223,63 +228,70 @@
   </h2>
   
     
-      <a href="https://github.com/cable-cr/cable/blob/f01263ef7f67e8410b79fed5bf696985099dc678/src/cable.cr#L7" target="_blank">
+      <a href="https://github.com/cable-cr/cable/blob/7418fef8020548e6c3f928b5dc4ee45cd81bef6b/src/cable.cr#L7" target="_blank">
         cable.cr
       </a>
     
     <br/>
   
     
-      <a href="https://github.com/cable-cr/cable/blob/f01263ef7f67e8410b79fed5bf696985099dc678/src/cable/channel.cr#L1" target="_blank">
+      <a href="https://github.com/cable-cr/cable/blob/7418fef8020548e6c3f928b5dc4ee45cd81bef6b/src/cable/channel.cr#L1" target="_blank">
         cable/channel.cr
       </a>
     
     <br/>
   
     
-      <a href="https://github.com/cable-cr/cable/blob/f01263ef7f67e8410b79fed5bf696985099dc678/src/cable/connection.cr#L3" target="_blank">
+      <a href="https://github.com/cable-cr/cable/blob/7418fef8020548e6c3f928b5dc4ee45cd81bef6b/src/cable/connection.cr#L3" target="_blank">
         cable/connection.cr
       </a>
     
     <br/>
   
     
-      <a href="https://github.com/cable-cr/cable/blob/f01263ef7f67e8410b79fed5bf696985099dc678/src/cable/debug.cr#L3" target="_blank">
+      <a href="https://github.com/cable-cr/cable/blob/7418fef8020548e6c3f928b5dc4ee45cd81bef6b/src/cable/debug.cr#L3" target="_blank">
         cable/debug.cr
       </a>
     
     <br/>
   
     
-      <a href="https://github.com/cable-cr/cable/blob/f01263ef7f67e8410b79fed5bf696985099dc678/src/cable/handler.cr#L3" target="_blank">
+      <a href="https://github.com/cable-cr/cable/blob/7418fef8020548e6c3f928b5dc4ee45cd81bef6b/src/cable/handler.cr#L3" target="_blank">
         cable/handler.cr
       </a>
     
     <br/>
   
     
-      <a href="https://github.com/cable-cr/cable/blob/f01263ef7f67e8410b79fed5bf696985099dc678/src/cable/logger.cr#L3" target="_blank">
+      <a href="https://github.com/cable-cr/cable/blob/7418fef8020548e6c3f928b5dc4ee45cd81bef6b/src/cable/logger.cr#L3" target="_blank">
         cable/logger.cr
       </a>
     
     <br/>
   
     
-      <a href="https://github.com/cable-cr/cable/blob/f01263ef7f67e8410b79fed5bf696985099dc678/src/cable/payload.cr#L1" target="_blank">
+      <a href="https://github.com/cable-cr/cable/blob/7418fef8020548e6c3f928b5dc4ee45cd81bef6b/src/cable/payload.cr#L1" target="_blank">
         cable/payload.cr
       </a>
     
     <br/>
   
     
-      <a href="https://github.com/cable-cr/cable/blob/f01263ef7f67e8410b79fed5bf696985099dc678/src/cable/server.cr#L4" target="_blank">
+      <a href="https://github.com/cable-cr/cable/blob/7418fef8020548e6c3f928b5dc4ee45cd81bef6b/src/cable/redis_pinger.cr#L3" target="_blank">
+        cable/redis_pinger.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/cable-cr/cable/blob/7418fef8020548e6c3f928b5dc4ee45cd81bef6b/src/cable/server.cr#L4" target="_blank">
         cable/server.cr
       </a>
     
     <br/>
   
     
-      <a href="https://github.com/cable-cr/cable/blob/f01263ef7f67e8410b79fed5bf696985099dc678/src/cable/websocket_pinger.cr#L3" target="_blank">
+      <a href="https://github.com/cable-cr/cable/blob/7418fef8020548e6c3f928b5dc4ee45cd81bef6b/src/cable/websocket_pinger.cr#L3" target="_blank">
         cable/websocket_pinger.cr
       </a>
     
@@ -301,7 +313,7 @@
   <dl>
     
       <dt class="entry-const" id="HABITAT_SETTINGS">
-        <strong>HABITAT_SETTINGS</strong> = <code>[{decl: route : <span class="t">String</span> <span class="o">=</span> <span class="t">Cable</span>.message(<span class="n">:default_mount_path</span>), example: <span class="s">&quot;/cable&quot;</span>, validation: <span class="n">nil</span>}, {decl: token : <span class="t">String</span> <span class="o">=</span> <span class="s">&quot;token&quot;</span>, example: <span class="s">&quot;token&quot;</span>, validation: <span class="n">nil</span>}, {decl: url : <span class="t">String</span> <span class="o">=</span> <span class="t">ENV</span>.fetch(<span class="s">&quot;REDIS_URL&quot;</span>, <span class="s">&quot;redis://localhost:6379&quot;</span>), example: <span class="s">&quot;redis://localhost:6379&quot;</span>, validation: <span class="n">nil</span>}, {decl: disable_sec_websocket_protocol_header : <span class="t">Bool</span> <span class="o">=</span> <span class="n">false</span>, example: <span class="n">nil</span>, validation: <span class="n">nil</span>}, {decl: pool_redis_publish : <span class="t">Bool</span> <span class="o">=</span> <span class="n">false</span>, example: <span class="n">nil</span>, validation: <span class="n">nil</span>}, {decl: redis_pool_size : <span class="t">Int32</span> <span class="o">=</span> <span class="n">5</span>, example: <span class="n">nil</span>, validation: <span class="n">nil</span>}, {decl: redis_pool_timeout : <span class="t">Float64</span> <span class="o">=</span> <span class="n">5.0</span>, example: <span class="n">nil</span>, validation: <span class="n">nil</span>}] <span class="k">of</span> <span class="t">Nil</span></code>
+        <strong>HABITAT_SETTINGS</strong> = <code>[{decl: route : <span class="t">String</span> <span class="o">=</span> <span class="t">Cable</span>.message(<span class="n">:default_mount_path</span>), example: <span class="s">&quot;/cable&quot;</span>, validation: <span class="n">nil</span>}, {decl: token : <span class="t">String</span> <span class="o">=</span> <span class="s">&quot;token&quot;</span>, example: <span class="s">&quot;token&quot;</span>, validation: <span class="n">nil</span>}, {decl: url : <span class="t">String</span> <span class="o">=</span> <span class="t">ENV</span>.fetch(<span class="s">&quot;REDIS_URL&quot;</span>, <span class="s">&quot;redis://localhost:6379&quot;</span>), example: <span class="s">&quot;redis://localhost:6379&quot;</span>, validation: <span class="n">nil</span>}, {decl: disable_sec_websocket_protocol_header : <span class="t">Bool</span> <span class="o">=</span> <span class="n">false</span>, example: <span class="n">nil</span>, validation: <span class="n">nil</span>}, {decl: pool_redis_publish : <span class="t">Bool</span> <span class="o">=</span> <span class="n">false</span>, example: <span class="n">nil</span>, validation: <span class="n">nil</span>}, {decl: redis_pool_size : <span class="t">Int32</span> <span class="o">=</span> <span class="n">5</span>, example: <span class="n">nil</span>, validation: <span class="n">nil</span>}, {decl: redis_pool_timeout : <span class="t">Float64</span> <span class="o">=</span> <span class="n">5.0</span>, example: <span class="n">nil</span>, validation: <span class="n">nil</span>}, {decl: redis_ping_interval : <span class="t">Time</span><span class="t">::</span><span class="t">Span</span> <span class="o">=</span> <span class="n">15</span>.seconds, example: <span class="n">nil</span>, validation: <span class="n">nil</span>}, {decl: restart_error_allowance : <span class="t">Int32</span> <span class="o">=</span> <span class="n">20</span>, example: <span class="n">nil</span>, validation: <span class="n">nil</span>}] <span class="k">of</span> <span class="t">Nil</span></code>
       </dt>
       
     
@@ -433,7 +445,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/cable-cr/cable/blob/f01263ef7f67e8410b79fed5bf696985099dc678/src/cable.cr#L28" target="_blank">View source</a>]
+          [<a href="https://github.com/cable-cr/cable/blob/7418fef8020548e6c3f928b5dc4ee45cd81bef6b/src/cable.cr#L28" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -449,7 +461,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/cable-cr/cable/blob/f01263ef7f67e8410b79fed5bf696985099dc678/src/cable.cr#L38" target="_blank">View source</a>]
+          [<a href="https://github.com/cable-cr/cable/blob/7418fef8020548e6c3f928b5dc4ee45cd81bef6b/src/cable.cr#L40" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -465,7 +477,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/cable-cr/cable/blob/f01263ef7f67e8410b79fed5bf696985099dc678/src/cable/server.cr#L11" target="_blank">View source</a>]
+          [<a href="https://github.com/cable-cr/cable/blob/7418fef8020548e6c3f928b5dc4ee45cd81bef6b/src/cable/server.cr#L11" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -481,7 +493,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/cable-cr/cable/blob/f01263ef7f67e8410b79fed5bf696985099dc678/src/cable/server.cr#L7" target="_blank">View source</a>]
+          [<a href="https://github.com/cable-cr/cable/blob/7418fef8020548e6c3f928b5dc4ee45cd81bef6b/src/cable/server.cr#L7" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -497,7 +509,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/cable-cr/cable/blob/f01263ef7f67e8410b79fed5bf696985099dc678/src/cable.cr#L28" target="_blank">View source</a>]
+          [<a href="https://github.com/cable-cr/cable/blob/7418fef8020548e6c3f928b5dc4ee45cd81bef6b/src/cable.cr#L28" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -525,7 +537,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/cable-cr/cable/blob/f01263ef7f67e8410b79fed5bf696985099dc678/src/cable.cr#L28" target="_blank">View source</a>]
+          [<a href="https://github.com/cable-cr/cable/blob/7418fef8020548e6c3f928b5dc4ee45cd81bef6b/src/cable.cr#L28" target="_blank">View source</a>]
         
       </div>
     </div>

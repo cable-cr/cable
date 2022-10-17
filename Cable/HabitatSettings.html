@@ -126,6 +126,11 @@
       
     </li>
   
+  <li class=" " data-id="cable/Cable/RedisPinger" data-name="cable::redispinger">
+      <a href="../Cable/RedisPinger.html">RedisPinger</a>
+      
+    </li>
+  
   <li class=" " data-id="cable/Cable/Server" data-name="cable::server">
       <a href="../Cable/Server.html">Server</a>
       
@@ -198,7 +203,7 @@
   </h2>
   
     
-      <a href="https://github.com/cable-cr/cable/blob/f01263ef7f67e8410b79fed5bf696985099dc678/src/cable.cr#L28" target="_blank">
+      <a href="https://github.com/cable-cr/cable/blob/7418fef8020548e6c3f928b5dc4ee45cd81bef6b/src/cable.cr#L28" target="_blank">
         cable.cr
       </a>
     
@@ -256,6 +261,23 @@
       </li>
     
       <li class="entry-summary">
+        <a href="#redis_ping_interval%3ATime%3A%3ASpan-class-method" class="signature"><strong>.redis_ping_interval</strong> : Time::Span</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#redis_ping_interval%3D%28value%3ATime%3A%3ASpan%29-class-method" class="signature"><strong>.redis_ping_interval=</strong>(value : Time::Span)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#redis_ping_interval%3F-class-method" class="signature"><strong>.redis_ping_interval?</strong></a>
+        
+          <div class="summary"><p>Used for checking missing settings on non-nilable types It's advised to use redis_ping_interval in your apps to ensure the propper type is checked.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#redis_pool_size%3AInt32-class-method" class="signature"><strong>.redis_pool_size</strong> : Int32</a>
         
       </li>
@@ -286,6 +308,23 @@
         <a href="#redis_pool_timeout%3F-class-method" class="signature"><strong>.redis_pool_timeout?</strong></a>
         
           <div class="summary"><p>Used for checking missing settings on non-nilable types It's advised to use redis_pool_timeout in your apps to ensure the propper type is checked.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#restart_error_allowance%3AInt32-class-method" class="signature"><strong>.restart_error_allowance</strong> : Int32</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#restart_error_allowance%3D%28value%3AInt32%29-class-method" class="signature"><strong>.restart_error_allowance=</strong>(value : Int32)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#restart_error_allowance%3F-class-method" class="signature"><strong>.restart_error_allowance?</strong></a>
+        
+          <div class="summary"><p>Used for checking missing settings on non-nilable types It's advised to use restart_error_allowance in your apps to ensure the propper type is checked.</p></div>
         
       </li>
     
@@ -489,6 +528,55 @@ the propper type is checked.</p>
       </div>
     </div>
   
+    <div class="entry-detail" id="redis_ping_interval:Time::Span-class-method">
+      <div class="signature">
+        
+        def self.<strong>redis_ping_interval</strong> : Time::Span
+
+        <a class="method-permalink" href="#redis_ping_interval%3ATime%3A%3ASpan-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="redis_ping_interval=(value:Time::Span)-class-method">
+      <div class="signature">
+        
+        def self.<strong>redis_ping_interval=</strong>(value : Time::Span)
+
+        <a class="method-permalink" href="#redis_ping_interval%3D%28value%3ATime%3A%3ASpan%29-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="redis_ping_interval?-class-method">
+      <div class="signature">
+        
+        def self.<strong>redis_ping_interval?</strong>
+
+        <a class="method-permalink" href="#redis_ping_interval%3F-class-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Used for checking missing settings on non-nilable types
+It's advised to use redis_ping_interval in your apps to ensure
+the propper type is checked.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
     <div class="entry-detail" id="redis_pool_size:Int32-class-method">
       <div class="signature">
         
@@ -578,6 +666,55 @@ the propper type is checked.</p>
           
           <p>Used for checking missing settings on non-nilable types
 It's advised to use redis_pool_timeout in your apps to ensure
+the propper type is checked.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="restart_error_allowance:Int32-class-method">
+      <div class="signature">
+        
+        def self.<strong>restart_error_allowance</strong> : Int32
+
+        <a class="method-permalink" href="#restart_error_allowance%3AInt32-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="restart_error_allowance=(value:Int32)-class-method">
+      <div class="signature">
+        
+        def self.<strong>restart_error_allowance=</strong>(value : Int32)
+
+        <a class="method-permalink" href="#restart_error_allowance%3D%28value%3AInt32%29-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="restart_error_allowance?-class-method">
+      <div class="signature">
+        
+        def self.<strong>restart_error_allowance?</strong>
+
+        <a class="method-permalink" href="#restart_error_allowance%3F-class-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Used for checking missing settings on non-nilable types
+It's advised to use restart_error_allowance in your apps to ensure
 the propper type is checked.</p>
         </div>
       
