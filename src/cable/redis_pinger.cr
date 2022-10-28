@@ -6,8 +6,8 @@ module Cable
 
     def initialize(@server : Cable::Server)
       @task = Tasker.every(Cable.settings.redis_ping_interval) do
-        check_redis_subscribe
-        check_redis_publish
+        @server.backend.ping_redis_subscribe
+        @server.backend.ping_redis_publish
       rescue e
         Cable::Logger.error { "Cable::RedisPinger Exception: #{e.class.name} -> #{e.message}" }
         # Restart cable if something happened
@@ -18,17 +18,6 @@ module Cable
 
     def stop
       @task.cancel
-    end
-
-    def check_redis_subscribe
-      Cable.server.publish("_internal", "ping")
-    end
-
-    def check_redis_publish
-      request = Redis::Request.new
-      request << "ping"
-      result = @server.redis_subscribe._connection.send(request)
-      Cable::Logger.debug { "Cable::RedisPinger.check_redis_publish -> #{result}" }
     end
   end
 end

@@ -19,31 +19,28 @@ module Cable
   class Server
     include Debug
 
-    getter connections = {} of String => Connection
-
-    getter redis_publish do
-      if Cable.settings.pool_redis_publish
-        Redis::PooledClient.new(
-          url: Cable.settings.url,
-          pool_size: Cable.settings.redis_pool_size,
-          pool_timeout: Cable.settings.redis_pool_timeout
-        )
-      else
-        Redis.new(url: Cable.settings.url)
-      end
-    end
-
     getter errors = 0
-    getter redis_subscribe = Redis.new(url: Cable.settings.url)
+    getter connections = {} of String => Connection
     getter fiber_channel = ::Channel({String, String}).new
     getter pinger : Cable::RedisPinger do
       Cable::RedisPinger.new(self)
+    end
+    getter backend do
+      Cable::Backend.new
+    end
+    getter backend_publish do
+      backend.publish_connection
+    end
+    getter backend_subscribe do
+      backend.subscribe_connection
     end
 
     @channels = {} of String => Channels
     @channel_mutex = Mutex.new
 
     def initialize
+      # load the connections
+      backend
       subscribe
       process_subscribed_messages
     end
@@ -65,10 +62,7 @@ module Cable
         @channels[identifier] << channel
       end
 
-      request = Redis::Request.new
-      request << "subscribe"
-      request << identifier
-      redis_subscribe._connection.send(request)
+      backend.subscribe(identifier)
     end
 
     def unsubscribe_channel(channel : Channel, identifier : String)
@@ -77,25 +71,19 @@ module Cable
           @channels[identifier].delete(channel)
 
           if @channels[identifier].size == 0
-            request = Redis::Request.new
-            request << "unsubscribe"
-            request << identifier
-            redis_subscribe._connection.send(request)
+            backend.unsubscribe(identifier)
 
             @channels.delete(identifier)
           end
         else
-          request = Redis::Request.new
-          request << "unsubscribe"
-          request << identifier
-          redis_subscribe._connection.send(request)
+          backend.unsubscribe(identifier)
         end
       end
     end
 
     # redis only accepts strings, so we should be strict here
     def publish(channel : String, message : String)
-      redis_publish.publish(channel, message)
+      backend.publish_message(channel, message)
     end
 
     def send_to_channels(channel_identifier, message)
@@ -133,11 +121,8 @@ module Cable
 
     def shutdown
       begin
-        request = Redis::Request.new
-        request << "unsubscribe"
-        redis_subscribe._connection.send(request)
-        redis_subscribe.close
-        redis_publish.close
+        backend.close_subscribe_connection
+        backend.close_publish_connection
       rescue e : IO::Error
         # the @writer IO is closed already
         Cable::Logger.debug { "Cable::Server#shutdown Connection to redis was severed: #{e.message}" }
@@ -171,18 +156,7 @@ module Cable
 
     private def subscribe
       spawn(name: "Cable::Server - subscribe") do
-        redis_subscribe.subscribe("_internal") do |on|
-          on.message do |channel, message|
-            if channel == "_internal" && message == "ping"
-              Cable::Logger.debug { "Cable::Server#subscribe -> PONG" }
-            elsif channel == "_internal" && message == "debug"
-              debug
-            else
-              fiber_channel.send({channel, message})
-              Cable::Logger.debug { "Cable::Server#subscribe channel:#{channel} message:#{message}" }
-            end
-          end
-        end
+        backend.open_subscribe_connection("_internal")
       end
     end
   end
