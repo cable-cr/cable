@@ -28,7 +28,7 @@ dependencies:
 Application code
 ```crystal
 require "cable"
-require "../lib/cable/src/backend/redis/backend"
+require "cable/backend/redis/backend"
 ```
 
 ## Backend setup
@@ -66,7 +66,7 @@ Application code
 
 ```crystal
 require "cable"
-require "../lib/cable/src/backend/redis/legacy/backend"
+require "cable/backend/redis/legacy/backend"
 ```
 
 **Testing the legacy Redis shard**
@@ -104,7 +104,7 @@ To help better illustrate how the entire setup looks, we'll use the [lucky web f
 # src/shards.cr
 
 require "cable"
-require "../lib/cable/src/backend/redis/backend"
+require "cable/backend/redis/backend"
 ```
 
 ### Mount the middleware
