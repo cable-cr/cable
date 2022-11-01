@@ -1,5 +1,6 @@
 require "spec"
 require "../src/cable"
+require "../src/backend/redis/backend"
 require "./support/application_cable/connection"
 require "./support/application_cable/channel"
 require "./support/channels/*"
