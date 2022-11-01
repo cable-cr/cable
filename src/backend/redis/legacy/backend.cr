@@ -19,7 +19,6 @@ end
 
 module Cable
   class Backend < Cable::BackendCore
-
     getter redis_subscribe : Redis = Redis.new(url: Cable.settings.url)
     getter redis_publish : Redis::PooledClient | Redis do
       if Cable.settings.pool_redis_publish
