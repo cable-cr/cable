@@ -109,6 +109,29 @@ describe Cable::Handler do
       Cable.server.connections.size.should eq(0)
     end
 
+    it "reports errors" do
+      FakeExceptionService.size.should eq(0)
+
+      address_chan = start_server
+      listen_address = address_chan.receive
+
+      ws2 = HTTP::WebSocket.new("ws://#{listen_address}/updates?test_token=1")
+
+      Cable.server.connections.size.should eq(1)
+
+      # to avoid IO::Error from mock client connection failure
+      begin
+        # typo in command vs commands
+        ws2.send({"commands" => "subscribe", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
+        ws2.run
+      rescue
+      end
+
+      FakeExceptionService.size.should eq(1)
+      FakeExceptionService.exceptions.first.keys.first.should eq("Cable::Handler#socket.on_message")
+      FakeExceptionService.exceptions.first.values.first.class.should eq(KeyError)
+    end
+
     it "rejected" do
       address_chan = start_server
       listen_address = address_chan.receive

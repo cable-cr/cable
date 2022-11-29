@@ -1,6 +1,8 @@
 # On redis shard it tries to convert the return of command to Nil
 # When returning an array, it raises an exception
 # So we monkey patch to run the command, ignore it, and return Nil
+{% if Redis.class? %}
+# :nodoc:
 class Redis
   module CommandExecution
     module ValueOriented
@@ -18,6 +20,7 @@ class Redis
 end
 
 module Cable
+  # :nodoc:
   class Backend < Cable::BackendCore
     getter redis_subscribe : Redis = Redis.new(url: Cable.settings.url)
     getter redis_publish : Redis::PooledClient | Redis do
@@ -114,3 +117,4 @@ module Cable
     end
   end
 end
+{% end %}

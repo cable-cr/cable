@@ -420,6 +420,33 @@ Options;
 1. Double or triple this setting on your Redis DB. 32Mb is usually the default.
 2. Ensure you truncate the message sizes client side.
 
+## Error handling
+
+You can setup a hook to report errors to any 3rd party service you choose.
+
+```crystal
+# config/cable.cr
+Cable.configure do |settings|
+  settings.on_error = ->(exception : Exception, message : String) do
+    # new 3rd part service handler
+    ExceptionService.notify(exception, message: message)
+    # default logic
+    Cable::Logger.error(exception: exception) { message }
+  end
+end
+```
+**Default Handler**
+
+```crystal
+Habitat.create do
+  setting on_error : Proc(Exception, String, Nil) = ->(exception : Exception, message : String) do
+    Cable::Logger.error(exception: exception) { message }
+  end
+end
+```
+
+> NOTE: The message field will contain details regarding which class/method raised the error
+
 ## Client-Side
 
 Check below on the JavaScript section how to communicate with the Cable backend.

@@ -58,7 +58,7 @@ module Cable
         Connection::CHANNELS[connection_identifier].delete(identifier)
         channel.close
       rescue e : IO::Error
-        Cable::Logger.error { "IO::Error Exception: #{e.message} -> #{self.class.name}#close" }
+        Cable.settings.on_error.call(e, "IO::Error: #{e.message} -> #{self.class.name}#close")
       end
 
       Connection::CHANNELS.delete(connection_identifier)
@@ -140,7 +140,7 @@ module Cable
             Cable::Logger.info { "#{channel.class}#receive(#{payload.data})" }
             channel.receive(payload.data)
           rescue e : TypeCastError
-            Cable::Logger.error { "Exception: #{e.message} -> #{self.class.name}#message(payload) { #{payload.inspect} }" }
+            Cable.settings.on_error.call(e, "Exception: #{e.message} -> #{self.class.name}#message(payload) { #{payload.inspect} }")
           end
         end
       end

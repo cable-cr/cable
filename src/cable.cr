@@ -39,6 +39,9 @@ module Cable
     setting redis_pool_timeout : Float64 = 5.0
     setting redis_ping_interval : Time::Span = 15.seconds
     setting restart_error_allowance : Int32 = 20
+    setting on_error : Proc(Exception, String, Nil) = ->(exception : Exception, message : String) do
+      Cable::Logger.error(exception: exception) { message }
+    end
   end
 
   def self.message(event : Symbol)

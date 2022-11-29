@@ -45,7 +45,7 @@ module Cable
             # handle unknown/malformed messages
             socket.close(HTTP::WebSocket::CloseCode::InvalidFramePayloadData, "Invalid message")
             Cable.server.remove_connection(connection_id)
-            Cable::Logger.error { "KeyError Exception: #{e.message}" }
+            Cable.settings.on_error.call(e, "Cable::Handler#socket.on_message")
           rescue e : Cable::Connection::UnathorizedConnectionException
             # handle unauthorized connections
             # no need to log them
@@ -61,7 +61,7 @@ module Cable
             # handle restart
             Cable.server.count_error!
             Cable.restart if Cable.server.restart?
-            Cable::Logger.error { "Exception: #{e.message}" }
+            Cable.settings.on_error.call(e, "Cable::Handler#socket.on_message")
           end
         end
 
@@ -70,6 +70,9 @@ module Cable
           Cable.server.remove_connection(connection_id)
           Cable::Logger.info { "Finished \"#{path}\" [WebSocket] for #{remote_address} at #{Time.utc.to_s}" }
         end
+      rescue e : Exception
+        Cable.settings.on_error.call(e, "Cable::Handler#call -> HTTP::WebSocketHandler")
+        raise e
       end
 
       Cable::Logger.info { "Successfully upgraded to WebSocket (REQUEST_METHOD: GET, HTTP_CONNECTION: Upgrade, HTTP_UPGRADE: websocket)" }

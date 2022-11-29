@@ -43,6 +43,9 @@ module Cable
       backend
       subscribe
       process_subscribed_messages
+    rescue e
+      Cable.settings.on_error.call(e, "Cable::Server.initialize")
+      raise e
     end
 
     def add_connection(connection)
@@ -105,7 +108,7 @@ module Cable
         end
       end
     rescue e : IO::Error
-      Cable::Logger.error { "IO::Error Exception: #{e.message} -> #{self.class.name}#send_to_channels(channel, message)" }
+      Cable.settings.on_error.call(e, "IO::Error Exception: #{e.message} -> #{self.class.name}#send_to_channels(channel, message)")
     end
 
     def safe_decode_message(message)
