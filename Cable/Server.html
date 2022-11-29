@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="generator" content="Crystal Docs 1.1.1">
-<meta name="crystal_docs.project_version" content="master">
+<meta name="generator" content="Crystal Docs 1.5.0">
+<meta name="crystal_docs.project_version" content="0.2.2">
 <meta name="crystal_docs.project_name" content="cable">
 
 
@@ -13,7 +13,7 @@
 <script type="text/javascript" src="../js/doc.js"></script>
 
   <meta name="repository-name" content="cable">
-  <title>Cable::Server - cable master</title>
+  <title>Cable::Server - cable 0.2.2</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../";
   </script>
@@ -39,7 +39,7 @@
       </h1>
 
       <span class="project-version">
-        master
+        0.2.2
       </span>
     </div>
   </div>
@@ -55,6 +55,16 @@
       <a href="../Cable.html">Cable</a>
       
         <ul>
+  
+  <li class=" " data-id="cable/Cable/Backend" data-name="cable::backend">
+      <a href="../Cable/Backend.html">Backend</a>
+      
+    </li>
+  
+  <li class=" " data-id="cable/Cable/BackendCore" data-name="cable::backendcore">
+      <a href="../Cable/BackendCore.html">BackendCore</a>
+      
+    </li>
   
   <li class="parent " data-id="cable/Cable/Channel" data-name="cable::channel">
       <a href="../Cable/Channel.html">Channel</a>
@@ -156,11 +166,6 @@
       
     </li>
   
-  <li class=" " data-id="cable/Redis" data-name="redis">
-      <a href="../Redis.html">Redis</a>
-      
-    </li>
-  
 </ul>
 
   </div>
@@ -217,9 +222,7 @@
   </h2>
   
     
-      <a href="https://github.com/cable-cr/cable/blob/7418fef8020548e6c3f928b5dc4ee45cd81bef6b/src/cable/server.cr#L19" target="_blank">
-        cable/server.cr
-      </a>
+      cable/server.cr
     
     <br/>
   
@@ -265,6 +268,21 @@
       </li>
     
       <li class="entry-summary">
+        <a href="#backend-instance-method" class="signature"><strong>#backend</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#backend_publish-instance-method" class="signature"><strong>#backend_publish</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#backend_subscribe-instance-method" class="signature"><strong>#backend_subscribe</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#connections%3AHash%28String%2CCable%3A%3AConnection%29-instance-method" class="signature"><strong>#connections</strong> : Hash(String, Cable::Connection)</a>
         
       </li>
@@ -293,16 +311,6 @@
         <a href="#publish%28channel%3AString%2Cmessage%3AString%29-instance-method" class="signature"><strong>#publish</strong>(channel : String, message : String)</a>
         
           <div class="summary"><p>redis only accepts strings, so we should be strict here</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#redis_publish-instance-method" class="signature"><strong>#redis_publish</strong></a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#redis_subscribe%3ARedis-instance-method" class="signature"><strong>#redis_subscribe</strong> : Redis</a>
         
       </li>
     
@@ -416,8 +424,6 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/cable-cr/cable/blob/7418fef8020548e6c3f928b5dc4ee45cd81bef6b/src/cable/server.cr#L46" target="_blank">View source</a>]
-        
       </div>
     </div>
   
@@ -446,7 +452,47 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/cable-cr/cable/blob/7418fef8020548e6c3f928b5dc4ee45cd81bef6b/src/cable/server.cr#L51" target="_blank">View source</a>]
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="backend-instance-method">
+      <div class="signature">
+        
+        def <strong>backend</strong>
+
+        <a class="method-permalink" href="#backend-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="backend_publish-instance-method">
+      <div class="signature">
+        
+        def <strong>backend_publish</strong>
+
+        <a class="method-permalink" href="#backend_publish-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="backend_subscribe-instance-method">
+      <div class="signature">
+        
+        def <strong>backend_subscribe</strong>
+
+        <a class="method-permalink" href="#backend_subscribe-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
         
       </div>
     </div>
@@ -462,8 +508,6 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/cable-cr/cable/blob/7418fef8020548e6c3f928b5dc4ee45cd81bef6b/src/cable/server.cr#L22" target="_blank">View source</a>]
-        
       </div>
     </div>
   
@@ -477,8 +521,6 @@
       
       <br/>
       <div>
-        
-          [<a href="https://github.com/cable-cr/cable/blob/7418fef8020548e6c3f928b5dc4ee45cd81bef6b/src/cable/server.cr#L155" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -494,8 +536,6 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/cable-cr/cable/blob/7418fef8020548e6c3f928b5dc4ee45cd81bef6b/src/cable/server.cr#L36" target="_blank">View source</a>]
-        
       </div>
     </div>
   
@@ -510,8 +550,6 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/cable-cr/cable/blob/7418fef8020548e6c3f928b5dc4ee45cd81bef6b/src/cable/server.cr#L38" target="_blank">View source</a>]
-        
       </div>
     </div>
   
@@ -525,8 +563,6 @@
       
       <br/>
       <div>
-        
-          [<a href="https://github.com/cable-cr/cable/blob/7418fef8020548e6c3f928b5dc4ee45cd81bef6b/src/cable/server.cr#L39" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -547,40 +583,6 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/cable-cr/cable/blob/7418fef8020548e6c3f928b5dc4ee45cd81bef6b/src/cable/server.cr#L97" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="redis_publish-instance-method">
-      <div class="signature">
-        
-        def <strong>redis_publish</strong>
-
-        <a class="method-permalink" href="#redis_publish-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/cable-cr/cable/blob/7418fef8020548e6c3f928b5dc4ee45cd81bef6b/src/cable/server.cr#L24" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="redis_subscribe:Redis-instance-method">
-      <div class="signature">
-        
-        def <strong>redis_subscribe</strong> : <a href="../Redis.html">Redis</a>
-
-        <a class="method-permalink" href="#redis_subscribe%3ARedis-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/cable-cr/cable/blob/7418fef8020548e6c3f928b5dc4ee45cd81bef6b/src/cable/server.cr#L37" target="_blank">View source</a>]
-        
       </div>
     </div>
   
@@ -594,8 +596,6 @@
       
       <br/>
       <div>
-        
-          [<a href="https://github.com/cable-cr/cable/blob/7418fef8020548e6c3f928b5dc4ee45cd81bef6b/src/cable/server.cr#L55" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -611,8 +611,6 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/cable-cr/cable/blob/7418fef8020548e6c3f928b5dc4ee45cd81bef6b/src/cable/server.cr#L151" target="_blank">View source</a>]
-        
       </div>
     </div>
   
@@ -626,8 +624,6 @@
       
       <br/>
       <div>
-        
-          [<a href="https://github.com/cable-cr/cable/blob/7418fef8020548e6c3f928b5dc4ee45cd81bef6b/src/cable/server.cr#L123" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -643,8 +639,6 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/cable-cr/cable/blob/7418fef8020548e6c3f928b5dc4ee45cd81bef6b/src/cable/server.cr#L101" target="_blank">View source</a>]
-        
       </div>
     </div>
   
@@ -658,8 +652,6 @@
       
       <br/>
       <div>
-        
-          [<a href="https://github.com/cable-cr/cable/blob/7418fef8020548e6c3f928b5dc4ee45cd81bef6b/src/cable/server.cr#L134" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -675,8 +667,6 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/cable-cr/cable/blob/7418fef8020548e6c3f928b5dc4ee45cd81bef6b/src/cable/server.cr#L59" target="_blank">View source</a>]
-        
       </div>
     </div>
   
@@ -690,8 +680,6 @@
       
       <br/>
       <div>
-        
-          [<a href="https://github.com/cable-cr/cable/blob/7418fef8020548e6c3f928b5dc4ee45cd81bef6b/src/cable/server.cr#L74" target="_blank">View source</a>]
         
       </div>
     </div>

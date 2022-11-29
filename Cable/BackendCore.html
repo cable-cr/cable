@@ -13,7 +13,7 @@
 <script type="text/javascript" src="../js/doc.js"></script>
 
   <meta name="repository-name" content="cable">
-  <title>Cable::Payload - cable 0.2.2</title>
+  <title>Cable::BackendCore - cable 0.2.2</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../";
   </script>
@@ -61,7 +61,7 @@
       
     </li>
   
-  <li class=" " data-id="cable/Cable/BackendCore" data-name="cable::backendcore">
+  <li class=" current" data-id="cable/Cable/BackendCore" data-name="cable::backendcore">
       <a href="../Cable/BackendCore.html">BackendCore</a>
       
     </li>
@@ -116,7 +116,7 @@
       
     </li>
   
-  <li class="parent open current" data-id="cable/Cable/Payload" data-name="cable::payload">
+  <li class="parent " data-id="cable/Cable/Payload" data-name="cable::payload">
       <a href="../Cable/Payload.html">Payload</a>
       
         <ul>
@@ -175,12 +175,12 @@
 <div class="main-content">
 <h1 class="type-name">
 
-  <span class="kind">class</span> Cable::Payload
+  <span class="kind">abstract class</span> Cable::BackendCore
 
 </h1>
 
 
-  <ul class="superclass-hierarchy"><li class="superclass"><a href="../Cable/Payload.html">Cable::Payload</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../Cable/BackendCore.html">Cable::BackendCore</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
 
 
 
@@ -192,6 +192,20 @@
 
 
 
+
+  <h2>
+    <a id="direct-known-subclasses" class="anchor" href="#direct-known-subclasses">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Direct Known Subclasses
+  </h2>
+  <ul class="other-types-list">
+    
+      <li class="other-type"><a href="../Cable/Backend.html">Cable::Backend</a></li>
+    
+  </ul>
 
 
 
@@ -208,7 +222,7 @@
   </h2>
   
     
-      cable/payload.cr
+      cable/backend_core.cr
     
     <br/>
   
@@ -216,23 +230,6 @@
 
 
 
-
-  <h2>
-    <a id="constructors" class="anchor" href="#constructors">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Constructors
-  </h2>
-  <ul class="list-summary">
-    
-      <li class="entry-summary">
-        <a href="#new%28json%3AString%29-class-method" class="signature"><strong>.new</strong>(json : String)</a>
-        
-      </li>
-    
-  </ul>
 
 
 
@@ -249,42 +246,60 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#action%3AString-instance-method" class="signature"><strong>#action</strong> : String</a>
+        <a href="#close_publish_connection-instance-method" class="signature"><strong>#close_publish_connection</strong></a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#action%3F%3ABool-instance-method" class="signature"><strong>#action?</strong> : Bool</a>
+        <a href="#close_subscribe_connection-instance-method" class="signature"><strong>#close_subscribe_connection</strong></a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#channel%3AString%3F-instance-method" class="signature"><strong>#channel</strong> : String?</a>
+        <a href="#open_subscribe_connection%28channel%29-instance-method" class="signature"><strong>#open_subscribe_connection</strong>(channel)</a>
+        
+          <div class="summary"><p>internal pub/sub</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#channel_params%3AHash%28String%2CCable%3A%3APayload%3A%3ARESULT%29-instance-method" class="signature"><strong>#channel_params</strong> : Hash(String, Cable::Payload::RESULT)</a>
+        <a href="#ping_redis_publish-instance-method" class="signature"><strong>#ping_redis_publish</strong></a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#command%3AString%3F-instance-method" class="signature"><strong>#command</strong> : String?</a>
+        <a href="#ping_redis_subscribe-instance-method" class="signature"><strong>#ping_redis_subscribe</strong></a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#data%3AHash%28String%2CCable%3A%3APayload%3A%3ARESULT%29-instance-method" class="signature"><strong>#data</strong> : Hash(String, Cable::Payload::RESULT)</a>
+        <a href="#publish_connection-instance-method" class="signature"><strong>#publish_connection</strong></a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#identifier%3AString-instance-method" class="signature"><strong>#identifier</strong> : String</a>
+        <a href="#publish_message%28stream_identifier%3AString%2Cmessage%3AString%29-instance-method" class="signature"><strong>#publish_message</strong>(stream_identifier : String, message : String)</a>
+        
+          <div class="summary"><p>external pub/sub</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#json%3AString-instance-method" class="signature"><strong>#json</strong> : String</a>
+        <a href="#subscribe%28stream_identifier%3AString%29-instance-method" class="signature"><strong>#subscribe</strong>(stream_identifier : String)</a>
+        
+          <div class="summary"><p>channel management</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#subscribe_connection-instance-method" class="signature"><strong>#subscribe_connection</strong></a>
+        
+          <div class="summary"><p>connection management</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#unsubscribe%28stream_identifier%3AString%29-instance-method" class="signature"><strong>#unsubscribe</strong>(stream_identifier : String)</a>
         
       </li>
     
@@ -319,30 +334,6 @@
 </div>
 
 
-  <h2>
-    <a id="constructor-detail" class="anchor" href="#constructor-detail">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Constructor Detail
-  </h2>
-  
-    <div class="entry-detail" id="new(json:String)-class-method">
-      <div class="signature">
-        
-        def self.<strong>new</strong>(json : String)
-
-        <a class="method-permalink" href="#new%28json%3AString%29-class-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-      </div>
-    </div>
-  
-
 
 
 
@@ -356,12 +347,12 @@
     Instance Method Detail
   </h2>
   
-    <div class="entry-detail" id="action:String-instance-method">
+    <div class="entry-detail" id="close_publish_connection-instance-method">
       <div class="signature">
-        
-        def <strong>action</strong> : String
+        abstract 
+        def <strong>close_publish_connection</strong>
 
-        <a class="method-permalink" href="#action%3AString-instance-method">#</a>
+        <a class="method-permalink" href="#close_publish_connection-instance-method">#</a>
       </div>
       
       <br/>
@@ -370,12 +361,12 @@
       </div>
     </div>
   
-    <div class="entry-detail" id="action?:Bool-instance-method">
+    <div class="entry-detail" id="close_subscribe_connection-instance-method">
       <div class="signature">
-        
-        def <strong>action?</strong> : Bool
+        abstract 
+        def <strong>close_subscribe_connection</strong>
 
-        <a class="method-permalink" href="#action%3F%3ABool-instance-method">#</a>
+        <a class="method-permalink" href="#close_subscribe_connection-instance-method">#</a>
       </div>
       
       <br/>
@@ -384,12 +375,31 @@
       </div>
     </div>
   
-    <div class="entry-detail" id="channel:String?-instance-method">
+    <div class="entry-detail" id="open_subscribe_connection(channel)-instance-method">
       <div class="signature">
-        
-        def <strong>channel</strong> : String?
+        abstract 
+        def <strong>open_subscribe_connection</strong>(channel)
 
-        <a class="method-permalink" href="#channel%3AString%3F-instance-method">#</a>
+        <a class="method-permalink" href="#open_subscribe_connection%28channel%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>internal pub/sub</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="ping_redis_publish-instance-method">
+      <div class="signature">
+        abstract 
+        def <strong>ping_redis_publish</strong>
+
+        <a class="method-permalink" href="#ping_redis_publish-instance-method">#</a>
       </div>
       
       <br/>
@@ -398,12 +408,12 @@
       </div>
     </div>
   
-    <div class="entry-detail" id="channel_params:Hash(String,Cable::Payload::RESULT)-instance-method">
+    <div class="entry-detail" id="ping_redis_subscribe-instance-method">
       <div class="signature">
-        
-        def <strong>channel_params</strong> : Hash(String, <a href="../Cable/Payload/RESULT.html">Cable::Payload::RESULT</a>)
+        abstract 
+        def <strong>ping_redis_subscribe</strong>
 
-        <a class="method-permalink" href="#channel_params%3AHash%28String%2CCable%3A%3APayload%3A%3ARESULT%29-instance-method">#</a>
+        <a class="method-permalink" href="#ping_redis_subscribe-instance-method">#</a>
       </div>
       
       <br/>
@@ -412,12 +422,12 @@
       </div>
     </div>
   
-    <div class="entry-detail" id="command:String?-instance-method">
+    <div class="entry-detail" id="publish_connection-instance-method">
       <div class="signature">
-        
-        def <strong>command</strong> : String?
+        abstract 
+        def <strong>publish_connection</strong>
 
-        <a class="method-permalink" href="#command%3AString%3F-instance-method">#</a>
+        <a class="method-permalink" href="#publish_connection-instance-method">#</a>
       </div>
       
       <br/>
@@ -426,13 +436,18 @@
       </div>
     </div>
   
-    <div class="entry-detail" id="data:Hash(String,Cable::Payload::RESULT)-instance-method">
+    <div class="entry-detail" id="publish_message(stream_identifier:String,message:String)-instance-method">
       <div class="signature">
-        
-        def <strong>data</strong> : Hash(String, <a href="../Cable/Payload/RESULT.html">Cable::Payload::RESULT</a>)
+        abstract 
+        def <strong>publish_message</strong>(stream_identifier : String, message : String)
 
-        <a class="method-permalink" href="#data%3AHash%28String%2CCable%3A%3APayload%3A%3ARESULT%29-instance-method">#</a>
+        <a class="method-permalink" href="#publish_message%28stream_identifier%3AString%2Cmessage%3AString%29-instance-method">#</a>
       </div>
+      
+        <div class="doc">
+          
+          <p>external pub/sub</p>
+        </div>
       
       <br/>
       <div>
@@ -440,13 +455,18 @@
       </div>
     </div>
   
-    <div class="entry-detail" id="identifier:String-instance-method">
+    <div class="entry-detail" id="subscribe(stream_identifier:String)-instance-method">
       <div class="signature">
-        
-        def <strong>identifier</strong> : String
+        abstract 
+        def <strong>subscribe</strong>(stream_identifier : String)
 
-        <a class="method-permalink" href="#identifier%3AString-instance-method">#</a>
+        <a class="method-permalink" href="#subscribe%28stream_identifier%3AString%29-instance-method">#</a>
       </div>
+      
+        <div class="doc">
+          
+          <p>channel management</p>
+        </div>
       
       <br/>
       <div>
@@ -454,12 +474,31 @@
       </div>
     </div>
   
-    <div class="entry-detail" id="json:String-instance-method">
+    <div class="entry-detail" id="subscribe_connection-instance-method">
       <div class="signature">
-        
-        def <strong>json</strong> : String
+        abstract 
+        def <strong>subscribe_connection</strong>
 
-        <a class="method-permalink" href="#json%3AString-instance-method">#</a>
+        <a class="method-permalink" href="#subscribe_connection-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>connection management</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="unsubscribe(stream_identifier:String)-instance-method">
+      <div class="signature">
+        abstract 
+        def <strong>unsubscribe</strong>(stream_identifier : String)
+
+        <a class="method-permalink" href="#unsubscribe%28stream_identifier%3AString%29-instance-method">#</a>
       </div>
       
       <br/>
