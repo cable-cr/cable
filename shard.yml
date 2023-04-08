@@ -4,7 +4,7 @@ version: 0.2.2
 authors:
   - Celso Fernandes <celso.fernandes@gmail.com>
 
-crystal: ">= 1.4.0"
+crystal: ">= 1.6.0"
 
 dependencies:
   tasker:
