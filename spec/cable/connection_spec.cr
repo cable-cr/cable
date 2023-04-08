@@ -94,11 +94,11 @@ describe Cable::Connection do
 
   describe ".identified_by" do
     it "uses the right identifier name for it" do
-      connect do |connection, socket|
+      connect do |connection, _socket|
         connection.identifier.should eq("98")
       end
 
-      connect(connection_class: ConnectionWithDifferentIndentifierTest) do |connection, socket|
+      connect(connection_class: ConnectionWithDifferentIndentifierTest) do |connection, _socket|
         connection.identifier.should eq("98")
       end
     end
@@ -106,9 +106,9 @@ describe Cable::Connection do
 
   describe ".owned_by" do
     it "uses the right identifier name for it" do
-      connect do |connection, socket|
-        connection.current_user.not_nil!.email.should eq("user98@mail.com")
-        connection.organization.not_nil!.name.should eq("Acme Inc.")
+      connect do |connection, _socket|
+        connection.current_user.as(User).email.should eq("user98@mail.com")
+        connection.organization.as(Organization).name.should eq("Acme Inc.")
       end
     end
   end
@@ -470,7 +470,7 @@ describe Cable::Connection do
   end
 end
 
-def builds_request(token : String)
+def builds_request(token : String) : HTTP::Request
   headers = HTTP::Headers{
     "Upgrade"                => "websocket",
     "Connection"             => "Upgrade",
@@ -478,10 +478,10 @@ def builds_request(token : String)
     "Sec-WebSocket-Protocol" => "actioncable-v1-json, actioncable-unsupported",
     "Sec-WebSocket-Version"  => "13",
   }
-  request = HTTP::Request.new("GET", "#{Cable.settings.route}?test_token=#{token}", headers)
+  HTTP::Request.new("GET", "#{Cable.settings.route}?test_token=#{token}", headers)
 end
 
-def builds_request(token : Nil)
+def builds_request(token : Nil) : HTTP::Request
   headers = HTTP::Headers{
     "Upgrade"                => "websocket",
     "Connection"             => "Upgrade",
@@ -489,7 +489,7 @@ def builds_request(token : Nil)
     "Sec-WebSocket-Protocol" => "actioncable-v1-json, actioncable-unsupported",
     "Sec-WebSocket-Version"  => "13",
   }
-  request = HTTP::Request.new("GET", "#{Cable.settings.route}", headers)
+  HTTP::Request.new("GET", Cable.settings.route, headers)
 end
 
 private class DummySocket < HTTP::WebSocket
@@ -566,7 +566,7 @@ private class UnauthorizedConnectionTest < Cable::Connection
   end
 end
 
-def connect(connection_class : Cable::Connection.class = ConnectionTest, token : String? = "98", &block)
+def connect(connection_class : Cable::Connection.class = ConnectionTest, token : String? = "98", &)
   socket = DummySocket.new(IO::Memory.new)
   connection = connection_class.new(builds_request(token: token), socket)
 

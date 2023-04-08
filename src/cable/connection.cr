@@ -125,7 +125,7 @@ module Cable
     def reject(payload : Cable::Payload)
       if channel = Connection::CHANNELS[connection_identifier].delete(payload.identifier)
         channel.unsubscribed
-        Cable::Logger.info { "#{channel.class.to_s} is transmitting the subscription rejection" }
+        Cable::Logger.info { "#{channel.class} is transmitting the subscription rejection" }
         socket.send({type: Cable.message(:rejection), identifier: payload.identifier}.to_json)
       end
     end

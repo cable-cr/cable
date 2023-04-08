@@ -7,7 +7,7 @@ module Cable
     @@seconds : Int32 | Float64 = 3
     @task : Tasker::Task
 
-    def self.run_every(value : Int32 | Float64, &block)
+    def self.run_every(value : Int32 | Float64, &)
       @@seconds = value
 
       yield

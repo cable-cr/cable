@@ -21,9 +21,9 @@ module Cable
       end
     end
 
-    getter params
-    getter identifier
-    getter connection
+    getter params : Hash(String, Cable::Payload::RESULT)
+    getter identifier : String
+    getter connection : Cable::Connection
     getter stream_identifier : String?
     getter? subscription_rejected : Bool = false
 
@@ -38,8 +38,11 @@ module Cable
     end
 
     def close
-      Cable.server.unsubscribe_channel(channel: self, identifier: @stream_identifier.not_nil!) unless @stream_identifier.nil?
-      Cable::Logger.info { "#{self.class.name} stopped streaming from #{identifier}" }
+      if stream_id = stream_identifier.presence
+        Cable.server.unsubscribe_channel(channel: self, identifier: stream_id)
+        Cable::Logger.info { "#{self.class.name} stopped streaming from #{identifier}" }
+      end
+
       unsubscribed
     end
 
@@ -52,8 +55,8 @@ module Cable
     def perform(action, message)
     end
 
-    def stream_from(stream_identifier)
-      @stream_identifier = stream_identifier
+    def stream_from(stream_identifier : String | Symbol)
+      @stream_identifier = stream_identifier.to_s
     end
 
     def self.broadcast_to(channel : String, message : JSON::Any)
@@ -73,29 +76,29 @@ module Cable
     end
 
     def broadcast(message : String)
-      if stream_identifier.nil?
-        Cable::Logger.error { "#{self.class}.transmit(message : String) with #{message} without already using stream_from(stream_identifier)" }
-      else
+      if stream_id = stream_identifier.presence
         Cable::Logger.info { "[ActionCable] Broadcasting to #{self.class}: #{message}" }
-        Cable.server.send_to_channels(stream_identifier.not_nil!, message)
+        Cable.server.send_to_channels(stream_id, message)
+      else
+        Cable::Logger.error { "#{self.class}.transmit(message : String) with #{message} without already using stream_from(stream_identifier)" }
       end
     end
 
     def broadcast(message : JSON::Any)
-      if stream_identifier.nil?
-        Cable::Logger.error { "#{self.class}.transmit(message : JSON::Any) with #{message} without already using stream_from(stream_identifier)" }
-      else
+      if stream_id = stream_identifier.presence
         Cable::Logger.info { "[ActionCable] Broadcasting to #{self.class}: #{message}" }
-        Cable.server.send_to_channels(stream_identifier.not_nil!, message)
+        Cable.server.send_to_channels(stream_id, message)
+      else
+        Cable::Logger.error { "#{self.class}.transmit(message : JSON::Any) with #{message} without already using stream_from(stream_identifier)" }
       end
     end
 
     def broadcast(message : Hash(String, String))
-      if stream_identifier.nil?
-        Cable::Logger.error { "#{self.class}.transmit(message : Hash(String, String)) with #{message} without already using stream_from(stream_identifier)" }
-      else
+      if stream_id = stream_identifier.presence
         Cable::Logger.info { "[ActionCable] Broadcasting to #{self.class}: #{message}" }
-        Cable.server.send_to_channels(stream_identifier.not_nil!, message.to_json)
+        Cable.server.send_to_channels(stream_id, message.to_json)
+      else
+        Cable::Logger.error { "#{self.class}.transmit(message : Hash(String, String)) with #{message} without already using stream_from(stream_identifier)" }
       end
     end
 

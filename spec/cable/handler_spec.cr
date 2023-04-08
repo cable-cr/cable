@@ -297,14 +297,14 @@ describe Cable::Handler do
       Cable.server.connections.size.should eq(2)
       ws4 = HTTP::WebSocket.new("ws://#{listen_address}/updates?test_token=ws4")
       Cable.server.connections.size.should eq(3)
-      ws5 = HTTP::WebSocket.new("ws://#{listen_address}/updates?test_token=ws5")
+      _ws5 = HTTP::WebSocket.new("ws://#{listen_address}/updates?test_token=ws5")
       Cable.server.connections.size.should eq(4)
 
       connections = Cable.server.connections.keys
-      connections.any? { |c| c.starts_with?("ws2") }.should eq(true)
-      connections.any? { |c| c.starts_with?("ws3") }.should eq(true)
-      connections.any? { |c| c.starts_with?("ws4") }.should eq(true)
-      connections.any? { |c| c.starts_with?("ws5") }.should eq(true)
+      connections.any?(&.starts_with?("ws2")).should eq(true)
+      connections.any?(&.starts_with?("ws3")).should eq(true)
+      connections.any?(&.starts_with?("ws4")).should eq(true)
+      connections.any?(&.starts_with?("ws5")).should eq(true)
 
       messages = [
         {type: "welcome"}.to_json,
@@ -340,7 +340,7 @@ describe Cable::Handler do
       # connection 1 will be disconnected due to error
       Cable.server.connections.size.should eq(3)
       connections = Cable.server.connections.keys
-      connections.any? { |c| c.starts_with?("ws2") }.should eq(false)
+      connections.any?(&.starts_with?("ws2")).should eq(false)
 
       messages = [
         {type: "welcome"}.to_json,
@@ -376,7 +376,7 @@ describe Cable::Handler do
       # connection 1 will be disconnected due to error
       Cable.server.connections.size.should eq(2)
       connections = Cable.server.connections.keys
-      connections.any? { |c| c.starts_with?("ws3") }.should eq(false)
+      connections.any?(&.starts_with?("ws3")).should eq(false)
 
       messages = [
         {type: "welcome"}.to_json,
@@ -437,8 +437,7 @@ private def start_server
 
   spawn do
     # Make pinger real fast so we don't need to wait
-    http_ref = nil
-    http_server = http_ref = HTTP::Server.new([Cable::Handler(ApplicationCable::Connection).new])
+    http_server = HTTP::Server.new([Cable::Handler(ApplicationCable::Connection).new])
     address = http_server.bind_unused_port
     address_chan.send(address)
     http_server.listen

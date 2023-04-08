@@ -131,7 +131,7 @@ module Cable
         Cable::Logger.debug { "Cable::Server#shutdown Connection to redis was severed: #{e.message}" }
       end
       pinger.stop
-      connections.each do |k, v|
+      connections.each do |_k, v|
         v.close
       end
     end
