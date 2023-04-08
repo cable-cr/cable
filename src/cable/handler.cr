@@ -9,14 +9,14 @@ module Cable
 
       remote_address = context.request.remote_address
       path = context.request.path
-      Cable::Logger.info { "Started GET \"#{path}\" [WebSocket] for #{remote_address} at #{Time.utc.to_s}" }
+      Cable::Logger.info { "Started GET \"#{path}\" [WebSocket] for #{remote_address} at #{Time.utc}" }
 
       unless Cable.settings.disable_sec_websocket_protocol_header
         context.response.headers["Sec-WebSocket-Protocol"] = "actioncable-v1-json"
       end
 
-      ws = HTTP::WebSocketHandler.new do |socket, context|
-        connection = T.new(context.request, socket)
+      ws = HTTP::WebSocketHandler.new do |socket, ws_ctx|
+        connection = T.new(ws_ctx.request, socket)
         connection_id = connection.connection_identifier
 
         # we should not add any connections which have been rejected
@@ -28,7 +28,7 @@ module Cable
         ws_pinger = Cable::WebsocketPinger.build(socket)
 
         socket.on_ping do
-          socket.pong context.request.path
+          socket.pong ws_ctx.request.path
           Cable::Logger.debug { "Ping received" }
         end
 
@@ -68,7 +68,7 @@ module Cable
         socket.on_close do
           ws_pinger.stop
           Cable.server.remove_connection(connection_id)
-          Cable::Logger.info { "Finished \"#{path}\" [WebSocket] for #{remote_address} at #{Time.utc.to_s}" }
+          Cable::Logger.info { "Finished \"#{path}\" [WebSocket] for #{remote_address} at #{Time.utc}" }
         end
       rescue e : Exception
         Cable.settings.on_error.call(e, "Cable::Handler#call -> HTTP::WebSocketHandler")

@@ -40,7 +40,7 @@ module Cable
       Cable::Logger.debug { "-" * 80 }
       Cable::Logger.debug { "Some Good Information" }
       Cable::Logger.debug { "Connections" }
-      @connections.each do |k, v|
+      @connections.each do |k, _v|
         Cable::Logger.debug { "Connection Key: #{k}" }
       end
       Cable::Logger.debug { "Channels" }

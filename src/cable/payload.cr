@@ -3,8 +3,8 @@ module Cable
     alias RESULT = String | Int64 | Hash(String, RESULT)
     alias PARAMS = Hash(String, RESULT)
 
-    getter :json
-    getter :action
+    getter json : String
+    getter action : String
     getter command : String?
     getter identifier : String
     getter channel : String?
@@ -72,11 +72,11 @@ module Cable
         end
       end
 
-      return params_result
+      params_result
     end
 
     private def process_hash(hash : JSON::Any)
-      return process_hash(hash.as_h)
+      process_hash(hash.as_h)
     end
   end
 end

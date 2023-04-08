@@ -16,6 +16,7 @@ module Cable
       rejection:    "reject_subscription",
       unsubscribe:  "confirm_unsubscription",
     },
+    channel:            "_internal",
     disconnect_reasons: {
       unauthorized:    "unauthorized",
       invalid_request: "invalid_request",

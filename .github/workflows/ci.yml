@@ -20,8 +20,14 @@ jobs:
           - 1.5.0
           - 1.6.0
           - latest
+        experimental:
+          - false
+        include:
+          - crystal_version: nightly
+            experimental: true
     runs-on: ubuntu-latest
     container: crystallang/crystal:${{ matrix.crystal_version }}-alpine
+    continue-on-error: ${{ matrix.experimental }}
     services:
       redis:
         image: redis
@@ -42,5 +48,9 @@ jobs:
           key: ${{ runner.os }}-crystal
       - name: Install shards
         run: shards install
+      - name: Format
+        run: crystal tool format --check
+      - name: Lint
+        run: ./bin/ameba
       - name: Run tests
         run: crystal spec

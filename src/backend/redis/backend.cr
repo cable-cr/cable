@@ -31,14 +31,14 @@ module Cable
       return if redis_subscribe.nil?
 
       redis_subscribe.subscribe(channel) do |subscription|
-        subscription.on_message do |channel, message|
-          if channel == "_internal" && message == "ping"
+        subscription.on_message do |sub_channel, message|
+          if sub_channel == Cable::INTERNAL[:channel] && message == "ping"
             Cable::Logger.debug { "Cable::Server#subscribe -> PONG" }
-          elsif channel == "_internal" && message == "debug"
+          elsif sub_channel == Cable::INTERNAL[:channel] && message == "debug"
             Cable.server.debug
           else
-            Cable.server.fiber_channel.send({channel, message})
-            Cable::Logger.debug { "Cable::Server#subscribe channel:#{channel} message:#{message}" }
+            Cable.server.fiber_channel.send({sub_channel, message})
+            Cable::Logger.debug { "Cable::Server#subscribe channel:#{sub_channel} message:#{message}" }
           end
         end
       end
@@ -74,7 +74,7 @@ module Cable
     # the @server.redis_subscribe picks up this special combination
     # and calls ping on the block loop for us
     def ping_redis_subscribe
-      Cable.server.publish("_internal", "ping")
+      Cable.server.publish(Cable::INTERNAL[:channel], "ping")
     end
 
     def ping_redis_publish
