@@ -21,7 +21,8 @@
 
   module Cable
     # :nodoc:
-    class Backend < Cable::BackendCore
+    @[Deprecated("The RedisLegacyBackend will be removed in a future version")]
+    class RedisLegacyBackend < Cable::BackendCore
       getter redis_subscribe : Redis = Redis.new(url: Cable.settings.url)
       getter redis_publish : Redis::PooledClient | Redis do
         if Cable.settings.pool_redis_publish

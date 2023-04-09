@@ -8,6 +8,10 @@ module Cable
     @@server ||= Server.new
   end
 
+  def self.reset_server
+    @@server = nil
+  end
+
   def self.restart
     if current_server = @@server
       current_server.shutdown
@@ -25,8 +29,8 @@ module Cable
     getter pinger : Cable::RedisPinger do
       Cable::RedisPinger.new(self)
     end
-    getter backend do
-      Cable::Backend.new
+    getter backend : Cable::BackendCore do
+      Cable.settings.backend_class.new
     end
     getter backend_publish do
       backend.publish_connection

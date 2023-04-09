@@ -1,5 +1,7 @@
 require "../spec_helper"
 
+include RequestHelpers
+
 describe Cable::Connection do
   it "removes the connection channel on close" do
     connect do |connection, _socket|
@@ -467,37 +469,6 @@ describe Cable::Connection do
       socket_1.close
       socket_2.close
     end
-  end
-end
-
-def builds_request(token : String) : HTTP::Request
-  headers = HTTP::Headers{
-    "Upgrade"                => "websocket",
-    "Connection"             => "Upgrade",
-    "Sec-WebSocket-Key"      => "OqColdEJm3i9e/EqMxnxZw==",
-    "Sec-WebSocket-Protocol" => "actioncable-v1-json, actioncable-unsupported",
-    "Sec-WebSocket-Version"  => "13",
-  }
-  HTTP::Request.new("GET", "#{Cable.settings.route}?test_token=#{token}", headers)
-end
-
-def builds_request(token : Nil) : HTTP::Request
-  headers = HTTP::Headers{
-    "Upgrade"                => "websocket",
-    "Connection"             => "Upgrade",
-    "Sec-WebSocket-Key"      => "OqColdEJm3i9e/EqMxnxZw==",
-    "Sec-WebSocket-Protocol" => "actioncable-v1-json, actioncable-unsupported",
-    "Sec-WebSocket-Version"  => "13",
-  }
-  HTTP::Request.new("GET", Cable.settings.route, headers)
-end
-
-private class DummySocket < HTTP::WebSocket
-  getter messages : Array(String) = Array(String).new
-
-  def send(message)
-    return if closed?
-    @messages << message
   end
 end
 
