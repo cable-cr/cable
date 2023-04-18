@@ -1,7 +1,5 @@
 require "../spec_helper"
 
-include RequestHelpers
-
 describe Cable::DevBackend do
   it "stores the broadcast" do
     # This is required because the RedisBackend is
