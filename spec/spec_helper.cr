@@ -1,7 +1,10 @@
 require "spec"
 require "../src/cable"
 require "../src/backend/redis/backend"
+require "../src/backend/dev/backend"
 require "./support/fake_exception_service"
+require "./support/request_helpers"
+require "./support/dummy_socket"
 require "./support/application_cable/connection"
 require "./support/application_cable/channel"
 require "./support/channels/*"
@@ -19,4 +22,5 @@ end
 Spec.before_each do
   Cable.restart
   FakeExceptionService.clear
+  Cable::DevBackend.reset
 end
