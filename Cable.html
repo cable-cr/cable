@@ -56,11 +56,6 @@
       
         <ul>
   
-  <li class=" " data-id="cable/Cable/Backend" data-name="cable::backend">
-      <a href="Cable/Backend.html">Backend</a>
-      
-    </li>
-  
   <li class=" " data-id="cable/Cable/BackendCore" data-name="cable::backendcore">
       <a href="Cable/BackendCore.html">BackendCore</a>
       
@@ -106,6 +101,11 @@
       
     </li>
   
+  <li class=" " data-id="cable/Cable/DevBackend" data-name="cable::devbackend">
+      <a href="Cable/DevBackend.html">DevBackend</a>
+      
+    </li>
+  
   <li class=" " data-id="cable/Cable/HabitatSettings" data-name="cable::habitatsettings">
       <a href="Cable/HabitatSettings.html">HabitatSettings</a>
       
@@ -133,6 +133,11 @@
   
 </ul>
 
+      
+    </li>
+  
+  <li class=" " data-id="cable/Cable/RedisBackend" data-name="cable::redisbackend">
+      <a href="Cable/RedisBackend.html">RedisBackend</a>
       
     </li>
   
@@ -233,6 +238,11 @@
   </h2>
   
     
+      backend/dev/backend.cr
+    
+    <br/>
+  
+    
       backend/redis/backend.cr
     
     <br/>
@@ -308,11 +318,11 @@
   <dl>
     
       <dt class="entry-const" id="HABITAT_SETTINGS">
-        <strong>HABITAT_SETTINGS</strong> = <code>[{decl: route : <span class="t">String</span> <span class="o">=</span> <span class="t">Cable</span>.message(<span class="n">:default_mount_path</span>), example: <span class="s">&quot;/cable&quot;</span>, validation: <span class="n">nil</span>}, {decl: token : <span class="t">String</span> <span class="o">=</span> <span class="s">&quot;token&quot;</span>, example: <span class="s">&quot;token&quot;</span>, validation: <span class="n">nil</span>}, {decl: url : <span class="t">String</span> <span class="o">=</span> <span class="t">ENV</span>.fetch(<span class="s">&quot;REDIS_URL&quot;</span>, <span class="s">&quot;redis://localhost:6379&quot;</span>), example: <span class="s">&quot;redis://localhost:6379&quot;</span>, validation: <span class="n">nil</span>}, {decl: disable_sec_websocket_protocol_header : <span class="t">Bool</span> <span class="o">=</span> <span class="n">false</span>, example: <span class="n">nil</span>, validation: <span class="n">nil</span>}, {decl: pool_redis_publish : <span class="t">Bool</span> <span class="o">=</span> <span class="n">false</span>, example: <span class="n">nil</span>, validation: <span class="n">nil</span>}, {decl: redis_pool_size : <span class="t">Int32</span> <span class="o">=</span> <span class="n">5</span>, example: <span class="n">nil</span>, validation: <span class="n">nil</span>}, {decl: redis_pool_timeout : <span class="t">Float64</span> <span class="o">=</span> <span class="n">5.0</span>, example: <span class="n">nil</span>, validation: <span class="n">nil</span>}, {decl: redis_ping_interval : <span class="t">Time</span><span class="t">::</span><span class="t">Span</span> <span class="o">=</span> <span class="n">15</span>.seconds, example: <span class="n">nil</span>, validation: <span class="n">nil</span>}, {decl: restart_error_allowance : <span class="t">Int32</span> <span class="o">=</span> <span class="n">20</span>, example: <span class="n">nil</span>, validation: <span class="n">nil</span>}, {decl: on_error : <span class="t">Proc</span>(<span class="t">Exception</span>, <span class="t">String</span>, <span class="t">Nil</span>) <span class="o">=</span> <span class="o">-&gt;</span>(exception : <span class="t">Exception</span>, message : <span class="t">String</span>) <span class="k">do</span>
+        <strong>HABITAT_SETTINGS</strong> = <code>[{decl: route : <span class="t">String</span> <span class="o">=</span> <span class="t">Cable</span>.message(<span class="n">:default_mount_path</span>), example: <span class="s">&quot;/cable&quot;</span>, validation: <span class="n">nil</span>}, {decl: token : <span class="t">String</span> <span class="o">=</span> <span class="s">&quot;token&quot;</span>, example: <span class="s">&quot;token&quot;</span>, validation: <span class="n">nil</span>}, {decl: url : <span class="t">String</span> <span class="o">=</span> <span class="t">ENV</span>.fetch(<span class="s">&quot;REDIS_URL&quot;</span>, <span class="s">&quot;redis://localhost:6379&quot;</span>), example: <span class="s">&quot;redis://localhost:6379&quot;</span>, validation: <span class="n">nil</span>}, {decl: disable_sec_websocket_protocol_header : <span class="t">Bool</span> <span class="o">=</span> <span class="n">false</span>, example: <span class="n">nil</span>, validation: <span class="n">nil</span>}, {decl: backend_class : <span class="t">Cable</span><span class="t">::</span><span class="t">BackendCore</span>.<span class="k">class</span> <span class="o">=</span> <span class="t">Cable</span><span class="t">::</span><span class="t">RedisBackend</span>, example: <span class="s">&quot;Cable::RedisBackend&quot;</span>, validation: <span class="n">nil</span>}, {decl: redis_ping_interval : <span class="t">Time</span><span class="t">::</span><span class="t">Span</span> <span class="o">=</span> <span class="n">15</span>.seconds, example: <span class="n">nil</span>, validation: <span class="n">nil</span>}, {decl: restart_error_allowance : <span class="t">Int32</span> <span class="o">=</span> <span class="n">20</span>, example: <span class="n">nil</span>, validation: <span class="n">nil</span>}, {decl: on_error : <span class="t">Proc</span>(<span class="t">Exception</span>, <span class="t">String</span>, <span class="t">Nil</span>) <span class="o">=</span> <span class="o">-&gt;</span>(exception : <span class="t">Exception</span>, message : <span class="t">String</span>) <span class="k">do</span>
   <span class="t">Cable</span><span class="t">::</span><span class="t">Logger</span>.error(exception: exception) <span class="k">do</span>
     message
   <span class="k">end</span>
-<span class="k">end</span>, example: <span class="n">nil</span>, validation: <span class="n">nil</span>}] <span class="k">of</span> <span class="t">Nil</span></code>
+<span class="k">end</span>, example: <span class="n">nil</span>, validation: <span class="n">nil</span>}, {decl: pool_redis_publish : <span class="t">Bool</span> <span class="o">=</span> <span class="n">false</span>, example: <span class="n">nil</span>, validation: <span class="n">nil</span>}, {decl: redis_pool_size : <span class="t">Int32</span> <span class="o">=</span> <span class="n">5</span>, example: <span class="n">nil</span>, validation: <span class="n">nil</span>}, {decl: redis_pool_timeout : <span class="t">Float64</span> <span class="o">=</span> <span class="n">5.0</span>, example: <span class="n">nil</span>, validation: <span class="n">nil</span>}] <span class="k">of</span> <span class="t">Nil</span></code>
       </dt>
       
     
@@ -354,6 +364,11 @@
     
       <li class="entry-summary">
         <a href="#message%28event%3ASymbol%29-class-method" class="signature"><strong>.message</strong>(event : Symbol)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#reset_server-class-method" class="signature"><strong>.reset_server</strong></a>
         
       </li>
     
@@ -453,6 +468,20 @@
         def self.<strong>message</strong>(event : Symbol)
 
         <a class="method-permalink" href="#message%28event%3ASymbol%29-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="reset_server-class-method">
+      <div class="signature">
+        
+        def self.<strong>reset_server</strong>
+
+        <a class="method-permalink" href="#reset_server-class-method">#</a>
       </div>
       
       <br/>

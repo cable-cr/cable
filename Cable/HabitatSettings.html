@@ -56,11 +56,6 @@
       
         <ul>
   
-  <li class=" " data-id="cable/Cable/Backend" data-name="cable::backend">
-      <a href="../Cable/Backend.html">Backend</a>
-      
-    </li>
-  
   <li class=" " data-id="cable/Cable/BackendCore" data-name="cable::backendcore">
       <a href="../Cable/BackendCore.html">BackendCore</a>
       
@@ -106,6 +101,11 @@
       
     </li>
   
+  <li class=" " data-id="cable/Cable/DevBackend" data-name="cable::devbackend">
+      <a href="../Cable/DevBackend.html">DevBackend</a>
+      
+    </li>
+  
   <li class=" current" data-id="cable/Cable/HabitatSettings" data-name="cable::habitatsettings">
       <a href="../Cable/HabitatSettings.html">HabitatSettings</a>
       
@@ -133,6 +133,11 @@
   
 </ul>
 
+      
+    </li>
+  
+  <li class=" " data-id="cable/Cable/RedisBackend" data-name="cable::redisbackend">
+      <a href="../Cable/RedisBackend.html">RedisBackend</a>
       
     </li>
   
@@ -228,6 +233,23 @@
     Class Method Summary
   </h2>
   <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#backend_class%3ACable%3A%3ABackendCore.class-class-method" class="signature"><strong>.backend_class</strong> : <span class="t">Cable</span><span class="t">::</span><span class="t">BackendCore</span>.<span class="k">class</span></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#backend_class%3D%28value%3ACable%3A%3ABackendCore.class%29-class-method" class="signature"><strong>.backend_class=</strong>(value : <span class="t">Cable</span><span class="t">::</span><span class="t">BackendCore</span>.<span class="k">class</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#backend_class%3F-class-method" class="signature"><strong>.backend_class?</strong></a>
+        
+          <div class="summary"><p>Used for checking missing settings on non-nilable types It's advised to use backend_class in your apps to ensure the propper type is checked.</p></div>
+        
+      </li>
     
       <li class="entry-summary">
         <a href="#disable_sec_websocket_protocol_header%3ABool-class-method" class="signature"><strong>.disable_sec_websocket_protocol_header</strong> : Bool</a>
@@ -449,6 +471,55 @@
 </a>
     Class Method Detail
   </h2>
+  
+    <div class="entry-detail" id="backend_class:Cable::BackendCore.class-class-method">
+      <div class="signature">
+        
+        def self.<strong>backend_class</strong> : <span class="t">Cable</span><span class="t">::</span><span class="t">BackendCore</span>.<span class="k">class</span>
+
+        <a class="method-permalink" href="#backend_class%3ACable%3A%3ABackendCore.class-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="backend_class=(value:Cable::BackendCore.class)-class-method">
+      <div class="signature">
+        
+        def self.<strong>backend_class=</strong>(value : <span class="t">Cable</span><span class="t">::</span><span class="t">BackendCore</span>.<span class="k">class</span>)
+
+        <a class="method-permalink" href="#backend_class%3D%28value%3ACable%3A%3ABackendCore.class%29-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="backend_class?-class-method">
+      <div class="signature">
+        
+        def self.<strong>backend_class?</strong>
+
+        <a class="method-permalink" href="#backend_class%3F-class-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Used for checking missing settings on non-nilable types
+It's advised to use backend_class in your apps to ensure
+the propper type is checked.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
   
     <div class="entry-detail" id="disable_sec_websocket_protocol_header:Bool-class-method">
       <div class="signature">

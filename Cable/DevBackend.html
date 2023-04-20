@@ -13,7 +13,7 @@
 <script type="text/javascript" src="../js/doc.js"></script>
 
   <meta name="repository-name" content="cable">
-  <title>Cable::BackendCore - cable 0.2.2</title>
+  <title>Cable::DevBackend - cable 0.2.2</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../";
   </script>
@@ -56,7 +56,7 @@
       
         <ul>
   
-  <li class=" current" data-id="cable/Cable/BackendCore" data-name="cable::backendcore">
+  <li class=" " data-id="cable/Cable/BackendCore" data-name="cable::backendcore">
       <a href="../Cable/BackendCore.html">BackendCore</a>
       
     </li>
@@ -101,7 +101,7 @@
       
     </li>
   
-  <li class=" " data-id="cable/Cable/DevBackend" data-name="cable::devbackend">
+  <li class=" current" data-id="cable/Cable/DevBackend" data-name="cable::devbackend">
       <a href="../Cable/DevBackend.html">DevBackend</a>
       
     </li>
@@ -180,12 +180,12 @@
 <div class="main-content">
 <h1 class="type-name">
 
-  <span class="kind">abstract class</span> Cable::BackendCore
+  <span class="kind">class</span> Cable::DevBackend
 
 </h1>
 
 
-  <ul class="superclass-hierarchy"><li class="superclass"><a href="../Cable/BackendCore.html">Cable::BackendCore</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../Cable/DevBackend.html">Cable::DevBackend</a></li><li class="superclass"><a href="../Cable/BackendCore.html">Cable::BackendCore</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
 
 
 
@@ -197,22 +197,6 @@
 
 
 
-
-  <h2>
-    <a id="direct-known-subclasses" class="anchor" href="#direct-known-subclasses">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Direct Known Subclasses
-  </h2>
-  <ul class="other-types-list">
-    
-      <li class="other-type"><a href="../Cable/DevBackend.html">Cable::DevBackend</a></li>
-    
-      <li class="other-type"><a href="../Cable/RedisBackend.html">Cable::RedisBackend</a></li>
-    
-  </ul>
 
 
 
@@ -229,7 +213,7 @@
   </h2>
   
     
-      cable/backend_core.cr
+      backend/dev/backend.cr
     
     <br/>
   
@@ -239,6 +223,37 @@
 
 
 
+
+  <h2>
+    <a id="class-method-summary" class="anchor" href="#class-method-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Class Method Summary
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#published_messages-class-method" class="signature"><strong>.published_messages</strong></a>
+        
+          <div class="summary"><p>Store the published <code>stream_identifier</code> and <code>message</code></p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#reset-class-method" class="signature"><strong>.reset</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#subscriptions-class-method" class="signature"><strong>.subscriptions</strong></a>
+        
+          <div class="summary"><p>Store the <code>stream_identifier</code> on <code><a href="../Cable/DevBackend.html#subscribe%28stream_identifier%3AString%29-instance-method">#subscribe</a></code></p></div>
+        
+      </li>
+    
+  </ul>
 
 
 
@@ -320,6 +335,70 @@
   
     
 
+  <h3>Instance methods inherited from class <code><a href="../Cable/BackendCore.html">Cable::BackendCore</a></code></h3>
+  
+  
+    <a href="../Cable/BackendCore.html#close_publish_connection-instance-method" class="tooltip">
+      <span>close_publish_connection</span>
+    close_publish_connection</a>, 
+    
+  
+    <a href="../Cable/BackendCore.html#close_subscribe_connection-instance-method" class="tooltip">
+      <span>close_subscribe_connection</span>
+    close_subscribe_connection</a>, 
+    
+  
+    <a href="../Cable/BackendCore.html#open_subscribe_connection%28channel%29-instance-method" class="tooltip">
+      <span>open_subscribe_connection(channel)</span>
+    open_subscribe_connection</a>, 
+    
+  
+    <a href="../Cable/BackendCore.html#ping_redis_publish-instance-method" class="tooltip">
+      <span>ping_redis_publish</span>
+    ping_redis_publish</a>, 
+    
+  
+    <a href="../Cable/BackendCore.html#ping_redis_subscribe-instance-method" class="tooltip">
+      <span>ping_redis_subscribe</span>
+    ping_redis_subscribe</a>, 
+    
+  
+    <a href="../Cable/BackendCore.html#publish_connection-instance-method" class="tooltip">
+      <span>publish_connection</span>
+    publish_connection</a>, 
+    
+  
+    <a href="../Cable/BackendCore.html#publish_message%28stream_identifier%3AString%2Cmessage%3AString%29-instance-method" class="tooltip">
+      <span>publish_message(stream_identifier : String, message : String)</span>
+    publish_message</a>, 
+    
+  
+    <a href="../Cable/BackendCore.html#subscribe%28stream_identifier%3AString%29-instance-method" class="tooltip">
+      <span>subscribe(stream_identifier : String)</span>
+    subscribe</a>, 
+    
+  
+    <a href="../Cable/BackendCore.html#subscribe_connection-instance-method" class="tooltip">
+      <span>subscribe_connection</span>
+    subscribe_connection</a>, 
+    
+  
+    <a href="../Cable/BackendCore.html#unsubscribe%28stream_identifier%3AString%29-instance-method" class="tooltip">
+      <span>unsubscribe(stream_identifier : String)</span>
+    unsubscribe</a>
+    
+  
+
+
+    
+
+
+    
+
+
+  
+    
+
 
     
 
@@ -343,6 +422,68 @@
 
 
 
+  <h2>
+    <a id="class-method-detail" class="anchor" href="#class-method-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Class Method Detail
+  </h2>
+  
+    <div class="entry-detail" id="published_messages-class-method">
+      <div class="signature">
+        
+        def self.<strong>published_messages</strong>
+
+        <a class="method-permalink" href="#published_messages-class-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Store the published <code>stream_identifier</code> and <code>message</code></p>
+        </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="reset-class-method">
+      <div class="signature">
+        
+        def self.<strong>reset</strong>
+
+        <a class="method-permalink" href="#reset-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="subscriptions-class-method">
+      <div class="signature">
+        
+        def self.<strong>subscriptions</strong>
+
+        <a class="method-permalink" href="#subscriptions-class-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Store the <code>stream_identifier</code> on <code><a href="../Cable/DevBackend.html#subscribe%28stream_identifier%3AString%29-instance-method">#subscribe</a></code></p>
+        </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+
 
 
   <h2>
@@ -356,7 +497,7 @@
   
     <div class="entry-detail" id="close_publish_connection-instance-method">
       <div class="signature">
-        abstract 
+        
         def <strong>close_publish_connection</strong>
 
         <a class="method-permalink" href="#close_publish_connection-instance-method">#</a>
@@ -370,7 +511,7 @@
   
     <div class="entry-detail" id="close_subscribe_connection-instance-method">
       <div class="signature">
-        abstract 
+        
         def <strong>close_subscribe_connection</strong>
 
         <a class="method-permalink" href="#close_subscribe_connection-instance-method">#</a>
@@ -384,13 +525,17 @@
   
     <div class="entry-detail" id="open_subscribe_connection(channel)-instance-method">
       <div class="signature">
-        abstract 
+        
         def <strong>open_subscribe_connection</strong>(channel)
 
         <a class="method-permalink" href="#open_subscribe_connection%28channel%29-instance-method">#</a>
       </div>
       
         <div class="doc">
+          
+            <div class="doc-inherited">
+              Description copied from class <a href="../Cable/BackendCore.html">Cable::BackendCore</a>
+            </div>
           
           <p>internal pub/sub</p>
         </div>
@@ -403,7 +548,7 @@
   
     <div class="entry-detail" id="ping_redis_publish-instance-method">
       <div class="signature">
-        abstract 
+        
         def <strong>ping_redis_publish</strong>
 
         <a class="method-permalink" href="#ping_redis_publish-instance-method">#</a>
@@ -417,7 +562,7 @@
   
     <div class="entry-detail" id="ping_redis_subscribe-instance-method">
       <div class="signature">
-        abstract 
+        
         def <strong>ping_redis_subscribe</strong>
 
         <a class="method-permalink" href="#ping_redis_subscribe-instance-method">#</a>
@@ -431,7 +576,7 @@
   
     <div class="entry-detail" id="publish_connection-instance-method">
       <div class="signature">
-        abstract 
+        
         def <strong>publish_connection</strong>
 
         <a class="method-permalink" href="#publish_connection-instance-method">#</a>
@@ -445,13 +590,17 @@
   
     <div class="entry-detail" id="publish_message(stream_identifier:String,message:String)-instance-method">
       <div class="signature">
-        abstract 
+        
         def <strong>publish_message</strong>(stream_identifier : String, message : String)
 
         <a class="method-permalink" href="#publish_message%28stream_identifier%3AString%2Cmessage%3AString%29-instance-method">#</a>
       </div>
       
         <div class="doc">
+          
+            <div class="doc-inherited">
+              Description copied from class <a href="../Cable/BackendCore.html">Cable::BackendCore</a>
+            </div>
           
           <p>external pub/sub</p>
         </div>
@@ -464,13 +613,17 @@
   
     <div class="entry-detail" id="subscribe(stream_identifier:String)-instance-method">
       <div class="signature">
-        abstract 
+        
         def <strong>subscribe</strong>(stream_identifier : String)
 
         <a class="method-permalink" href="#subscribe%28stream_identifier%3AString%29-instance-method">#</a>
       </div>
       
         <div class="doc">
+          
+            <div class="doc-inherited">
+              Description copied from class <a href="../Cable/BackendCore.html">Cable::BackendCore</a>
+            </div>
           
           <p>channel management</p>
         </div>
@@ -483,13 +636,17 @@
   
     <div class="entry-detail" id="subscribe_connection-instance-method">
       <div class="signature">
-        abstract 
+        
         def <strong>subscribe_connection</strong>
 
         <a class="method-permalink" href="#subscribe_connection-instance-method">#</a>
       </div>
       
         <div class="doc">
+          
+            <div class="doc-inherited">
+              Description copied from class <a href="../Cable/BackendCore.html">Cable::BackendCore</a>
+            </div>
           
           <p>connection management</p>
         </div>
@@ -502,7 +659,7 @@
   
     <div class="entry-detail" id="unsubscribe(stream_identifier:String)-instance-method">
       <div class="signature">
-        abstract 
+        
         def <strong>unsubscribe</strong>(stream_identifier : String)
 
         <a class="method-permalink" href="#unsubscribe%28stream_identifier%3AString%29-instance-method">#</a>
