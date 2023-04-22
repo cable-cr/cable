@@ -25,7 +25,7 @@ jobs:
           - crystal_version: nightly
             experimental: true
     runs-on: ubuntu-latest
-    container: crystallang/crystal:${{ matrix.crystal_version }}-alpine
+    container: crystallang/crystal:${{ matrix.crystal_version }}
     continue-on-error: ${{ matrix.experimental }}
     services:
       redis:
