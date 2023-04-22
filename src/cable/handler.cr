@@ -41,7 +41,7 @@ module Cable
         socket.on_message do |message|
           begin
             connection.receive(message)
-          rescue e : KeyError | JSON::ParseException
+          rescue e : KeyError | JSON::ParseException | JSON::SerializableError
             # handle unknown/malformed messages
             socket.close(HTTP::WebSocket::CloseCode::InvalidFramePayloadData, "Invalid message")
             Cable.server.remove_connection(connection_id)

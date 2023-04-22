@@ -11,6 +11,37 @@ describe Cable::Connection do
     ConnectionTest::CHANNELS.keys.size.should eq(0)
   end
 
+  describe "#receive" do
+    it "ignores empty messages" do
+      connect do |connection, socket|
+        connection.receive("")
+        sleep 0.1
+
+        socket.messages.size.should eq(0)
+
+        connection.close
+        socket.close
+      end
+    end
+
+    it "ignores incorrect json structures" do
+      connect do |connection, socket|
+        # The handler handles exception catching
+        # so we just make sure the correct exception is thrown
+        expect_raises(JSON::SerializableError) do
+          connection.receive([{command: "subscribe"}].to_json)
+        end
+
+        sleep 0.1
+
+        socket.messages.size.should eq(0)
+
+        connection.close
+        socket.close
+      end
+    end
+  end
+
   describe "#subscribe" do
     it "accepts" do
       connect do |connection, socket|
