@@ -74,8 +74,8 @@ module Cable
 
     def data : Hash(String, RESULT)
       if @_data.nil?
-        if unmapped_data = json_unmapped["data"]?
-          @_data = process_data(unmapped_data.as_s)
+        if unmapped_data = json_unmapped["data"]?.try(&.as_s?)
+          @_data = process_data(unmapped_data)
         else
           @_data = no_data
         end

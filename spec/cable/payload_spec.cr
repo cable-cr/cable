@@ -35,4 +35,19 @@ describe Cable::Payload do
     payload.action?.should be_truthy
     payload.action.should eq("invite")
   end
+
+  it "raises a SerializableError when the identifier is not a string" do
+    payload_json = {
+      command:    "subscribe",
+      identifier: {
+        channel: "ChatChannel",
+        person:  {name: "Foo", age: 32, boom: "boom"},
+        foo:     "bar",
+      },
+    }.to_json
+
+    expect_raises(JSON::SerializableError) do
+      Cable::Payload.from_json(payload_json)
+    end
+  end
 end
