@@ -14,7 +14,7 @@ module Cable
       end
 
       def self.to_json(value : Indentifier, json : JSON::Builder) : Nil
-        json.string(value.to_json)
+        json.string(value.key)
       end
     end
 
