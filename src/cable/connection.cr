@@ -71,8 +71,12 @@ module Cable
       raise UnathorizedConnectionException.new
     end
 
-    def receive(message)
-      payload = Cable::Payload.new(message)
+    # Convert the `message` to a proper `Payload`.
+    # The `Cable::Handler` will handle catching `SerializableError`,
+    # and close the socket and connection
+    def receive(message : String)
+      return unless message.presence
+      payload = Cable::Payload.from_json(message)
 
       return subscribe(payload) if payload.command == "subscribe"
       return unsubscribe(payload) if payload.command == "unsubscribe"
@@ -84,11 +88,11 @@ module Cable
 
       channel = Cable::Channel::CHANNELS[payload.channel].new(
         connection: self,
-        identifier: payload.identifier,
+        identifier: payload.identifier.key,
         params: payload.channel_params
       )
       Connection::CHANNELS[connection_identifier] ||= {} of String => Cable::Channel
-      Connection::CHANNELS[connection_identifier][payload.identifier] = channel
+      Connection::CHANNELS[connection_identifier][payload.identifier.key] = channel
       channel.subscribed
 
       if channel.subscription_rejected?
@@ -102,36 +106,36 @@ module Cable
       end
 
       Cable::Logger.info { "#{payload.channel} is transmitting the subscription confirmation" }
-      socket.send({type: Cable.message(:confirmation), identifier: payload.identifier}.to_json)
+      socket.send({type: Cable.message(:confirmation), identifier: payload.identifier.key}.to_json)
 
       channel.run_after_subscribed_callbacks unless channel.subscription_rejected?
     end
 
     # ensure we only allow subscribing to the same channel once from a connection
     def connection_requesting_duplicate_channel_subscription?(payload)
-      return unless connection_key = Connection::CHANNELS.dig?(connection_identifier, payload.identifier)
+      return unless connection_key = Connection::CHANNELS.dig?(connection_identifier, payload.identifier.key)
 
       connection_key.class.to_s == payload.channel
     end
 
     def unsubscribe(payload : Cable::Payload)
-      if channel = Connection::CHANNELS[connection_identifier].delete(payload.identifier)
+      if channel = Connection::CHANNELS[connection_identifier].delete(payload.identifier.key)
         channel.close
         Cable::Logger.info { "#{payload.channel} is transmitting the unsubscribe confirmation" }
-        socket.send({type: Cable.message(:unsubscribe), identifier: payload.identifier}.to_json)
+        socket.send({type: Cable.message(:unsubscribe), identifier: payload.identifier.key}.to_json)
       end
     end
 
     def reject(payload : Cable::Payload)
-      if channel = Connection::CHANNELS[connection_identifier].delete(payload.identifier)
+      if channel = Connection::CHANNELS[connection_identifier].delete(payload.identifier.key)
         channel.unsubscribed
         Cable::Logger.info { "#{channel.class} is transmitting the subscription rejection" }
-        socket.send({type: Cable.message(:rejection), identifier: payload.identifier}.to_json)
+        socket.send({type: Cable.message(:rejection), identifier: payload.identifier.key}.to_json)
       end
     end
 
     def message(payload : Cable::Payload)
-      if channel = Connection::CHANNELS.dig?(connection_identifier, payload.identifier)
+      if channel = Connection::CHANNELS.dig?(connection_identifier, payload.identifier.key)
         if payload.action?
           Cable::Logger.info { "#{channel.class}#perform(\"#{payload.action}\", #{payload.data})" }
           channel.perform(payload.action, payload.data)
