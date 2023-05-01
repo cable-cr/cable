@@ -121,6 +121,16 @@
       
         <ul>
   
+  <li class=" " data-id="cable/Cable/Payload/IdentifierConverter" data-name="cable::payload::identifierconverter">
+      <a href="../Cable/Payload/IdentifierConverter.html">IdentifierConverter</a>
+      
+    </li>
+  
+  <li class=" " data-id="cable/Cable/Payload/Indentifier" data-name="cable::payload::indentifier">
+      <a href="../Cable/Payload/Indentifier.html">Indentifier</a>
+      
+    </li>
+  
   <li class=" " data-id="cable/Cable/Payload/PARAMS" data-name="cable::payload::params">
       <a href="../Cable/Payload/PARAMS.html">PARAMS</a>
       
@@ -180,12 +190,12 @@
 <div class="main-content">
 <h1 class="type-name">
 
-  <span class="kind">class</span> Cable::Payload
+  <span class="kind">struct</span> Cable::Payload
 
 </h1>
 
 
-  <ul class="superclass-hierarchy"><li class="superclass"><a href="../Cable/Payload.html">Cable::Payload</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../Cable/Payload.html">Cable::Payload</a></li><li class="superclass">Struct</li><li class="superclass">Value</li><li class="superclass">Object</li></ul>
 
 
 
@@ -193,6 +203,22 @@
 
 
 
+
+  <h2>
+    <a id="included-modules" class="anchor" href="#included-modules">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Included Modules
+  </h2>
+  <ul class="other-types-list">
+    
+      <li class="other-type">JSON::Serializable</li>
+    
+      <li class="other-type">JSON::Serializable::Unmapped</li>
+    
+  </ul>
 
 
 
@@ -233,7 +259,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new%28json%3AString%29-class-method" class="signature"><strong>.new</strong>(json : String)</a>
+        <a href="#new%28pull%3AJSON%3A%3APullParser%29-class-method" class="signature"><strong>.new</strong>(pull : JSON::PullParser)</a>
         
       </li>
     
@@ -264,32 +290,36 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#channel%3AString%7CNil-instance-method" class="signature"><strong>#channel</strong> : String | Nil</a>
+        <a href="#after_initialize-instance-method" class="signature"><strong>#after_initialize</strong></a>
+        
+          <div class="summary"><p>After the Payload is deserialized, parse the data.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#channel_params%3AHash%28String%2CCable%3A%3APayload%3A%3ARESULT%29-instance-method" class="signature"><strong>#channel_params</strong> : Hash(String, Cable::Payload::RESULT)</a>
+        <a href="#channel%3AString-instance-method" class="signature"><strong>#channel</strong> : String</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#command%3AString%7CNil-instance-method" class="signature"><strong>#command</strong> : String | Nil</a>
+        <a href="#channel_params%3AHash%28String%2CRESULT%29-instance-method" class="signature"><strong>#channel_params</strong> : Hash(String, RESULT)</a>
+        
+          <div class="summary"><p>These are the additional data sent with the identifier e.g.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#data%3AHash%28String%2CCable%3A%3APayload%3A%3ARESULT%29-instance-method" class="signature"><strong>#data</strong> : Hash(String, Cable::Payload::RESULT)</a>
+        <a href="#command%3AString-instance-method" class="signature"><strong>#command</strong> : String</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#identifier%3AString-instance-method" class="signature"><strong>#identifier</strong> : String</a>
+        <a href="#data%3AHash%28String%2CRESULT%29-instance-method" class="signature"><strong>#data</strong> : Hash(String, RESULT)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#json%3AString-instance-method" class="signature"><strong>#json</strong> : String</a>
+        <a href="#identifier%3AIndentifier-instance-method" class="signature"><strong>#identifier</strong> : Indentifier</a>
         
       </li>
     
@@ -300,6 +330,36 @@
 
 
 <div class="methods-inherited">
+  
+    
+
+
+    
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+    
+
+
   
     
 
@@ -333,12 +393,12 @@
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new(json:String)-class-method">
+    <div class="entry-detail" id="new(pull:JSON::PullParser)-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(json : String)
+        def self.<strong>new</strong>(pull : JSON::PullParser)
 
-        <a class="method-permalink" href="#new%28json%3AString%29-class-method">#</a>
+        <a class="method-permalink" href="#new%28pull%3AJSON%3A%3APullParser%29-class-method">#</a>
       </div>
       
       <br/>
@@ -389,12 +449,32 @@
       </div>
     </div>
   
-    <div class="entry-detail" id="channel:String|Nil-instance-method">
+    <div class="entry-detail" id="after_initialize-instance-method">
       <div class="signature">
         
-        def <strong>channel</strong> : String | Nil
+        def <strong>after_initialize</strong>
 
-        <a class="method-permalink" href="#channel%3AString%7CNil-instance-method">#</a>
+        <a class="method-permalink" href="#after_initialize-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>After the Payload is deserialized, parse the data.
+This will ensure we know if it's an action.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="channel:String-instance-method">
+      <div class="signature">
+        
+        def <strong>channel</strong> : String
+
+        <a class="method-permalink" href="#channel%3AString-instance-method">#</a>
       </div>
       
       <br/>
@@ -403,12 +483,33 @@
       </div>
     </div>
   
-    <div class="entry-detail" id="channel_params:Hash(String,Cable::Payload::RESULT)-instance-method">
+    <div class="entry-detail" id="channel_params:Hash(String,RESULT)-instance-method">
       <div class="signature">
         
-        def <strong>channel_params</strong> : Hash(String, <a href="../Cable/Payload/RESULT.html">Cable::Payload::RESULT</a>)
+        def <strong>channel_params</strong> : Hash(String, <a href="../Cable/Payload/RESULT.html">RESULT</a>)
 
-        <a class="method-permalink" href="#channel_params%3AHash%28String%2CCable%3A%3APayload%3A%3ARESULT%29-instance-method">#</a>
+        <a class="method-permalink" href="#channel_params%3AHash%28String%2CRESULT%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>These are the additional data sent with the identifier
+e.g. <code>{channel: &quot;RoomChannel&quot;, room_id: 1}</code></p>
+<pre><code class="language-crystal">channel_params[<span class="s">&quot;room_id&quot;</span>] <span class="c"># =&gt; 1</span></code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="command:String-instance-method">
+      <div class="signature">
+        
+        def <strong>command</strong> : String
+
+        <a class="method-permalink" href="#command%3AString-instance-method">#</a>
       </div>
       
       <br/>
@@ -417,12 +518,12 @@
       </div>
     </div>
   
-    <div class="entry-detail" id="command:String|Nil-instance-method">
+    <div class="entry-detail" id="data:Hash(String,RESULT)-instance-method">
       <div class="signature">
         
-        def <strong>command</strong> : String | Nil
+        def <strong>data</strong> : Hash(String, <a href="../Cable/Payload/RESULT.html">RESULT</a>)
 
-        <a class="method-permalink" href="#command%3AString%7CNil-instance-method">#</a>
+        <a class="method-permalink" href="#data%3AHash%28String%2CRESULT%29-instance-method">#</a>
       </div>
       
       <br/>
@@ -431,40 +532,12 @@
       </div>
     </div>
   
-    <div class="entry-detail" id="data:Hash(String,Cable::Payload::RESULT)-instance-method">
+    <div class="entry-detail" id="identifier:Indentifier-instance-method">
       <div class="signature">
         
-        def <strong>data</strong> : Hash(String, <a href="../Cable/Payload/RESULT.html">Cable::Payload::RESULT</a>)
+        def <strong>identifier</strong> : <a href="../Cable/Payload/Indentifier.html">Indentifier</a>
 
-        <a class="method-permalink" href="#data%3AHash%28String%2CCable%3A%3APayload%3A%3ARESULT%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="identifier:String-instance-method">
-      <div class="signature">
-        
-        def <strong>identifier</strong> : String
-
-        <a class="method-permalink" href="#identifier%3AString-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="json:String-instance-method">
-      <div class="signature">
-        
-        def <strong>json</strong> : String
-
-        <a class="method-permalink" href="#json%3AString-instance-method">#</a>
+        <a class="method-permalink" href="#identifier%3AIndentifier-instance-method">#</a>
       </div>
       
       <br/>

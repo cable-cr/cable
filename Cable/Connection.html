@@ -121,6 +121,16 @@
       
         <ul>
   
+  <li class=" " data-id="cable/Cable/Payload/IdentifierConverter" data-name="cable::payload::identifierconverter">
+      <a href="../Cable/Payload/IdentifierConverter.html">IdentifierConverter</a>
+      
+    </li>
+  
+  <li class=" " data-id="cable/Cable/Payload/Indentifier" data-name="cable::payload::indentifier">
+      <a href="../Cable/Payload/Indentifier.html">Indentifier</a>
+      
+    </li>
+  
   <li class=" " data-id="cable/Cable/Payload/PARAMS" data-name="cable::payload::params">
       <a href="../Cable/Payload/PARAMS.html">PARAMS</a>
       
@@ -342,7 +352,9 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#receive%28message%29-instance-method" class="signature"><strong>#receive</strong>(message)</a>
+        <a href="#receive%28message%3AString%29-instance-method" class="signature"><strong>#receive</strong>(message : String)</a>
+        
+          <div class="summary"><p>Convert the <code><a href="../Cable/Connection.html#message%28payload%3ACable%3A%3APayload%29-instance-method">#message</a></code> to a proper <code><a href="../Cable/Payload.html">Payload</a></code>.</p></div>
         
       </li>
     
@@ -645,13 +657,20 @@
       </div>
     </div>
   
-    <div class="entry-detail" id="receive(message)-instance-method">
+    <div class="entry-detail" id="receive(message:String)-instance-method">
       <div class="signature">
         
-        def <strong>receive</strong>(message)
+        def <strong>receive</strong>(message : String)
 
-        <a class="method-permalink" href="#receive%28message%29-instance-method">#</a>
+        <a class="method-permalink" href="#receive%28message%3AString%29-instance-method">#</a>
       </div>
+      
+        <div class="doc">
+          
+          <p>Convert the <code><a href="../Cable/Connection.html#message%28payload%3ACable%3A%3APayload%29-instance-method">#message</a></code> to a proper <code><a href="../Cable/Payload.html">Payload</a></code>.
+The <code><a href="../Cable/Handler.html">Cable::Handler</a></code> will handle catching <code>SerializableError</code>,
+and close the socket and connection</p>
+        </div>
       
       <br/>
       <div>
