@@ -40,6 +40,7 @@ module Cable
     end
 
     @channels = {} of String => Channels
+    @_internal_subscriptions = {} of String => Cable::Connection
     @channel_mutex = Mutex.new
 
     def initialize
@@ -52,12 +53,28 @@ module Cable
       raise e
     end
 
+    def remote_connections
+      RemoteConnections.new(self)
+    end
+
     def add_connection(connection)
       connections[connection.connection_identifier] = connection
     end
 
     def remove_connection(connection_id)
       connections.delete(connection_id).try(&.close)
+    end
+
+    def add_internal_subscription(internal_channel : String, connection : Cable::Connection)
+      if internal_channel.presence && !connection.closed?
+        @_internal_subscriptions[internal_channel] = connection
+      end
+    end
+
+    def remove_internal_subscription(internal_channel : String)
+      if @_internal_subscriptions.has_key?(internal_channel)
+        @_internal_subscriptions.delete(internal_channel)
+      end
     end
 
     def subscribe_channel(channel : Channel, identifier : String)
@@ -115,6 +132,16 @@ module Cable
       Cable.settings.on_error.call(e, "IO::Error Exception: #{e.message} -> #{self.class.name}#send_to_channels(channel, message)")
     end
 
+    def send_to_internal_channels(channel_identifier : String, message : String)
+      if internal_channel = @_internal_subscriptions[channel_identifier]?
+        case message
+        when "disconnect"
+          Cable::Logger.info { "Removing connection (#{channel_identifier})" }
+          internal_channel.close
+        end
+      end
+    end
+
     def safe_decode_message(message)
       case message
       when String
@@ -155,7 +182,11 @@ module Cable
       spawn(name: "Cable::Server - process_subscribed_messages") do
         while received = fiber_channel.receive
           channel, message = received
-          server.send_to_channels(channel, message)
+          if channel.includes?("cable_internal") && message == Cable.message(:disconnect)
+            server.send_to_internal_channels(channel, message)
+          else
+            server.send_to_channels(channel, message)
+          end
           Cable::Logger.debug { "Cable::Server#process_subscribed_messages channel:#{channel} message:#{message}" }
         end
       end

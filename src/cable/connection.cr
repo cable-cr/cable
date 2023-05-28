@@ -37,6 +37,7 @@ module Cable
         connect
         # gather connection_identifier after the connection has gathered the id from identified_by(field)
         self.connection_identifier = "#{internal_identifier}-#{UUID.random}"
+        subscribe_to_internal_channel
       rescue e : UnathorizedConnectionException
         reject_connection!
         socket.close(HTTP::WebSocket::CloseCode::NormalClosure, "Farewell")
@@ -48,6 +49,10 @@ module Cable
 
     def reject_connection!
       @connection_rejected = true
+    end
+
+    def closed? : Bool
+      socket.closed?
     end
 
     def close
@@ -62,6 +67,7 @@ module Cable
       end
 
       Connection::CHANNELS.delete(connection_identifier)
+      unsubscribe_from_internal_channel
       Cable::Logger.info { "Terminating connection #{connection_identifier}" }
 
       socket.close
@@ -152,6 +158,24 @@ module Cable
 
     def self.broadcast_to(channel : String, message : String)
       Cable.server.publish(channel, message)
+    end
+
+    private def internal_channel
+      "cable_internal/#{internal_identifier}"
+    end
+
+    private def subscribe_to_internal_channel
+      server = Cable.server
+      channel = self
+      spawn(name: "Cable::Connection - subscribe_to_internal_channel") do
+        server.add_internal_subscription(internal_channel, channel)
+        server.backend.open_subscribe_connection(internal_channel)
+      end
+    end
+
+    private def unsubscribe_from_internal_channel
+      Cable.server.backend.unsubscribe(internal_channel)
+      Cable.server.remove_internal_subscription(internal_channel)
     end
   end
 end
