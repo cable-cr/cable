@@ -135,7 +135,7 @@ module Cable
     def send_to_internal_channels(channel_identifier : String, message : String)
       if internal_channel = @_internal_subscriptions[channel_identifier]?
         case message
-        when "disconnect"
+        when Cable.message(:disconnect)
           Cable::Logger.info { "Removing connection (#{channel_identifier})" }
           internal_channel.close
         end
@@ -182,7 +182,7 @@ module Cable
       spawn(name: "Cable::Server - process_subscribed_messages") do
         while received = fiber_channel.receive
           channel, message = received
-          if channel.includes?("cable_internal") && message == Cable.message(:disconnect)
+          if channel.includes?("cable_internal")
             server.send_to_internal_channels(channel, message)
           else
             server.send_to_channels(channel, message)
