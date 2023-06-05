@@ -3,16 +3,16 @@ module Cable
     def initialize(@server : Cable::Server)
     end
 
-    # Specify the name and value of your connection's `identified_by`
+    # Specify the value of your connection's `identified_by`
     # ```
     # # e.g.
     # # identified_by :user_id
     # # self.user_id = 1234.to_s
     #
-    # where({:user_id, "1234"})
+    # find("1234")
     # ```
-    def where(identifier : Tuple(Symbol, String))
-      RemoteConnection.new(@server, identifier[1])
+    def find(identifier : String)
+      RemoteConnection.new(@server, identifier)
     end
 
     private class RemoteConnection
