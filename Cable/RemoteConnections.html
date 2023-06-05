@@ -13,7 +13,7 @@
 <script type="text/javascript" src="../js/doc.js"></script>
 
   <meta name="repository-name" content="cable">
-  <title>Cable::RedisPinger - cable 0.2.2</title>
+  <title>Cable::RemoteConnections - cable 0.2.2</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../";
   </script>
@@ -151,12 +151,12 @@
       
     </li>
   
-  <li class=" current" data-id="cable/Cable/RedisPinger" data-name="cable::redispinger">
+  <li class=" " data-id="cable/Cable/RedisPinger" data-name="cable::redispinger">
       <a href="../Cable/RedisPinger.html">RedisPinger</a>
       
     </li>
   
-  <li class=" " data-id="cable/Cable/RemoteConnections" data-name="cable::remoteconnections">
+  <li class=" current" data-id="cable/Cable/RemoteConnections" data-name="cable::remoteconnections">
       <a href="../Cable/RemoteConnections.html">RemoteConnections</a>
       
     </li>
@@ -195,12 +195,12 @@
 <div class="main-content">
 <h1 class="type-name">
 
-  <span class="kind">class</span> Cable::RedisPinger
+  <span class="kind">class</span> Cable::RemoteConnections
 
 </h1>
 
 
-  <ul class="superclass-hierarchy"><li class="superclass"><a href="../Cable/RedisPinger.html">Cable::RedisPinger</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../Cable/RemoteConnections.html">Cable::RemoteConnections</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
 
 
 
@@ -228,7 +228,7 @@
   </h2>
   
     
-      cable/redis_pinger.cr
+      cable/remote_connections.cr
     
     <br/>
   
@@ -269,7 +269,9 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#stop-instance-method" class="signature"><strong>#stop</strong></a>
+        <a href="#find%28identifier%3AString%29-instance-method" class="signature"><strong>#find</strong>(identifier : String)</a>
+        
+          <div class="summary"><p>Specify the value of your connection's <code>identified_by</code> ``` # e.g.</p></div>
         
       </li>
     
@@ -341,13 +343,23 @@
     Instance Method Detail
   </h2>
   
-    <div class="entry-detail" id="stop-instance-method">
+    <div class="entry-detail" id="find(identifier:String)-instance-method">
       <div class="signature">
         
-        def <strong>stop</strong>
+        def <strong>find</strong>(identifier : String)
 
-        <a class="method-permalink" href="#stop-instance-method">#</a>
+        <a class="method-permalink" href="#find%28identifier%3AString%29-instance-method">#</a>
       </div>
+      
+        <div class="doc">
+          
+          <p>Specify the value of your connection's <code>identified_by</code></p>
+<pre><code class="language-crystal"><span class="c"># e.g.</span>
+<span class="c"># identified_by :user_id</span>
+<span class="c"># self.user_id = 1234.to_s</span>
+
+find(<span class="s">&quot;1234&quot;</span>)</code></pre>
+        </div>
       
       <br/>
       <div>
