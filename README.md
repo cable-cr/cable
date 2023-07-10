@@ -14,6 +14,7 @@ It's like [ActionCable](https://guides.rubyonrails.org/action_cable_overview.htm
 dependencies:
   cable:
     github: cable-cr/cable
+    branch: master # or use the latest version
   redis:
     github: jgaskins/redis
     branch: master # lock down if needed
