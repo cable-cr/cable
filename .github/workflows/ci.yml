@@ -7,26 +7,35 @@ on:
     branches: "*"
 
 jobs:
+  check_format:
+    strategy:
+      fail-fast: false
+    runs-on: ubuntu-latest
+    continue-on-error: false
+    steps:
+      - name: Download source
+        uses: actions/checkout@v3
+      - name: Install Crystal
+        uses: crystal-lang/install-crystal@v1
+      - name: Install shards
+        run: shards install
+      - name: Format
+        run: crystal tool format --check
+      - name: Lint
+        run: ./bin/ameba
   specs:
     env:
       REDIS_URL: redis://redis:6379
     strategy:
       fail-fast: false
       matrix:
-        shard_file:
-          - shard.yml
-        crystal_version:
-          - 1.6.0
-          - 1.7.0
-          - latest
-        experimental:
-          - false
+        os: [ubuntu-latest, windows-latest]
+        crystal_version: [latest]
         include:
-          - crystal_version: nightly
-            experimental: true
-    runs-on: ubuntu-latest
-    container: crystallang/crystal:${{ matrix.crystal_version }}
-    continue-on-error: ${{ matrix.experimental }}
+          - os: ubuntu-latest
+            crystal_version: 1.6.0
+    runs-on: ${{ matrix.os }}
+    continue-on-error: false
     services:
       redis:
         image: redis
@@ -40,16 +49,10 @@ jobs:
           --health-retries 5
     steps:
       - uses: actions/checkout@v3
-      - name: Cache Crystal
-        uses: actions/cache@v3
+      - uses: crystal-lang/install-crystal@v1
         with:
-          path: ~/.cache/crystal
-          key: ${{ runner.os }}-crystal
-      - name: Install shards
-        run: shards install
-      - name: Format
-        run: crystal tool format --check
-      - name: Lint
-        run: ./bin/ameba
+          crystal: ${{ matrix.crystal_version }}
+      - name: Install dependencies
+        run: shards install --skip-postinstall --skip-executables
       - name: Run tests
         run: crystal spec
