@@ -9,7 +9,7 @@ crystal: ">= 1.6.0"
 dependencies:
   tasker:
     github: spider-gazelle/tasker
-    version: ~> 2.0
+    version: ~> 2.1
   habitat:
     github: luckyframework/habitat
     version: ~> 0.4
@@ -26,6 +26,7 @@ development_dependencies:
   #   version: ~> 2.8.0
   ameba:
     github: crystal-ameba/ameba
-    version: ~> 1.4.3
+    branch: master
+    # version: ~> 1.5.0
 
 license: MIT
