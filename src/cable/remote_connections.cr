@@ -11,7 +11,10 @@ module Cable
     #
     # find("1234")
     # ```
-    def find(identifier : String)
+    # NOTE: This code may run on a different machine than where the `@server.connections`
+    # is actually sitting in memory. For this reason, we just pass the value right through
+    # the backend (i.e. redis), and let that broadcast out to all running instances.
+    def find(identifier : String) : RemoteConnection
       RemoteConnection.new(@server, identifier)
     end
 
@@ -19,11 +22,11 @@ module Cable
       def initialize(@server : Cable::Server, @value : String)
       end
 
-      def disconnect
+      def disconnect : Nil
         @server.backend.publish_message(internal_channel, Cable.message(:disconnect))
       end
 
-      private def internal_channel
+      private def internal_channel : String
         "cable_internal/#{@value}"
       end
     end
