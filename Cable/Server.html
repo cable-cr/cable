@@ -288,11 +288,6 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#add_internal_subscription%28internal_channel%3AString%2Cconnection%3ACable%3A%3AConnection%29-instance-method" class="signature"><strong>#add_internal_subscription</strong>(internal_channel : String, connection : Cable::Connection)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
         <a href="#backend%3ACable%3A%3ABackendCore-instance-method" class="signature"><strong>#backend</strong> : Cable::BackendCore</a>
         
       </li>
@@ -309,6 +304,8 @@
     
       <li class="entry-summary">
         <a href="#connections%3AHash%28String%2CCable%3A%3AConnection%29-instance-method" class="signature"><strong>#connections</strong> : Hash(String, Cable::Connection)</a>
+        
+          <div class="summary"><p>The String key is the <code>connection_identifier</code> value for <code><a href="../Cable/Connection.html">Cable::Connection</a></code></p></div>
         
       </li>
     
@@ -350,11 +347,6 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#remove_internal_subscription%28internal_channel%3AString%29-instance-method" class="signature"><strong>#remove_internal_subscription</strong>(internal_channel : String)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
         <a href="#restart%3F-instance-method" class="signature"><strong>#restart?</strong></a>
         
       </li>
@@ -370,7 +362,7 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#send_to_internal_channels%28channel_identifier%3AString%2Cmessage%3AString%29-instance-method" class="signature"><strong>#send_to_internal_channels</strong>(channel_identifier : String, message : String)</a>
+        <a href="#send_to_internal_connections%28connection_identifier%3AString%2Cmessage%3AString%29-instance-method" class="signature"><strong>#send_to_internal_connections</strong>(connection_identifier : String, message : String)</a>
         
       </li>
     
@@ -495,20 +487,6 @@
       </div>
     </div>
   
-    <div class="entry-detail" id="add_internal_subscription(internal_channel:String,connection:Cable::Connection)-instance-method">
-      <div class="signature">
-        
-        def <strong>add_internal_subscription</strong>(internal_channel : String, connection : <a href="../Cable/Connection.html">Cable::Connection</a>)
-
-        <a class="method-permalink" href="#add_internal_subscription%28internal_channel%3AString%2Cconnection%3ACable%3A%3AConnection%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-      </div>
-    </div>
-  
     <div class="entry-detail" id="backend:Cable::BackendCore-instance-method">
       <div class="signature">
         
@@ -558,6 +536,11 @@
 
         <a class="method-permalink" href="#connections%3AHash%28String%2CCable%3A%3AConnection%29-instance-method">#</a>
       </div>
+      
+        <div class="doc">
+          
+          <p>The String key is the <code>connection_identifier</code> value for <code><a href="../Cable/Connection.html">Cable::Connection</a></code></p>
+        </div>
       
       <br/>
       <div>
@@ -668,20 +651,6 @@
       </div>
     </div>
   
-    <div class="entry-detail" id="remove_internal_subscription(internal_channel:String)-instance-method">
-      <div class="signature">
-        
-        def <strong>remove_internal_subscription</strong>(internal_channel : String)
-
-        <a class="method-permalink" href="#remove_internal_subscription%28internal_channel%3AString%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-      </div>
-    </div>
-  
     <div class="entry-detail" id="restart?-instance-method">
       <div class="signature">
         
@@ -724,12 +693,12 @@
       </div>
     </div>
   
-    <div class="entry-detail" id="send_to_internal_channels(channel_identifier:String,message:String)-instance-method">
+    <div class="entry-detail" id="send_to_internal_connections(connection_identifier:String,message:String)-instance-method">
       <div class="signature">
         
-        def <strong>send_to_internal_channels</strong>(channel_identifier : String, message : String)
+        def <strong>send_to_internal_connections</strong>(connection_identifier : String, message : String)
 
-        <a class="method-permalink" href="#send_to_internal_channels%28channel_identifier%3AString%2Cmessage%3AString%29-instance-method">#</a>
+        <a class="method-permalink" href="#send_to_internal_connections%28connection_identifier%3AString%2Cmessage%3AString%29-instance-method">#</a>
       </div>
       
       <br/>

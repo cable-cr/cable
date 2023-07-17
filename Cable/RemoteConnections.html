@@ -269,7 +269,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#find%28identifier%3AString%29-instance-method" class="signature"><strong>#find</strong>(identifier : String)</a>
+        <a href="#find%28identifier%3AString%29%3ARemoteConnection-instance-method" class="signature"><strong>#find</strong>(identifier : String) : RemoteConnection</a>
         
           <div class="summary"><p>Specify the value of your connection's <code>identified_by</code> ``` # e.g.</p></div>
         
@@ -343,12 +343,12 @@
     Instance Method Detail
   </h2>
   
-    <div class="entry-detail" id="find(identifier:String)-instance-method">
+    <div class="entry-detail" id="find(identifier:String):RemoteConnection-instance-method">
       <div class="signature">
         
-        def <strong>find</strong>(identifier : String)
+        def <strong>find</strong>(identifier : String) : RemoteConnection
 
-        <a class="method-permalink" href="#find%28identifier%3AString%29-instance-method">#</a>
+        <a class="method-permalink" href="#find%28identifier%3AString%29%3ARemoteConnection-instance-method">#</a>
       </div>
       
         <div class="doc">
@@ -359,6 +359,9 @@
 <span class="c"># self.user_id = 1234.to_s</span>
 
 find(<span class="s">&quot;1234&quot;</span>)</code></pre>
+<p><span class="flag purple">NOTE</span>  This code may run on a different machine than where the <code>@server.connections</code>
+is actually sitting in memory. For this reason, we just pass the value right through
+the backend (i.e. redis), and let that broadcast out to all running instances.</p>
         </div>
       
       <br/>
