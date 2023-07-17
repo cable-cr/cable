@@ -40,6 +40,7 @@ module Cable
         subscribe_to_internal_channel
       rescue e : UnathorizedConnectionException
         reject_connection!
+        unsubscribe_from_internal_channel
         socket.close(HTTP::WebSocket::CloseCode::NormalClosure, "Farewell")
         Cable::Logger.info { ("An unauthorized connection attempt was rejected") }
       end
@@ -168,14 +169,14 @@ module Cable
       server = Cable.server
       channel = self
       spawn(name: "Cable::Connection - subscribe_to_internal_channel") do
-        server.add_internal_subscription(internal_channel, channel)
-        server.backend.open_subscribe_connection(internal_channel)
+        if !channel.connection_rejected?
+          server.backend.open_subscribe_connection(internal_channel)
+        end
       end
     end
 
     private def unsubscribe_from_internal_channel
       Cable.server.backend.unsubscribe(internal_channel)
-      Cable.server.remove_internal_subscription(internal_channel)
     end
   end
 end

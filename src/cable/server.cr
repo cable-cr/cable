@@ -23,8 +23,9 @@ module Cable
   class Server
     include Debug
 
+    # The String key is the `connection_identifier` value for `Cable::Connection`
+    getter connections = {} of String => Cable::Connection
     getter errors = 0
-    getter connections = {} of String => Connection
     getter fiber_channel = ::Channel({String, String}).new
     getter pinger : Cable::RedisPinger do
       Cable::RedisPinger.new(self)
@@ -40,7 +41,6 @@ module Cable
     end
 
     @channels = {} of String => Channels
-    @_internal_subscriptions = {} of String => Cable::Connection
     @channel_mutex = Mutex.new
 
     def initialize
@@ -63,18 +63,6 @@ module Cable
 
     def remove_connection(connection_id)
       connections.delete(connection_id).try(&.close)
-    end
-
-    def add_internal_subscription(internal_channel : String, connection : Cable::Connection)
-      if internal_channel.presence && !connection.closed?
-        @_internal_subscriptions[internal_channel] = connection
-      end
-    end
-
-    def remove_internal_subscription(internal_channel : String)
-      if @_internal_subscriptions.has_key?(internal_channel)
-        @_internal_subscriptions.delete(internal_channel)
-      end
     end
 
     def subscribe_channel(channel : Channel, identifier : String)
@@ -132,12 +120,13 @@ module Cable
       Cable.settings.on_error.call(e, "IO::Error Exception: #{e.message} -> #{self.class.name}#send_to_channels(channel, message)")
     end
 
-    def send_to_internal_channels(channel_identifier : String, message : String)
-      if internal_channel = @_internal_subscriptions[channel_identifier]?
+    def send_to_internal_connections(connection_identifier : String, message : String)
+      if internal_connection = connections[connection_identifier]?
         case message
         when Cable.message(:disconnect)
-          Cable::Logger.info { "Removing connection (#{channel_identifier})" }
-          internal_channel.close
+          Cable::Logger.info { "Removing connection (#{connection_identifier})" }
+          internal_connection.close
+          remove_connection(connection_identifier)
         end
       end
     end
@@ -182,8 +171,10 @@ module Cable
       spawn(name: "Cable::Server - process_subscribed_messages") do
         while received = fiber_channel.receive
           channel, message = received
-          if channel.includes?("cable_internal")
-            server.send_to_internal_channels(channel, message)
+          if channel.starts_with?("cable_internal")
+            identifier = channel.split('/').last
+            connection_identifier = server.connections.keys.find!(&.starts_with?(identifier))
+            server.send_to_internal_connections(connection_identifier, message)
           else
             server.send_to_channels(channel, message)
           end
