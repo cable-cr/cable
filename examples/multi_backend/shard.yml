@@ -1,0 +1,23 @@
+name: multi_backend
+version: 0.1.0
+
+authors:
+  - Jamie Gaskins <jgaskins@hey.com>
+
+targets:
+  multi_backend:
+    main: src/multi_backend.cr
+
+dependencies:
+  cable:
+    path: ../..
+  nats:
+    github: jgaskins/nats
+  redis:
+    github: jgaskins/redis
+  turbo:
+    github: jgaskins/turbo
+
+crystal: 1.9.2
+
+license: MIT

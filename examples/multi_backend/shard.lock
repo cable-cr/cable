@@ -1,0 +1,42 @@
+version: 2.0
+shards:
+  base32:
+    git: https://github.com/jgaskins/base32.git
+    version: 0.1.1+git.commit.18f5647c42dae4de654e3003825fab43dc95b029
+
+  cable:
+    path: ../..
+    version: 0.2.2
+
+  cron_parser:
+    git: https://github.com/kostya/cron_parser.git
+    version: 0.4.0
+
+  db:
+    git: https://github.com/crystal-lang/crystal-db.git
+    version: 0.12.0
+
+  future:
+    git: https://github.com/crystal-community/future.cr.git
+    version: 1.0.0
+
+  habitat:
+    git: https://github.com/luckyframework/habitat.git
+    version: 0.4.7
+
+  nats:
+    git: https://github.com/jgaskins/nats.git
+    version: 1.3.3
+
+  redis:
+    git: https://github.com/jgaskins/redis.git
+    version: 0.7.0
+
+  tasker:
+    git: https://github.com/spider-gazelle/tasker.git
+    version: 2.1.4
+
+  turbo:
+    git: https://github.com/jgaskins/turbo.git
+    version: 0.1.0+git.commit.8685616e26d7903d1559f5f3f8b96085bc10af12
+
