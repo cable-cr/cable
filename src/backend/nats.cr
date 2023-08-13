@@ -7,8 +7,8 @@ module Cable
     getter nats : NATS::Client do
       NATS::Client.new(URI.parse(Cable.settings.url))
     end
-    getter streams = Hash(String, Set(Int64)).new { |streams, channel|
-      streams[channel] = Set(Int64).new
+    getter streams = Hash(String, Set(NATS::Subscription)).new { |streams, channel|
+      streams[channel] = Set(NATS::Subscription).new
     }
 
     def subscribe_connection
@@ -38,14 +38,19 @@ module Cable
     def subscribe(stream_identifier : String)
       subscription = nats.subscribe stream_identifier, queue_group: object_id.to_s do |msg|
         Cable.server.fiber_channel.send({
-          msg.subject.sub(/\Acable\./, ""),
+          stream_identifier,
           String.new(msg.body),
         })
       end
-      streams[stream_identifier] << subscription.sid
+      streams[stream_identifier] << subscription
     end
 
     def unsubscribe(stream_identifier : String)
+      if subscriptions = streams.delete(stream_identifier)
+        subscriptions.each do |subscription|
+          nats.unsubscribe subscription
+        end
+      end
     end
 
     def ping_redis_subscribe
