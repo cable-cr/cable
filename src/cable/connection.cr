@@ -52,6 +52,14 @@ module Cable
       @connection_rejected = true
     end
 
+    def connection_accepted? : Bool
+      !connection_rejected?
+    end
+
+    def open? : Bool
+      !closed?
+    end
+
     def closed? : Bool
       socket.closed?
     end
