@@ -17,10 +17,12 @@ module Cable
 
       ws = HTTP::WebSocketHandler.new do |socket, ws_ctx|
         connection = T.new(ws_ctx.request, socket)
+
+        next if connection.closed? || connection.connection_rejected?
         connection_id = connection.connection_identifier
 
         # we should not add any connections which have been rejected
-        Cable.server.add_connection(connection) unless connection.connection_rejected?
+        Cable.server.add_connection(connection)
 
         # Send welcome message to the client
         socket.send({type: Cable.message(:welcome)}.to_json)

@@ -9,6 +9,7 @@ module Cable
         @server.backend.ping_redis_subscribe
         @server.backend.ping_redis_publish
       rescue e
+        stop
         Cable::Logger.error { "Cable::RedisPinger Exception: #{e.class.name} -> #{e.message}" }
         # Restart cable if something happened
         Cable.server.count_error!

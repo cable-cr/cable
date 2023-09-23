@@ -40,17 +40,22 @@ module Cable
       backend.subscribe_connection
     end
 
-    @channels = {} of String => Channels
-    @channel_mutex = Mutex.new
+    @channels : Hash(String, Channels)
+    @channel_mutex : Mutex
 
     def initialize
-      # load the connections
-      backend
-      subscribe
-      process_subscribed_messages
-    rescue e
-      Cable.settings.on_error.call(e, "Cable::Server.initialize")
-      raise e
+      @channels = {} of String => Channels
+      @channel_mutex = Mutex.new
+
+      begin
+        # load the connections
+        backend
+        subscribe
+        process_subscribed_messages
+      rescue e
+        Cable.settings.on_error.call(e, "Cable::Server.initialize")
+        raise e
+      end
     end
 
     def remote_connections
