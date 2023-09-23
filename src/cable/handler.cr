@@ -45,12 +45,14 @@ module Cable
             connection.receive(message)
           rescue e : KeyError | JSON::ParseException | JSON::SerializableError
             # handle unknown/malformed messages
+            ws_pinger.stop
             socket.close(HTTP::WebSocket::CloseCode::InvalidFramePayloadData, "Invalid message")
             Cable.server.remove_connection(connection_id)
             Cable.settings.on_error.call(e, "Cable::Handler#socket.on_message")
           rescue e : Cable::Connection::UnathorizedConnectionException
             # handle unauthorized connections
             # no need to log them
+            ws_pinger.stop
             socket.close(HTTP::WebSocket::CloseCode::NormalClosure, "Farewell")
             # most of the time, we will have already removed the connection
             # since the connection is rejected before any messages are received
@@ -58,6 +60,7 @@ module Cable
             Cable.server.remove_connection(connection_id)
           rescue e : Exception
             # handle all other exceptions
+            ws_pinger.stop
             socket.close(HTTP::WebSocket::CloseCode::InternalServerError, "Internal Server Error")
             Cable.server.remove_connection(connection_id)
             # handle restart
