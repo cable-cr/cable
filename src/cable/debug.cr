@@ -23,7 +23,7 @@ module Cable
               next unless channel.connection.connection_identifier == key
               connections_mounted_channels << {
                 "channel"  => channel.class.to_s,
-                "key"      => channel.stream_identifier,
+                "key"      => channel.stream_identifier.to_s,
                 "rejected" => channel.subscription_rejected?.to_s,
               }
             end
