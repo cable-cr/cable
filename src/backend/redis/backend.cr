@@ -56,7 +56,6 @@ module Cable
       return if redis_subscribe.nil?
 
       redis_subscribe.subscribe(stream_identifier)
-      redis_subscribe.flush
     end
 
     def unsubscribe(stream_identifier : String)
