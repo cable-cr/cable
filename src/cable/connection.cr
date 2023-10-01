@@ -167,10 +167,10 @@ module Cable
 
     private def subscribe_to_internal_channel
       server = Cable.server
-      channel = self
+      conn = self
       spawn(name: "Cable::Connection - subscribe_to_internal_channel") do
-        if !channel.connection_rejected?
-          server.backend.open_subscribe_connection(internal_channel)
+        if !conn.closed? || !conn.connection_rejected?
+          server.backend.subscribe(internal_channel)
         end
       end
     end
