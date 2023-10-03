@@ -74,6 +74,12 @@ module Cable
       socket.close
     end
 
+    def send_message(message : String)
+      return if socket.closed?
+
+      socket.send(message)
+    end
+
     def reject_unauthorized_connection
       raise UnathorizedConnectionException.new
     end
@@ -113,7 +119,7 @@ module Cable
       end
 
       Cable::Logger.info { "#{payload.channel} is transmitting the subscription confirmation" }
-      socket.send({type: Cable.message(:confirmation), identifier: payload.identifier.key}.to_json)
+      send_message({type: Cable.message(:confirmation), identifier: payload.identifier.key}.to_json)
 
       channel.run_after_subscribed_callbacks unless channel.subscription_rejected?
     end
@@ -129,7 +135,7 @@ module Cable
       if channel = Connection::CHANNELS[connection_identifier].delete(payload.identifier.key)
         channel.close
         Cable::Logger.info { "#{payload.channel} is transmitting the unsubscribe confirmation" }
-        socket.send({type: Cable.message(:unsubscribe), identifier: payload.identifier.key}.to_json)
+        send_message({type: Cable.message(:unsubscribe), identifier: payload.identifier.key}.to_json)
       end
     end
 
@@ -137,7 +143,7 @@ module Cable
       if channel = Connection::CHANNELS[connection_identifier].delete(payload.identifier.key)
         channel.unsubscribed
         Cable::Logger.info { "#{channel.class} is transmitting the subscription rejection" }
-        socket.send({type: Cable.message(:rejection), identifier: payload.identifier.key}.to_json)
+        send_message({type: Cable.message(:rejection), identifier: payload.identifier.key}.to_json)
       end
     end
 
@@ -166,17 +172,19 @@ module Cable
     end
 
     private def subscribe_to_internal_channel
-      server = Cable.server
-      conn = self
-      spawn(name: "Cable::Connection - subscribe_to_internal_channel") do
-        if !conn.closed? || !conn.connection_rejected?
-          server.backend.subscribe(internal_channel)
-        end
+      return if connection_rejected? || closed?
+
+      # If there's no internal identifier, then we have no way
+      # to disconnect remotely, so avoid subscribing
+      if internal_identifier.presence
+        Cable.server.backend.subscribe(internal_channel)
       end
     end
 
     private def unsubscribe_from_internal_channel
-      Cable.server.backend.unsubscribe(internal_channel)
+      if internal_identifier.presence
+        Cable.server.backend.unsubscribe(internal_channel)
+      end
     end
   end
 end

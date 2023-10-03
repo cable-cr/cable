@@ -25,7 +25,7 @@ module Cable
         Cable.server.add_connection(connection)
 
         # Send welcome message to the client
-        socket.send({type: Cable.message(:welcome)}.to_json)
+        connection.send_message({type: Cable.message(:welcome)}.to_json)
 
         ws_pinger = Cable::WebsocketPinger.build(socket)
 
