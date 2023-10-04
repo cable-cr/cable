@@ -108,21 +108,23 @@ module Cable
 
       parsed_message = safe_decode_message(message)
 
-      @channels[channel_identifier].each do |channel|
-        # TODO: would be nice to have a test where we open two connections
-        # close one, and make sure the other one receives the message
-        if channel.connection.socket.closed?
-          channel.close
-        else
-          Cable::Logger.info { "#{channel.class} transmitting #{parsed_message} (via streamed from #{channel.stream_identifier})" }
-          channel.connection.socket.send({
-            identifier: channel.identifier,
-            message:    parsed_message,
-          }.to_json)
+      begin
+        @channels[channel_identifier].each do |channel|
+          # TODO: would be nice to have a test where we open two connections
+          # close one, and make sure the other one receives the message
+          if channel.connection.socket.closed?
+            channel.close
+          else
+            Cable::Logger.info { "#{channel.class} transmitting #{parsed_message} (via streamed from #{channel.stream_identifier})" }
+            channel.connection.socket.send({
+              identifier: channel.identifier,
+              message:    parsed_message,
+            }.to_json)
+          end
         end
+      rescue e : IO::Error
+        Cable.settings.on_error.call(e, "IO::Error Exception: #{e.message}: #{parsed_message} -> Cable::Server#send_to_channels(channel, message)")
       end
-    rescue e : IO::Error
-      Cable.settings.on_error.call(e, "IO::Error Exception: #{e.message} -> #{self.class.name}#send_to_channels(channel, message)")
     end
 
     def send_to_internal_connections(connection_identifier : String, message : String)

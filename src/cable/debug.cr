@@ -11,17 +11,20 @@ module Cable
       end
 
       {
+        "total_conn_chanels"  => Cable::Connection::CHANNELS.size,
+        "errors"              => @errors,
         "connections"         => @connections.size,
         "channels"            => @channels.size,
         "channels_mounted"    => _channels,
         "connections_mounted" => @connections.map do |key, connection|
-          connections_mounted_channels = [] of Hash(String, String | Nil)
+          connections_mounted_channels = [] of Hash(String, String)
           @channels.each do |_, v|
             v.each do |channel|
               next unless channel.connection.connection_identifier == key
               connections_mounted_channels << {
-                "channel" => channel.class.to_s,
-                "key"     => channel.stream_identifier,
+                "channel"  => channel.class.to_s,
+                "key"      => channel.stream_identifier.to_s,
+                "rejected" => channel.subscription_rejected?.to_s,
               }
             end
           end
@@ -29,6 +32,8 @@ module Cable
           {
             "key"        => key,
             "identifier" => connection.identifier,
+            "closed"     => connection.closed?.to_s,
+            "rejected"   => connection.connection_rejected?.to_s,
             "started_at" => connection.started_at.to_s("%Y-%m-%dT%H:%M:%S.%6N"),
             "channels"   => connections_mounted_channels,
           }
