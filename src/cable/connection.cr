@@ -48,7 +48,7 @@ module Cable
 
     abstract def connect
 
-    def reject_connection!
+    private def reject_connection!
       @connection_rejected = true
     end
 
