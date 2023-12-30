@@ -52,6 +52,10 @@ module Cable
       @connection_rejected = true
     end
 
+    def channels : Array(Channel)
+      Connection::CHANNELS[connection_identifier]
+    end
+
     def closed? : Bool
       socket.closed?
     end
@@ -75,7 +79,7 @@ module Cable
     end
 
     def send_message(message : String)
-      return if socket.closed?
+      return if closed?
 
       socket.send(message)
     end

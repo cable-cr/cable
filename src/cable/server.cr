@@ -70,6 +70,14 @@ module Cable
       connections.delete(connection_id).try(&.close)
     end
 
+    def active_connections_for(token : String) : Array(Connection)
+      connections.values.select { |connection| connection.token == token && !connection.closed? }
+    end
+
+    def subscribed_channels_for(token : String) : Array(Channel)
+      active_connections_for(token).map { |connection| connection.channels }
+    end
+
     def subscribe_channel(channel : Channel, identifier : String)
       @channel_mutex.synchronize do
         if !@channels.has_key?(identifier)
@@ -112,7 +120,7 @@ module Cable
         @channels[channel_identifier].each do |channel|
           # TODO: would be nice to have a test where we open two connections
           # close one, and make sure the other one receives the message
-          if channel.connection.socket.closed?
+          if channel.connection.closed?
             channel.close
           else
             Cable::Logger.info { "#{channel.class} transmitting #{parsed_message} (via streamed from #{channel.stream_identifier})" }
