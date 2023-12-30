@@ -50,6 +50,8 @@ describe Cable::Handler do
       ws2 = HTTP::WebSocket.new("ws://#{listen_address}/updates?test_token=1")
 
       Cable.server.connections.size.should eq(1)
+      Cable.server.active_connections_for("1").size.should eq(1)
+      Cable.server.subscribed_channels_for("1").size.should eq(0)
 
       messages = [
         {type: "welcome"}.to_json,
@@ -69,6 +71,8 @@ describe Cable::Handler do
       ws2.run
 
       Cable.server.connections.size.should eq(1)
+      Cable.server.active_connections_for("1").size.should eq(1)
+      Cable.server.subscribed_channels_for("1").size.should eq(1)
     end
 
     it "malformed data from client" do

@@ -75,7 +75,7 @@ module Cable
     end
 
     def subscribed_channels_for(token : String) : Array(Channel)
-      active_connections_for(token).map { |connection| connection.channels }
+      active_connections_for(token).sum { |connection| connection.channels }
     end
 
     def subscribe_channel(channel : Channel, identifier : String)
