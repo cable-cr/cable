@@ -49,7 +49,7 @@ module Cable
             socket.close(HTTP::WebSocket::CloseCode::InvalidFramePayloadData, "Invalid message")
             Cable.server.remove_connection(connection_id)
             Cable.settings.on_error.call(e, "Cable::Handler#socket.on_message")
-          rescue e : Cable::Connection::UnathorizedConnectionException
+          rescue e : Cable::Connection::UnauthorizedConnectionException
             # handle unauthorized connections
             # no need to log them
             ws_pinger.stop

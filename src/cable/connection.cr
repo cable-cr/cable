@@ -2,7 +2,7 @@ require "uuid"
 
 module Cable
   abstract class Connection
-    class UnathorizedConnectionException < Exception; end
+    class UnauthorizedConnectionException < Exception; end
 
     property internal_identifier : String = "0"
     property connection_identifier : String = ""
@@ -38,7 +38,7 @@ module Cable
         # gather connection_identifier after the connection has gathered the id from identified_by(field)
         self.connection_identifier = "#{internal_identifier}-#{UUID.random}"
         subscribe_to_internal_channel
-      rescue e : UnathorizedConnectionException
+      rescue e : UnauthorizedConnectionException
         reject_connection!
         unsubscribe_from_internal_channel
         socket.close(HTTP::WebSocket::CloseCode::NormalClosure, "Farewell")
@@ -86,7 +86,7 @@ module Cable
     end
 
     def reject_unauthorized_connection
-      raise UnathorizedConnectionException.new
+      raise UnauthorizedConnectionException.new
     end
 
     # Convert the `message` to a proper `Payload`.
