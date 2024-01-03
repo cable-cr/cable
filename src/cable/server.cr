@@ -70,10 +70,15 @@ module Cable
       connections.delete(connection_id).try(&.close)
     end
 
+    # You shouldn't rely on these two methods for an exhaustive array of connections
+    # if your application can spawn more than one Cable.server instance.
+
+    # Only returns connections opened on this instance.
     def active_connections_for(token : String) : Array(Connection)
       connections.values.select { |connection| connection.token == token && !connection.closed? }
     end
 
+    # Only returns channel subscriptions opened on this instance.
     def subscribed_channels_for(token : String) : Array(Channel)
       active_connections_for(token).sum { |connection| connection.channels }
     end
