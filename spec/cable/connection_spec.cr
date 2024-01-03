@@ -3,12 +3,22 @@ require "../spec_helper"
 include RequestHelpers
 
 describe Cable::Connection do
-  it "removes the connection channel on close" do
-    connect do |connection, _socket|
-      connection.receive({"command" => "subscribe", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
-      ConnectionTest::CHANNELS.keys.size.should eq(1)
+  describe "#close" do
+    it "closes the connection socket even without channel subscriptions" do
+      connect do |connection, _socket|
+        connection.closed?.should eq(false)
+        connection.close
+        connection.closed?.should eq(true)
+      end
     end
-    ConnectionTest::CHANNELS.keys.size.should eq(0)
+    it "removes the connection channel on close" do
+      connect do |connection, _socket|
+        connection.receive({"command" => "subscribe", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
+        ConnectionTest::CHANNELS.keys.size.should eq(1)
+        connection.close
+        ConnectionTest::CHANNELS.keys.size.should eq(0)
+      end
+    end
   end
 
   describe "#receive" do

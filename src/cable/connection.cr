@@ -62,20 +62,22 @@ module Cable
     end
 
     def close
-      return true unless Connection::CHANNELS.has_key?(connection_identifier)
+      if Connection::CHANNELS.has_key?(connection_identifier)
+        Connection::CHANNELS[connection_identifier].each do |identifier, channel|
+          # the ordering here is important
+          Connection::CHANNELS[connection_identifier].delete(identifier)
+          channel.close
+        rescue e : IO::Error
+          Cable.settings.on_error.call(e, "IO::Error: #{e.message} -> #{self.class.name}#close")
+        end
 
-      Connection::CHANNELS[connection_identifier].each do |identifier, channel|
-        # the ordering here is important
-        Connection::CHANNELS[connection_identifier].delete(identifier)
-        channel.close
-      rescue e : IO::Error
-        Cable.settings.on_error.call(e, "IO::Error: #{e.message} -> #{self.class.name}#close")
+        Connection::CHANNELS.delete(connection_identifier)
+        unsubscribe_from_internal_channel
       end
 
-      Connection::CHANNELS.delete(connection_identifier)
-      unsubscribe_from_internal_channel
-      Cable::Logger.info { "Terminating connection #{connection_identifier}" }
+      return true if closed?
 
+      Cable::Logger.info { "Terminating connection #{connection_identifier}" }
       socket.close
     end
 
