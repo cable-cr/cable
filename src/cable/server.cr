@@ -70,7 +70,8 @@ module Cable
       connections.delete(connection_id).try(&.close)
     end
 
-    # You shouldn't rely on these two methods for an exhaustive array of connections
+    # You shouldn't rely on these following two methods
+    # for an exhaustive array of connections and channels
     # if your application can spawn more than one Cable.server instance.
 
     # Only returns connections opened on this instance.
