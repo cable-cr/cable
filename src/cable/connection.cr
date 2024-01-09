@@ -52,8 +52,8 @@ module Cable
       @connection_rejected = true
     end
 
-    def channels : Array(Channel)
-      return Array(Channel).new unless Connection::CHANNELS.has_key?(connection_identifier)
+    def channels : Array(Cable::Channel)
+      return Array(Cable::Channel).new unless Connection::CHANNELS.has_key?(connection_identifier)
       Connection::CHANNELS.[connection_identifier].values
     end
 
