@@ -86,8 +86,8 @@
       
         <ul>
   
-  <li class=" " data-id="cable/Cable/Connection/UnathorizedConnectionException" data-name="cable::connection::unathorizedconnectionexception">
-      <a href="../Cable/Connection/UnathorizedConnectionException.html">UnathorizedConnectionException</a>
+  <li class=" " data-id="cable/Cable/Connection/UnauthorizedConnectionException" data-name="cable::connection::unauthorizedconnectionexception">
+      <a href="../Cable/Connection/UnauthorizedConnectionException.html">UnauthorizedConnectionException</a>
       
     </li>
   
@@ -273,6 +273,13 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
+        <a href="#active_connections_for%28token%3AString%29%3AArray%28Connection%29-instance-method" class="signature"><strong>#active_connections_for</strong>(token : String) : Array(Connection)</a>
+        
+          <div class="summary"><p>Only returns connections opened on this instance.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#add_connection%28connection%29-instance-method" class="signature"><strong>#add_connection</strong>(connection)</a>
         
       </li>
@@ -363,6 +370,13 @@
     
       <li class="entry-summary">
         <a href="#subscribe_channel%28channel%3AChannel%2Cidentifier%3AString%29-instance-method" class="signature"><strong>#subscribe_channel</strong>(channel : Channel, identifier : String)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#subscribed_channels_for%28token%3AString%29%3AArray%28Channel%29-instance-method" class="signature"><strong>#subscribed_channels_for</strong>(token : String) : Array(Channel)</a>
+        
+          <div class="summary"><p>Only returns channel subscriptions opened on this instance.</p></div>
         
       </li>
     
@@ -462,6 +476,25 @@
 </a>
     Instance Method Detail
   </h2>
+  
+    <div class="entry-detail" id="active_connections_for(token:String):Array(Connection)-instance-method">
+      <div class="signature">
+        
+        def <strong>active_connections_for</strong>(token : String) : Array(<a href="../Cable/Connection.html">Connection</a>)
+
+        <a class="method-permalink" href="#active_connections_for%28token%3AString%29%3AArray%28Connection%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Only returns connections opened on this instance.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
   
     <div class="entry-detail" id="add_connection(connection)-instance-method">
       <div class="signature">
@@ -718,6 +751,25 @@
 
         <a class="method-permalink" href="#subscribe_channel%28channel%3AChannel%2Cidentifier%3AString%29-instance-method">#</a>
       </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="subscribed_channels_for(token:String):Array(Channel)-instance-method">
+      <div class="signature">
+        
+        def <strong>subscribed_channels_for</strong>(token : String) : Array(<a href="../Cable/Channel.html">Channel</a>)
+
+        <a class="method-permalink" href="#subscribed_channels_for%28token%3AString%29%3AArray%28Channel%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Only returns channel subscriptions opened on this instance.</p>
+        </div>
       
       <br/>
       <div>

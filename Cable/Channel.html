@@ -86,8 +86,8 @@
       
         <ul>
   
-  <li class=" " data-id="cable/Cable/Connection/UnathorizedConnectionException" data-name="cable::connection::unathorizedconnectionexception">
-      <a href="../Cable/Connection/UnathorizedConnectionException.html">UnathorizedConnectionException</a>
+  <li class=" " data-id="cable/Cable/Connection/UnauthorizedConnectionException" data-name="cable::connection::unauthorizedconnectionexception">
+      <a href="../Cable/Connection/UnauthorizedConnectionException.html">UnauthorizedConnectionException</a>
       
     </li>
   
@@ -276,7 +276,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#broadcast_to%28channel%3AString%2Cmessage%3AJSON%3A%3AAny%29-class-method" class="signature"><strong>.broadcast_to</strong>(channel : String, message : JSON::Any)</a>
+        <a href="#broadcast_to%28channel%3AString%2Cmessage%3AJSON%3A%3AAny%7CHash%28String%2CString%29%29-class-method" class="signature"><strong>.broadcast_to</strong>(channel : String, message : JSON::Any | Hash(String, String))</a>
         
       </li>
     
@@ -284,11 +284,6 @@
         <a href="#broadcast_to%28channel%3AString%2Cmessage%3AString%29-class-method" class="signature"><strong>.broadcast_to</strong>(channel : String, message : String)</a>
         
           <div class="summary"><p>It's important that we don't call message.to_json</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#broadcast_to%28channel%3AString%2Cmessage%3AHash%28String%2CString%29%29-class-method" class="signature"><strong>.broadcast_to</strong>(channel : String, message : Hash(String, String))</a>
         
       </li>
     
@@ -307,17 +302,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#broadcast%28message%3AString%29-instance-method" class="signature"><strong>#broadcast</strong>(message : String)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#broadcast%28message%3AJSON%3A%3AAny%29-instance-method" class="signature"><strong>#broadcast</strong>(message : JSON::Any)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#broadcast%28message%3AHash%28String%2CString%29%29-instance-method" class="signature"><strong>#broadcast</strong>(message : Hash(String, String))</a>
+        <a href="#broadcast%28message%3AString%7CJSON%3A%3AAny%7CHash%28String%2CString%29%29-instance-method" class="signature"><strong>#broadcast</strong>(message : String | JSON::Any | Hash(String, String))</a>
         
       </li>
     
@@ -384,21 +369,7 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#transmit%28message%3AString%29-instance-method" class="signature"><strong>#transmit</strong>(message : String)</a>
-        
-          <div class="summary"><p>broadcast single message to single connection for this channel</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#transmit%28message%3AJSON%3A%3AAny%29-instance-method" class="signature"><strong>#transmit</strong>(message : JSON::Any)</a>
-        
-          <div class="summary"><p>broadcast single message to single connection for this channel</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#transmit%28message%3AHash%28String%2CString%29%29-instance-method" class="signature"><strong>#transmit</strong>(message : Hash(String, String))</a>
+        <a href="#transmit%28message%3AString%7CJSON%3A%3AAny%7CHash%28String%2CString%29%29-instance-method" class="signature"><strong>#transmit</strong>(message : String | JSON::Any | Hash(String, String))</a>
         
           <div class="summary"><p>broadcast single message to single connection for this channel</p></div>
         
@@ -494,12 +465,12 @@
     Class Method Detail
   </h2>
   
-    <div class="entry-detail" id="broadcast_to(channel:String,message:JSON::Any)-class-method">
+    <div class="entry-detail" id="broadcast_to(channel:String,message:JSON::Any|Hash(String,String))-class-method">
       <div class="signature">
         
-        def self.<strong>broadcast_to</strong>(channel : String, message : JSON::Any)
+        def self.<strong>broadcast_to</strong>(channel : String, message : JSON::Any | Hash(String, String))
 
-        <a class="method-permalink" href="#broadcast_to%28channel%3AString%2Cmessage%3AJSON%3A%3AAny%29-class-method">#</a>
+        <a class="method-permalink" href="#broadcast_to%28channel%3AString%2Cmessage%3AJSON%3A%3AAny%7CHash%28String%2CString%29%29-class-method">#</a>
       </div>
       
       <br/>
@@ -527,20 +498,6 @@
       </div>
     </div>
   
-    <div class="entry-detail" id="broadcast_to(channel:String,message:Hash(String,String))-class-method">
-      <div class="signature">
-        
-        def self.<strong>broadcast_to</strong>(channel : String, message : Hash(String, String))
-
-        <a class="method-permalink" href="#broadcast_to%28channel%3AString%2Cmessage%3AHash%28String%2CString%29%29-class-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-      </div>
-    </div>
-  
 
 
 
@@ -553,40 +510,12 @@
     Instance Method Detail
   </h2>
   
-    <div class="entry-detail" id="broadcast(message:String)-instance-method">
+    <div class="entry-detail" id="broadcast(message:String|JSON::Any|Hash(String,String))-instance-method">
       <div class="signature">
         
-        def <strong>broadcast</strong>(message : String)
+        def <strong>broadcast</strong>(message : String | JSON::Any | Hash(String, String))
 
-        <a class="method-permalink" href="#broadcast%28message%3AString%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="broadcast(message:JSON::Any)-instance-method">
-      <div class="signature">
-        
-        def <strong>broadcast</strong>(message : JSON::Any)
-
-        <a class="method-permalink" href="#broadcast%28message%3AJSON%3A%3AAny%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="broadcast(message:Hash(String,String))-instance-method">
-      <div class="signature">
-        
-        def <strong>broadcast</strong>(message : Hash(String, String))
-
-        <a class="method-permalink" href="#broadcast%28message%3AHash%28String%2CString%29%29-instance-method">#</a>
+        <a class="method-permalink" href="#broadcast%28message%3AString%7CJSON%3A%3AAny%7CHash%28String%2CString%29%29-instance-method">#</a>
       </div>
       
       <br/>
@@ -768,50 +697,12 @@
       </div>
     </div>
   
-    <div class="entry-detail" id="transmit(message:String)-instance-method">
+    <div class="entry-detail" id="transmit(message:String|JSON::Any|Hash(String,String))-instance-method">
       <div class="signature">
         
-        def <strong>transmit</strong>(message : String)
+        def <strong>transmit</strong>(message : String | JSON::Any | Hash(String, String))
 
-        <a class="method-permalink" href="#transmit%28message%3AString%29-instance-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>broadcast single message to single connection for this channel</p>
-        </div>
-      
-      <br/>
-      <div>
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="transmit(message:JSON::Any)-instance-method">
-      <div class="signature">
-        
-        def <strong>transmit</strong>(message : JSON::Any)
-
-        <a class="method-permalink" href="#transmit%28message%3AJSON%3A%3AAny%29-instance-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>broadcast single message to single connection for this channel</p>
-        </div>
-      
-      <br/>
-      <div>
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="transmit(message:Hash(String,String))-instance-method">
-      <div class="signature">
-        
-        def <strong>transmit</strong>(message : Hash(String, String))
-
-        <a class="method-permalink" href="#transmit%28message%3AHash%28String%2CString%29%29-instance-method">#</a>
+        <a class="method-permalink" href="#transmit%28message%3AString%7CJSON%3A%3AAny%7CHash%28String%2CString%29%29-instance-method">#</a>
       </div>
       
         <div class="doc">
