@@ -1,5 +1,10 @@
+require "redis"
+
 module Cable
   class RedisBackend < Cable::BackendCore
+    register "redis"
+    register "rediss"
+
     # connection management
     getter redis_subscribe : Redis::Connection = Redis::Connection.new(URI.parse(Cable.settings.url))
     getter redis_publish : Redis::Client = Redis::Client.new(URI.parse(Cable.settings.url))
