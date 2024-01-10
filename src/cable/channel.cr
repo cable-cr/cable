@@ -59,7 +59,7 @@ module Cable
       @stream_identifier = stream_identifier.to_s
     end
 
-    def self.broadcast_to(channel : String, message : JSON::Any)
+    def self.broadcast_to(channel : String, message : JSON::Any | Hash(String, String))
       Cable::Logger.info { "[ActionCable] Broadcasting to #{channel}: #{message}" }
       Cable.server.publish(channel, message.to_json)
     end
@@ -70,60 +70,19 @@ module Cable
       Cable.server.publish(channel, message)
     end
 
-    def self.broadcast_to(channel : String, message : Hash(String, String))
-      Cable::Logger.info { "[ActionCable] Broadcasting to #{channel}: #{message}" }
-      Cable.server.publish(channel, message.to_json)
-    end
-
-    def broadcast(message : String)
+    def broadcast(message : String | JSON::Any | Hash(String, String))
       if stream_id = stream_identifier.presence
         Cable::Logger.info { "[ActionCable] Broadcasting to #{self.class}: #{message}" }
         Cable.server.send_to_channels(stream_id, message)
       else
-        Cable::Logger.error { "#{self.class}.transmit(message : String) with #{message} without already using stream_from(stream_identifier)" }
-      end
-    end
-
-    def broadcast(message : JSON::Any)
-      if stream_id = stream_identifier.presence
-        Cable::Logger.info { "[ActionCable] Broadcasting to #{self.class}: #{message}" }
-        Cable.server.send_to_channels(stream_id, message)
-      else
-        Cable::Logger.error { "#{self.class}.transmit(message : JSON::Any) with #{message} without already using stream_from(stream_identifier)" }
-      end
-    end
-
-    def broadcast(message : Hash(String, String))
-      if stream_id = stream_identifier.presence
-        Cable::Logger.info { "[ActionCable] Broadcasting to #{self.class}: #{message}" }
-        Cable.server.send_to_channels(stream_id, message.to_json)
-      else
-        Cable::Logger.error { "#{self.class}.transmit(message : Hash(String, String)) with #{message} without already using stream_from(stream_identifier)" }
+        Cable::Logger.error { "#{self.class}.transmit(message : #{message.class}) with #{message} without already using stream_from(stream_identifier)" }
       end
     end
 
     # broadcast single message to single connection for this channel
-    def transmit(message : String)
+    def transmit(message : String | JSON::Any | Hash(String, String))
       Cable::Logger.info { "[ActionCable] transmitting to #{self.class}: #{message}" }
-      connection.socket.send({
-        identifier: identifier,
-        message:    Cable.server.safe_decode_message(message),
-      }.to_json)
-    end
-
-    # broadcast single message to single connection for this channel
-    def transmit(message : JSON::Any)
-      Cable::Logger.info { "[ActionCable] transmitting to #{self.class}: #{message}" }
-      connection.socket.send({
-        identifier: identifier,
-        message:    Cable.server.safe_decode_message(message),
-      }.to_json)
-    end
-
-    # broadcast single message to single connection for this channel
-    def transmit(message : Hash(String, String))
-      Cable::Logger.info { "[ActionCable] transmitting to #{self.class}: #{message}" }
-      connection.socket.send({
+      connection.send_message({
         identifier: identifier,
         message:    Cable.server.safe_decode_message(message),
       }.to_json)

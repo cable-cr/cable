@@ -2,7 +2,7 @@ require "uuid"
 
 module Cable
   abstract class Connection
-    class UnathorizedConnectionException < Exception; end
+    class UnauthorizedConnectionException < Exception; end
 
     property internal_identifier : String = "0"
     property connection_identifier : String = ""
@@ -38,7 +38,7 @@ module Cable
         # gather connection_identifier after the connection has gathered the id from identified_by(field)
         self.connection_identifier = "#{internal_identifier}-#{UUID.random}"
         subscribe_to_internal_channel
-      rescue e : UnathorizedConnectionException
+      rescue e : UnauthorizedConnectionException
         reject_connection!
         unsubscribe_from_internal_channel
         socket.close(HTTP::WebSocket::CloseCode::NormalClosure, "Farewell")
@@ -52,36 +52,43 @@ module Cable
       @connection_rejected = true
     end
 
+    def channels : Array(Cable::Channel)
+      return Array(Cable::Channel).new unless Connection::CHANNELS.has_key?(connection_identifier)
+      Connection::CHANNELS.[connection_identifier].values
+    end
+
     def closed? : Bool
       socket.closed?
     end
 
     def close
-      return true unless Connection::CHANNELS.has_key?(connection_identifier)
+      if Connection::CHANNELS.has_key?(connection_identifier)
+        Connection::CHANNELS[connection_identifier].each do |identifier, channel|
+          # the ordering here is important
+          Connection::CHANNELS[connection_identifier].delete(identifier)
+          channel.close
+        rescue e : IO::Error
+          Cable.settings.on_error.call(e, "IO::Error: #{e.message} -> #{self.class.name}#close")
+        end
 
-      Connection::CHANNELS[connection_identifier].each do |identifier, channel|
-        # the ordering here is important
-        Connection::CHANNELS[connection_identifier].delete(identifier)
-        channel.close
-      rescue e : IO::Error
-        Cable.settings.on_error.call(e, "IO::Error: #{e.message} -> #{self.class.name}#close")
+        Connection::CHANNELS.delete(connection_identifier)
+        unsubscribe_from_internal_channel
       end
 
-      Connection::CHANNELS.delete(connection_identifier)
-      unsubscribe_from_internal_channel
-      Cable::Logger.info { "Terminating connection #{connection_identifier}" }
+      return true if closed?
 
+      Cable::Logger.info { "Terminating connection #{connection_identifier}" }
       socket.close
     end
 
     def send_message(message : String)
-      return if socket.closed?
+      return if closed?
 
       socket.send(message)
     end
 
     def reject_unauthorized_connection
-      raise UnathorizedConnectionException.new
+      raise UnauthorizedConnectionException.new
     end
 
     # Convert the `message` to a proper `Payload`.
