@@ -1,7 +1,5 @@
 module Cable
   class Channel
-    class CloseRedisFiber < Exception; end
-
     CHANNELS = {} of String => Cable::Channel.class
 
     macro inherited

@@ -12,7 +12,8 @@ require "./support/channels/*"
 Cable.configure do |settings|
   settings.route = "/updates"
   settings.token = "test_token"
-  settings.redis_ping_interval = 2.seconds
+  settings.url = "redis://localhost:6379"
+  settings.backend_ping_interval = 2.seconds
   settings.restart_error_allowance = 2
   settings.on_error = ->(exception : Exception, message : String) do
     FakeExceptionService.notify(exception, message: message)

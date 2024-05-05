@@ -1,5 +1,10 @@
+require "redis"
+
 module Cable
   class RedisBackend < Cable::BackendCore
+    register "redis"  # redis://
+    register "rediss" # rediss://
+
     # connection management
     getter redis_subscribe : Redis::Connection = Redis::Connection.new(URI.parse(Cable.settings.url))
     getter redis_publish : Redis::Client = Redis::Client.new(URI.parse(Cable.settings.url))
@@ -72,13 +77,13 @@ module Cable
     # then publish a special channel/message broadcast
     # the @server.redis_subscribe picks up this special combination
     # and calls ping on the block loop for us
-    def ping_redis_subscribe
+    def ping_subscribe_connection
       Cable.server.publish(Cable::INTERNAL[:channel], "ping")
     end
 
-    def ping_redis_publish
+    def ping_publish_connection
       result = redis_publish.run({"ping"})
-      Cable::Logger.debug { "Cable::RedisPinger.ping_redis_publish -> #{result}" }
+      Cable::Logger.debug { "Cable::BackendPinger.ping_publish_connection -> #{result}" }
     end
   end
 end
