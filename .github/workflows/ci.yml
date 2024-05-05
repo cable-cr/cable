@@ -9,7 +9,7 @@ on:
 jobs:
   specs:
     env:
-      REDIS_URL: redis://redis:6379
+      CABLE_BACKEND_URL: redis://redis:6379
     strategy:
       fail-fast: false
       matrix:
@@ -40,9 +40,9 @@ jobs:
           --health-timeout 5s
           --health-retries 5
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Cache Crystal
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.cache/crystal
           key: ${{ runner.os }}-crystal
