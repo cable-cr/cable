@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Crystal Docs 1.6.2">
+<meta name="crystal_docs.project_version" content="0.3.1">
+<meta name="crystal_docs.project_name" content="cable">
+
+
+
+<link href="../css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../js/doc.js"></script>
+
+  <meta name="repository-name" content="cable">
+  <title>Cable::BackendRegistry - cable 0.3.1</title>
+  <script type="text/javascript">
+    CrystalDocs.base_path = "../";
+  </script>
+</head>
+<body>
+
+<svg class="hidden">
+  <symbol id="octicon-link" viewBox="0 0 16 16">
+    <path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path>
+  </symbol>
+</svg>
+<div class="sidebar">
+  <div class="sidebar-header">
+    <div class="search-box">
+      <input type="search" class="search-input" placeholder="Search..." spellcheck="false" aria-label="Search">
+    </div>
+
+    <div class="project-summary">
+      <h1 class="project-name">
+        <a href="../index.html">
+          cable
+        </a>
+      </h1>
+
+      <span class="project-version">
+        0.3.1
+      </span>
+    </div>
+  </div>
+
+  <div class="search-results hidden">
+    <ul class="search-list"></ul>
+  </div>
+
+  <div class="types-list">
+    <ul>
+  
+  <li class="parent open current" data-id="cable/Cable" data-name="cable">
+      <a href="../Cable.html">Cable</a>
+      
+        <ul>
+  
+  <li class=" " data-id="cable/Cable/BackendCore" data-name="cable::backendcore">
+      <a href="../Cable/BackendCore.html">BackendCore</a>
+      
+    </li>
+  
+  <li class=" " data-id="cable/Cable/BackendPinger" data-name="cable::backendpinger">
+      <a href="../Cable/BackendPinger.html">BackendPinger</a>
+      
+    </li>
+  
+  <li class=" current" data-id="cable/Cable/BackendRegistry" data-name="cable::backendregistry">
+      <a href="../Cable/BackendRegistry.html">BackendRegistry</a>
+      
+    </li>
+  
+  <li class=" " data-id="cable/Cable/Channel" data-name="cable::channel">
+      <a href="../Cable/Channel.html">Channel</a>
+      
+    </li>
+  
+  <li class=" " data-id="cable/Cable/Channels" data-name="cable::channels">
+      <a href="../Cable/Channels.html">Channels</a>
+      
+    </li>
+  
+  <li class="parent " data-id="cable/Cable/Connection" data-name="cable::connection">
+      <a href="../Cable/Connection.html">Connection</a>
+      
+        <ul>
+  
+  <li class=" " data-id="cable/Cable/Connection/UnauthorizedConnectionException" data-name="cable::connection::unauthorizedconnectionexception">
+      <a href="../Cable/Connection/UnauthorizedConnectionException.html">UnauthorizedConnectionException</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="cable/Cable/Debug" data-name="cable::debug">
+      <a href="../Cable/Debug.html">Debug</a>
+      
+    </li>
+  
+  <li class=" " data-id="cable/Cable/DevBackend" data-name="cable::devbackend">
+      <a href="../Cable/DevBackend.html">DevBackend</a>
+      
+    </li>
+  
+  <li class=" " data-id="cable/Cable/HabitatSettings" data-name="cable::habitatsettings">
+      <a href="../Cable/HabitatSettings.html">HabitatSettings</a>
+      
+    </li>
+  
+  <li class=" " data-id="cable/Cable/Handler" data-name="cable::handler(t)">
+      <a href="../Cable/Handler.html">Handler</a>
+      
+    </li>
+  
+  <li class="parent " data-id="cable/Cable/Payload" data-name="cable::payload">
+      <a href="../Cable/Payload.html">Payload</a>
+      
+        <ul>
+  
+  <li class=" " data-id="cable/Cable/Payload/IdentifierConverter" data-name="cable::payload::identifierconverter">
+      <a href="../Cable/Payload/IdentifierConverter.html">IdentifierConverter</a>
+      
+    </li>
+  
+  <li class=" " data-id="cable/Cable/Payload/Indentifier" data-name="cable::payload::indentifier">
+      <a href="../Cable/Payload/Indentifier.html">Indentifier</a>
+      
+    </li>
+  
+  <li class=" " data-id="cable/Cable/Payload/PARAMS" data-name="cable::payload::params">
+      <a href="../Cable/Payload/PARAMS.html">PARAMS</a>
+      
+    </li>
+  
+  <li class=" " data-id="cable/Cable/Payload/RESULT" data-name="cable::payload::result">
+      <a href="../Cable/Payload/RESULT.html">RESULT</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="cable/Cable/RedisBackend" data-name="cable::redisbackend">
+      <a href="../Cable/RedisBackend.html">RedisBackend</a>
+      
+    </li>
+  
+  <li class=" " data-id="cable/Cable/RemoteConnections" data-name="cable::remoteconnections">
+      <a href="../Cable/RemoteConnections.html">RemoteConnections</a>
+      
+    </li>
+  
+  <li class=" " data-id="cable/Cable/Server" data-name="cable::server">
+      <a href="../Cable/Server.html">Server</a>
+      
+    </li>
+  
+  <li class=" " data-id="cable/Cable/WebsocketPinger" data-name="cable::websocketpinger">
+      <a href="../Cable/WebsocketPinger.html">WebsocketPinger</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+  </div>
+</div>
+
+
+<div class="main-content">
+<h1 class="type-name">
+
+  <span class="kind">class</span> Cable::BackendRegistry
+
+</h1>
+
+
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../Cable/BackendRegistry.html">Cable::BackendRegistry</a></li><li class="superclass"><a href="../Cable/BackendCore.html">Cable::BackendCore</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2>
+    <a id="defined-in" class="anchor" href="#defined-in">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Defined in:
+  </h2>
+  
+    
+      cable/backend_core.cr
+    
+    <br/>
+  
+
+
+
+  
+    <h2>
+      <a id="constant-summary" class="anchor" href="#constant-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+      Constant Summary
+    </h2>
+  
+  <dl>
+    
+      <dt class="entry-const" id="REGISTERED_BACKENDS">
+        <strong>REGISTERED_BACKENDS</strong> = <code>{} <span class="k">of</span> <span class="t">String</span> <span class="o">=&gt;</span> <span class="t">BackendCore</span>.<span class="k">class</span></code>
+      </dt>
+      
+    
+  </dl>
+
+
+
+  <h2>
+    <a id="constructors" class="anchor" href="#constructors">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Constructors
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#new-class-method" class="signature"><strong>.new</strong></a>
+        
+      </li>
+    
+  </ul>
+
+
+
+  <h2>
+    <a id="class-method-summary" class="anchor" href="#class-method-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Class Method Summary
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#register%28uri_scheme%3AString%2Cbackend%3ABackendCore.class%3Dself%29-class-method" class="signature"><strong>.register</strong>(uri_scheme : String, backend : <span class="t">BackendCore</span>.<span class="k">class</span> = <span class="k">self</span>)</a>
+        
+      </li>
+    
+  </ul>
+
+
+
+  <h2>
+    <a id="instance-method-summary" class="anchor" href="#instance-method-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Summary
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#close_publish_connection%28%2Aargs%2C%2A%2Aoptions%29-instance-method" class="signature"><strong>#close_publish_connection</strong>(*args, **options)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#close_publish_connection%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method" class="signature"><strong>#close_publish_connection</strong>(*args, **options, &)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#close_subscribe_connection%28%2Aargs%2C%2A%2Aoptions%29-instance-method" class="signature"><strong>#close_subscribe_connection</strong>(*args, **options)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#close_subscribe_connection%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method" class="signature"><strong>#close_subscribe_connection</strong>(*args, **options, &)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#open_subscribe_connection%28%2Aargs%2C%2A%2Aoptions%29-instance-method" class="signature"><strong>#open_subscribe_connection</strong>(*args, **options)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#open_subscribe_connection%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method" class="signature"><strong>#open_subscribe_connection</strong>(*args, **options, &)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#ping_publish_connection%28%2Aargs%2C%2A%2Aoptions%29-instance-method" class="signature"><strong>#ping_publish_connection</strong>(*args, **options)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#ping_publish_connection%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method" class="signature"><strong>#ping_publish_connection</strong>(*args, **options, &)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#ping_subscribe_connection%28%2Aargs%2C%2A%2Aoptions%29-instance-method" class="signature"><strong>#ping_subscribe_connection</strong>(*args, **options)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#ping_subscribe_connection%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method" class="signature"><strong>#ping_subscribe_connection</strong>(*args, **options, &)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#publish_connection%28%2Aargs%2C%2A%2Aoptions%29-instance-method" class="signature"><strong>#publish_connection</strong>(*args, **options)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#publish_connection%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method" class="signature"><strong>#publish_connection</strong>(*args, **options, &)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#publish_message%28%2Aargs%2C%2A%2Aoptions%29-instance-method" class="signature"><strong>#publish_message</strong>(*args, **options)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#publish_message%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method" class="signature"><strong>#publish_message</strong>(*args, **options, &)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#subscribe%28%2Aargs%2C%2A%2Aoptions%29-instance-method" class="signature"><strong>#subscribe</strong>(*args, **options)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#subscribe%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method" class="signature"><strong>#subscribe</strong>(*args, **options, &)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#subscribe_connection%28%2Aargs%2C%2A%2Aoptions%29-instance-method" class="signature"><strong>#subscribe_connection</strong>(*args, **options)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#subscribe_connection%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method" class="signature"><strong>#subscribe_connection</strong>(*args, **options, &)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#unsubscribe%28%2Aargs%2C%2A%2Aoptions%29-instance-method" class="signature"><strong>#unsubscribe</strong>(*args, **options)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#unsubscribe%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method" class="signature"><strong>#unsubscribe</strong>(*args, **options, &)</a>
+        
+      </li>
+    
+  </ul>
+
+
+
+
+
+<div class="methods-inherited">
+  
+    
+
+  <h3>Instance methods inherited from class <code><a href="../Cable/BackendCore.html">Cable::BackendCore</a></code></h3>
+  
+  
+    <a href="../Cable/BackendCore.html#close_publish_connection-instance-method" class="tooltip">
+      <span>close_publish_connection</span>
+    close_publish_connection</a>, 
+    
+  
+    <a href="../Cable/BackendCore.html#close_subscribe_connection-instance-method" class="tooltip">
+      <span>close_subscribe_connection</span>
+    close_subscribe_connection</a>, 
+    
+  
+    <a href="../Cable/BackendCore.html#open_subscribe_connection%28channel%29-instance-method" class="tooltip">
+      <span>open_subscribe_connection(channel)</span>
+    open_subscribe_connection</a>, 
+    
+  
+    <a href="../Cable/BackendCore.html#ping_publish_connection-instance-method" class="tooltip">
+      <span>ping_publish_connection</span>
+    ping_publish_connection</a>, 
+    
+  
+    <a href="../Cable/BackendCore.html#ping_subscribe_connection-instance-method" class="tooltip">
+      <span>ping_subscribe_connection</span>
+    ping_subscribe_connection</a>, 
+    
+  
+    <a href="../Cable/BackendCore.html#publish_connection-instance-method" class="tooltip">
+      <span>publish_connection</span>
+    publish_connection</a>, 
+    
+  
+    <a href="../Cable/BackendCore.html#publish_message%28stream_identifier%3AString%2Cmessage%3AString%29-instance-method" class="tooltip">
+      <span>publish_message(stream_identifier : String, message : String)</span>
+    publish_message</a>, 
+    
+  
+    <a href="../Cable/BackendCore.html#subscribe%28stream_identifier%3AString%29-instance-method" class="tooltip">
+      <span>subscribe(stream_identifier : String)</span>
+    subscribe</a>, 
+    
+  
+    <a href="../Cable/BackendCore.html#subscribe_connection-instance-method" class="tooltip">
+      <span>subscribe_connection</span>
+    subscribe_connection</a>, 
+    
+  
+    <a href="../Cable/BackendCore.html#unsubscribe%28stream_identifier%3AString%29-instance-method" class="tooltip">
+      <span>unsubscribe(stream_identifier : String)</span>
+    unsubscribe</a>
+    
+  
+
+
+    
+
+
+    
+
+  <h3>Class methods inherited from class <code><a href="../Cable/BackendCore.html">Cable::BackendCore</a></code></h3>
+  
+  
+    <a href="../Cable/BackendCore.html#register%28uri_scheme%3AString%2Cbackend%3ABackendCore.class%3Dself%29-class-method" class="tooltip">
+      <span>register(uri_scheme : String, backend : <span class="t">BackendCore</span>.<span class="k">class</span> = <span class="k">self</span>)</span>
+    register</a>
+    
+  
+
+
+  
+    
+
+
+    
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+    
+
+
+  
+</div>
+
+
+  <h2>
+    <a id="constructor-detail" class="anchor" href="#constructor-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Constructor Detail
+  </h2>
+  
+    <div class="entry-detail" id="new-class-method">
+      <div class="signature">
+        
+        def self.<strong>new</strong>
+
+        <a class="method-permalink" href="#new-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+
+
+
+  <h2>
+    <a id="class-method-detail" class="anchor" href="#class-method-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Class Method Detail
+  </h2>
+  
+    <div class="entry-detail" id="register(uri_scheme:String,backend:BackendCore.class=self)-class-method">
+      <div class="signature">
+        
+        def self.<strong>register</strong>(uri_scheme : String, backend : <span class="t">BackendCore</span>.<span class="k">class</span> = <span class="k">self</span>)
+
+        <a class="method-permalink" href="#register%28uri_scheme%3AString%2Cbackend%3ABackendCore.class%3Dself%29-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+
+
+
+  <h2>
+    <a id="instance-method-detail" class="anchor" href="#instance-method-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Detail
+  </h2>
+  
+    <div class="entry-detail" id="close_publish_connection(*args,**options)-instance-method">
+      <div class="signature">
+        
+        def <strong>close_publish_connection</strong>(*args, **options)
+
+        <a class="method-permalink" href="#close_publish_connection%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="close_publish_connection(*args,**options,&amp;)-instance-method">
+      <div class="signature">
+        
+        def <strong>close_publish_connection</strong>(*args, **options, &)
+
+        <a class="method-permalink" href="#close_publish_connection%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="close_subscribe_connection(*args,**options)-instance-method">
+      <div class="signature">
+        
+        def <strong>close_subscribe_connection</strong>(*args, **options)
+
+        <a class="method-permalink" href="#close_subscribe_connection%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="close_subscribe_connection(*args,**options,&amp;)-instance-method">
+      <div class="signature">
+        
+        def <strong>close_subscribe_connection</strong>(*args, **options, &)
+
+        <a class="method-permalink" href="#close_subscribe_connection%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="open_subscribe_connection(*args,**options)-instance-method">
+      <div class="signature">
+        
+        def <strong>open_subscribe_connection</strong>(*args, **options)
+
+        <a class="method-permalink" href="#open_subscribe_connection%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="open_subscribe_connection(*args,**options,&amp;)-instance-method">
+      <div class="signature">
+        
+        def <strong>open_subscribe_connection</strong>(*args, **options, &)
+
+        <a class="method-permalink" href="#open_subscribe_connection%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="ping_publish_connection(*args,**options)-instance-method">
+      <div class="signature">
+        
+        def <strong>ping_publish_connection</strong>(*args, **options)
+
+        <a class="method-permalink" href="#ping_publish_connection%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="ping_publish_connection(*args,**options,&amp;)-instance-method">
+      <div class="signature">
+        
+        def <strong>ping_publish_connection</strong>(*args, **options, &)
+
+        <a class="method-permalink" href="#ping_publish_connection%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="ping_subscribe_connection(*args,**options)-instance-method">
+      <div class="signature">
+        
+        def <strong>ping_subscribe_connection</strong>(*args, **options)
+
+        <a class="method-permalink" href="#ping_subscribe_connection%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="ping_subscribe_connection(*args,**options,&amp;)-instance-method">
+      <div class="signature">
+        
+        def <strong>ping_subscribe_connection</strong>(*args, **options, &)
+
+        <a class="method-permalink" href="#ping_subscribe_connection%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="publish_connection(*args,**options)-instance-method">
+      <div class="signature">
+        
+        def <strong>publish_connection</strong>(*args, **options)
+
+        <a class="method-permalink" href="#publish_connection%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="publish_connection(*args,**options,&amp;)-instance-method">
+      <div class="signature">
+        
+        def <strong>publish_connection</strong>(*args, **options, &)
+
+        <a class="method-permalink" href="#publish_connection%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="publish_message(*args,**options)-instance-method">
+      <div class="signature">
+        
+        def <strong>publish_message</strong>(*args, **options)
+
+        <a class="method-permalink" href="#publish_message%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="publish_message(*args,**options,&amp;)-instance-method">
+      <div class="signature">
+        
+        def <strong>publish_message</strong>(*args, **options, &)
+
+        <a class="method-permalink" href="#publish_message%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="subscribe(*args,**options)-instance-method">
+      <div class="signature">
+        
+        def <strong>subscribe</strong>(*args, **options)
+
+        <a class="method-permalink" href="#subscribe%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="subscribe(*args,**options,&amp;)-instance-method">
+      <div class="signature">
+        
+        def <strong>subscribe</strong>(*args, **options, &)
+
+        <a class="method-permalink" href="#subscribe%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="subscribe_connection(*args,**options)-instance-method">
+      <div class="signature">
+        
+        def <strong>subscribe_connection</strong>(*args, **options)
+
+        <a class="method-permalink" href="#subscribe_connection%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="subscribe_connection(*args,**options,&amp;)-instance-method">
+      <div class="signature">
+        
+        def <strong>subscribe_connection</strong>(*args, **options, &)
+
+        <a class="method-permalink" href="#subscribe_connection%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="unsubscribe(*args,**options)-instance-method">
+      <div class="signature">
+        
+        def <strong>unsubscribe</strong>(*args, **options)
+
+        <a class="method-permalink" href="#unsubscribe%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="unsubscribe(*args,**options,&amp;)-instance-method">
+      <div class="signature">
+        
+        def <strong>unsubscribe</strong>(*args, **options, &)
+
+        <a class="method-permalink" href="#unsubscribe%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+
+
+
+
+</div>
+
+</body>
+</html>

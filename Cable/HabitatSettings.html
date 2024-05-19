@@ -61,18 +61,18 @@
       
     </li>
   
-  <li class="parent " data-id="cable/Cable/Channel" data-name="cable::channel">
-      <a href="../Cable/Channel.html">Channel</a>
-      
-        <ul>
-  
-  <li class=" " data-id="cable/Cable/Channel/CloseRedisFiber" data-name="cable::channel::closeredisfiber">
-      <a href="../Cable/Channel/CloseRedisFiber.html">CloseRedisFiber</a>
+  <li class=" " data-id="cable/Cable/BackendPinger" data-name="cable::backendpinger">
+      <a href="../Cable/BackendPinger.html">BackendPinger</a>
       
     </li>
   
-</ul>
-
+  <li class=" " data-id="cable/Cable/BackendRegistry" data-name="cable::backendregistry">
+      <a href="../Cable/BackendRegistry.html">BackendRegistry</a>
+      
+    </li>
+  
+  <li class=" " data-id="cable/Cable/Channel" data-name="cable::channel">
+      <a href="../Cable/Channel.html">Channel</a>
       
     </li>
   
@@ -148,11 +148,6 @@
   
   <li class=" " data-id="cable/Cable/RedisBackend" data-name="cable::redisbackend">
       <a href="../Cable/RedisBackend.html">RedisBackend</a>
-      
-    </li>
-  
-  <li class=" " data-id="cable/Cable/RedisPinger" data-name="cable::redispinger">
-      <a href="../Cable/RedisPinger.html">RedisPinger</a>
       
     </li>
   
@@ -257,6 +252,23 @@
       </li>
     
       <li class="entry-summary">
+        <a href="#backend_ping_interval%3ATime%3A%3ASpan-class-method" class="signature"><strong>.backend_ping_interval</strong> : Time::Span</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#backend_ping_interval%3D%28value%3ATime%3A%3ASpan%29-class-method" class="signature"><strong>.backend_ping_interval=</strong>(value : Time::Span)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#backend_ping_interval%3F-class-method" class="signature"><strong>.backend_ping_interval?</strong></a>
+        
+          <div class="summary"><p>Used for checking missing settings on non-nilable types It's advised to use backend_ping_interval in your apps to ensure the propper type is checked.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#disable_sec_websocket_protocol_header%3ABool-class-method" class="signature"><strong>.disable_sec_websocket_protocol_header</strong> : Bool</a>
         
       </li>
@@ -304,23 +316,6 @@
         <a href="#pool_redis_publish%3F-class-method" class="signature"><strong>.pool_redis_publish?</strong></a>
         
           <div class="summary"><p>Used for checking missing settings on non-nilable types It's advised to use pool_redis_publish in your apps to ensure the propper type is checked.</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#redis_ping_interval%3ATime%3A%3ASpan-class-method" class="signature"><strong>.redis_ping_interval</strong> : Time::Span</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#redis_ping_interval%3D%28value%3ATime%3A%3ASpan%29-class-method" class="signature"><strong>.redis_ping_interval=</strong>(value : Time::Span)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#redis_ping_interval%3F-class-method" class="signature"><strong>.redis_ping_interval?</strong></a>
-        
-          <div class="summary"><p>Used for checking missing settings on non-nilable types It's advised to use redis_ping_interval in your apps to ensure the propper type is checked.</p></div>
         
       </li>
     
@@ -526,6 +521,55 @@ the propper type is checked.</p>
       </div>
     </div>
   
+    <div class="entry-detail" id="backend_ping_interval:Time::Span-class-method">
+      <div class="signature">
+        
+        def self.<strong>backend_ping_interval</strong> : Time::Span
+
+        <a class="method-permalink" href="#backend_ping_interval%3ATime%3A%3ASpan-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="backend_ping_interval=(value:Time::Span)-class-method">
+      <div class="signature">
+        
+        def self.<strong>backend_ping_interval=</strong>(value : Time::Span)
+
+        <a class="method-permalink" href="#backend_ping_interval%3D%28value%3ATime%3A%3ASpan%29-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="backend_ping_interval?-class-method">
+      <div class="signature">
+        
+        def self.<strong>backend_ping_interval?</strong>
+
+        <a class="method-permalink" href="#backend_ping_interval%3F-class-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Used for checking missing settings on non-nilable types
+It's advised to use backend_ping_interval in your apps to ensure
+the propper type is checked.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
     <div class="entry-detail" id="disable_sec_websocket_protocol_header:Bool-class-method">
       <div class="signature">
         
@@ -664,55 +708,6 @@ the propper type is checked.</p>
           
           <p>Used for checking missing settings on non-nilable types
 It's advised to use pool_redis_publish in your apps to ensure
-the propper type is checked.</p>
-        </div>
-      
-      <br/>
-      <div>
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="redis_ping_interval:Time::Span-class-method">
-      <div class="signature">
-        
-        def self.<strong>redis_ping_interval</strong> : Time::Span
-
-        <a class="method-permalink" href="#redis_ping_interval%3ATime%3A%3ASpan-class-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="redis_ping_interval=(value:Time::Span)-class-method">
-      <div class="signature">
-        
-        def self.<strong>redis_ping_interval=</strong>(value : Time::Span)
-
-        <a class="method-permalink" href="#redis_ping_interval%3D%28value%3ATime%3A%3ASpan%29-class-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="redis_ping_interval?-class-method">
-      <div class="signature">
-        
-        def self.<strong>redis_ping_interval?</strong>
-
-        <a class="method-permalink" href="#redis_ping_interval%3F-class-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Used for checking missing settings on non-nilable types
-It's advised to use redis_ping_interval in your apps to ensure
 the propper type is checked.</p>
         </div>
       

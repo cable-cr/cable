@@ -61,18 +61,18 @@
       
     </li>
   
-  <li class="parent " data-id="cable/Cable/Channel" data-name="cable::channel">
-      <a href="../Cable/Channel.html">Channel</a>
-      
-        <ul>
-  
-  <li class=" " data-id="cable/Cable/Channel/CloseRedisFiber" data-name="cable::channel::closeredisfiber">
-      <a href="../Cable/Channel/CloseRedisFiber.html">CloseRedisFiber</a>
+  <li class=" " data-id="cable/Cable/BackendPinger" data-name="cable::backendpinger">
+      <a href="../Cable/BackendPinger.html">BackendPinger</a>
       
     </li>
   
-</ul>
-
+  <li class=" " data-id="cable/Cable/BackendRegistry" data-name="cable::backendregistry">
+      <a href="../Cable/BackendRegistry.html">BackendRegistry</a>
+      
+    </li>
+  
+  <li class=" " data-id="cable/Cable/Channel" data-name="cable::channel">
+      <a href="../Cable/Channel.html">Channel</a>
       
     </li>
   
@@ -148,11 +148,6 @@
   
   <li class=" " data-id="cable/Cable/RedisBackend" data-name="cable::redisbackend">
       <a href="../Cable/RedisBackend.html">RedisBackend</a>
-      
-    </li>
-  
-  <li class=" " data-id="cable/Cable/RedisPinger" data-name="cable::redispinger">
-      <a href="../Cable/RedisPinger.html">RedisPinger</a>
       
     </li>
   
@@ -322,14 +317,14 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#pinger%3ACable%3A%3ARedisPinger-instance-method" class="signature"><strong>#pinger</strong> : Cable::RedisPinger</a>
+        <a href="#pinger%3ACable%3A%3ABackendPinger-instance-method" class="signature"><strong>#pinger</strong> : Cable::BackendPinger</a>
         
       </li>
     
       <li class="entry-summary">
         <a href="#publish%28channel%3AString%2Cmessage%3AString%29-instance-method" class="signature"><strong>#publish</strong>(channel : String, message : String)</a>
         
-          <div class="summary"><p>redis only accepts strings, so we should be strict here</p></div>
+          <div class="summary"><p>Some backends only accept strings, so we should be strict here</p></div>
         
       </li>
     
@@ -613,12 +608,12 @@
       </div>
     </div>
   
-    <div class="entry-detail" id="pinger:Cable::RedisPinger-instance-method">
+    <div class="entry-detail" id="pinger:Cable::BackendPinger-instance-method">
       <div class="signature">
         
-        def <strong>pinger</strong> : <a href="../Cable/RedisPinger.html">Cable::RedisPinger</a>
+        def <strong>pinger</strong> : <a href="../Cable/BackendPinger.html">Cable::BackendPinger</a>
 
-        <a class="method-permalink" href="#pinger%3ACable%3A%3ARedisPinger-instance-method">#</a>
+        <a class="method-permalink" href="#pinger%3ACable%3A%3ABackendPinger-instance-method">#</a>
       </div>
       
       <br/>
@@ -637,7 +632,7 @@
       
         <div class="doc">
           
-          <p>redis only accepts strings, so we should be strict here</p>
+          <p>Some backends only accept strings, so we should be strict here</p>
         </div>
       
       <br/>

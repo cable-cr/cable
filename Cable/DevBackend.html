@@ -61,18 +61,18 @@
       
     </li>
   
-  <li class="parent " data-id="cable/Cable/Channel" data-name="cable::channel">
-      <a href="../Cable/Channel.html">Channel</a>
-      
-        <ul>
-  
-  <li class=" " data-id="cable/Cable/Channel/CloseRedisFiber" data-name="cable::channel::closeredisfiber">
-      <a href="../Cable/Channel/CloseRedisFiber.html">CloseRedisFiber</a>
+  <li class=" " data-id="cable/Cable/BackendPinger" data-name="cable::backendpinger">
+      <a href="../Cable/BackendPinger.html">BackendPinger</a>
       
     </li>
   
-</ul>
-
+  <li class=" " data-id="cable/Cable/BackendRegistry" data-name="cable::backendregistry">
+      <a href="../Cable/BackendRegistry.html">BackendRegistry</a>
+      
+    </li>
+  
+  <li class=" " data-id="cable/Cable/Channel" data-name="cable::channel">
+      <a href="../Cable/Channel.html">Channel</a>
       
     </li>
   
@@ -148,11 +148,6 @@
   
   <li class=" " data-id="cable/Cable/RedisBackend" data-name="cable::redisbackend">
       <a href="../Cable/RedisBackend.html">RedisBackend</a>
-      
-    </li>
-  
-  <li class=" " data-id="cable/Cable/RedisPinger" data-name="cable::redispinger">
-      <a href="../Cable/RedisPinger.html">RedisPinger</a>
       
     </li>
   
@@ -290,12 +285,14 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#ping_redis_publish-instance-method" class="signature"><strong>#ping_redis_publish</strong></a>
+        <a href="#ping_publish_connection-instance-method" class="signature"><strong>#ping_publish_connection</strong></a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#ping_redis_subscribe-instance-method" class="signature"><strong>#ping_redis_subscribe</strong></a>
+        <a href="#ping_subscribe_connection-instance-method" class="signature"><strong>#ping_subscribe_connection</strong></a>
+        
+          <div class="summary"><p>ping/pong</p></div>
         
       </li>
     
@@ -358,14 +355,14 @@
     open_subscribe_connection</a>, 
     
   
-    <a href="../Cable/BackendCore.html#ping_redis_publish-instance-method" class="tooltip">
-      <span>ping_redis_publish</span>
-    ping_redis_publish</a>, 
+    <a href="../Cable/BackendCore.html#ping_publish_connection-instance-method" class="tooltip">
+      <span>ping_publish_connection</span>
+    ping_publish_connection</a>, 
     
   
-    <a href="../Cable/BackendCore.html#ping_redis_subscribe-instance-method" class="tooltip">
-      <span>ping_redis_subscribe</span>
-    ping_redis_subscribe</a>, 
+    <a href="../Cable/BackendCore.html#ping_subscribe_connection-instance-method" class="tooltip">
+      <span>ping_subscribe_connection</span>
+    ping_subscribe_connection</a>, 
     
   
     <a href="../Cable/BackendCore.html#publish_connection-instance-method" class="tooltip">
@@ -399,6 +396,15 @@
 
 
     
+
+  <h3>Class methods inherited from class <code><a href="../Cable/BackendCore.html">Cable::BackendCore</a></code></h3>
+  
+  
+    <a href="../Cable/BackendCore.html#register%28uri_scheme%3AString%2Cbackend%3ABackendCore.class%3Dself%29-class-method" class="tooltip">
+      <span>register(uri_scheme : String, backend : <span class="t">BackendCore</span>.<span class="k">class</span> = <span class="k">self</span>)</span>
+    register</a>
+    
+  
 
 
   
@@ -551,12 +557,12 @@
       </div>
     </div>
   
-    <div class="entry-detail" id="ping_redis_publish-instance-method">
+    <div class="entry-detail" id="ping_publish_connection-instance-method">
       <div class="signature">
         
-        def <strong>ping_redis_publish</strong>
+        def <strong>ping_publish_connection</strong>
 
-        <a class="method-permalink" href="#ping_redis_publish-instance-method">#</a>
+        <a class="method-permalink" href="#ping_publish_connection-instance-method">#</a>
       </div>
       
       <br/>
@@ -565,13 +571,22 @@
       </div>
     </div>
   
-    <div class="entry-detail" id="ping_redis_subscribe-instance-method">
+    <div class="entry-detail" id="ping_subscribe_connection-instance-method">
       <div class="signature">
         
-        def <strong>ping_redis_subscribe</strong>
+        def <strong>ping_subscribe_connection</strong>
 
-        <a class="method-permalink" href="#ping_redis_subscribe-instance-method">#</a>
+        <a class="method-permalink" href="#ping_subscribe_connection-instance-method">#</a>
       </div>
+      
+        <div class="doc">
+          
+            <div class="doc-inherited">
+              Description copied from class <a href="../Cable/BackendCore.html">Cable::BackendCore</a>
+            </div>
+          
+          <p>ping/pong</p>
+        </div>
       
       <br/>
       <div>

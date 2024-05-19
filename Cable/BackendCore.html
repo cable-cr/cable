@@ -61,18 +61,18 @@
       
     </li>
   
-  <li class="parent " data-id="cable/Cable/Channel" data-name="cable::channel">
-      <a href="../Cable/Channel.html">Channel</a>
-      
-        <ul>
-  
-  <li class=" " data-id="cable/Cable/Channel/CloseRedisFiber" data-name="cable::channel::closeredisfiber">
-      <a href="../Cable/Channel/CloseRedisFiber.html">CloseRedisFiber</a>
+  <li class=" " data-id="cable/Cable/BackendPinger" data-name="cable::backendpinger">
+      <a href="../Cable/BackendPinger.html">BackendPinger</a>
       
     </li>
   
-</ul>
-
+  <li class=" " data-id="cable/Cable/BackendRegistry" data-name="cable::backendregistry">
+      <a href="../Cable/BackendRegistry.html">BackendRegistry</a>
+      
+    </li>
+  
+  <li class=" " data-id="cable/Cable/Channel" data-name="cable::channel">
+      <a href="../Cable/Channel.html">Channel</a>
       
     </li>
   
@@ -151,11 +151,6 @@
       
     </li>
   
-  <li class=" " data-id="cable/Cable/RedisPinger" data-name="cable::redispinger">
-      <a href="../Cable/RedisPinger.html">RedisPinger</a>
-      
-    </li>
-  
   <li class=" " data-id="cable/Cable/RemoteConnections" data-name="cable::remoteconnections">
       <a href="../Cable/RemoteConnections.html">RemoteConnections</a>
       
@@ -213,6 +208,8 @@
   </h2>
   <ul class="other-types-list">
     
+      <li class="other-type"><a href="../Cable/BackendRegistry.html">Cable::BackendRegistry</a></li>
+    
       <li class="other-type"><a href="../Cable/DevBackend.html">Cable::DevBackend</a></li>
     
       <li class="other-type"><a href="../Cable/RedisBackend.html">Cable::RedisBackend</a></li>
@@ -245,6 +242,23 @@
 
 
 
+  <h2>
+    <a id="class-method-summary" class="anchor" href="#class-method-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Class Method Summary
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#register%28uri_scheme%3AString%2Cbackend%3ABackendCore.class%3Dself%29-class-method" class="signature"><strong>.register</strong>(uri_scheme : String, backend : <span class="t">BackendCore</span>.<span class="k">class</span> = <span class="k">self</span>)</a>
+        
+      </li>
+    
+  </ul>
+
 
 
   <h2>
@@ -275,12 +289,14 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#ping_redis_publish-instance-method" class="signature"><strong>#ping_redis_publish</strong></a>
+        <a href="#ping_publish_connection-instance-method" class="signature"><strong>#ping_publish_connection</strong></a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#ping_redis_subscribe-instance-method" class="signature"><strong>#ping_redis_subscribe</strong></a>
+        <a href="#ping_subscribe_connection-instance-method" class="signature"><strong>#ping_subscribe_connection</strong></a>
+        
+          <div class="summary"><p>ping/pong</p></div>
         
       </li>
     
@@ -348,6 +364,30 @@
 
 
 
+  <h2>
+    <a id="class-method-detail" class="anchor" href="#class-method-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Class Method Detail
+  </h2>
+  
+    <div class="entry-detail" id="register(uri_scheme:String,backend:BackendCore.class=self)-class-method">
+      <div class="signature">
+        
+        def self.<strong>register</strong>(uri_scheme : String, backend : <span class="t">BackendCore</span>.<span class="k">class</span> = <span class="k">self</span>)
+
+        <a class="method-permalink" href="#register%28uri_scheme%3AString%2Cbackend%3ABackendCore.class%3Dself%29-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+
 
 
   <h2>
@@ -406,12 +446,12 @@
       </div>
     </div>
   
-    <div class="entry-detail" id="ping_redis_publish-instance-method">
+    <div class="entry-detail" id="ping_publish_connection-instance-method">
       <div class="signature">
         abstract 
-        def <strong>ping_redis_publish</strong>
+        def <strong>ping_publish_connection</strong>
 
-        <a class="method-permalink" href="#ping_redis_publish-instance-method">#</a>
+        <a class="method-permalink" href="#ping_publish_connection-instance-method">#</a>
       </div>
       
       <br/>
@@ -420,13 +460,18 @@
       </div>
     </div>
   
-    <div class="entry-detail" id="ping_redis_subscribe-instance-method">
+    <div class="entry-detail" id="ping_subscribe_connection-instance-method">
       <div class="signature">
         abstract 
-        def <strong>ping_redis_subscribe</strong>
+        def <strong>ping_subscribe_connection</strong>
 
-        <a class="method-permalink" href="#ping_redis_subscribe-instance-method">#</a>
+        <a class="method-permalink" href="#ping_subscribe_connection-instance-method">#</a>
       </div>
+      
+        <div class="doc">
+          
+          <p>ping/pong</p>
+        </div>
       
       <br/>
       <div>
