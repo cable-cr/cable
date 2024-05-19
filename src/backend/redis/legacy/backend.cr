@@ -106,15 +106,15 @@
 
       # ping/pong
 
-      def ping_redis_subscribe
+      def ping_subscribe_connection
         Cable.server.publish("_internal", "ping")
       end
 
-      def ping_redis_publish
+      def ping_publish_connection
         request = Redis::Request.new
         request << "ping"
         result = redis_subscribe._connection.send(request)
-        Cable::Logger.debug { "Cable::RedisPinger.ping_redis_publish -> #{result}" }
+        Cable::Logger.debug { "Cable::BackendPinger.ping_publish_connection -> #{result}" }
       end
     end
   end

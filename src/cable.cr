@@ -1,6 +1,5 @@
 require "habitat"
 require "json"
-require "redis"
 require "./cable/**"
 
 # TODO: Write documentation for `Cable`
@@ -30,10 +29,10 @@ module Cable
   Habitat.create do
     setting route : String = Cable.message(:default_mount_path), example: "/cable"
     setting token : String = "token", example: "token"
-    setting url : String = ENV.fetch("REDIS_URL", "redis://localhost:6379"), example: "redis://localhost:6379"
+    setting url : String = ENV["CABLE_BACKEND_URL"], example: "redis://localhost:6379"
     setting disable_sec_websocket_protocol_header : Bool = false
-    setting backend_class : Cable::BackendCore.class = Cable::RedisBackend, example: "Cable::RedisBackend"
-    setting redis_ping_interval : Time::Span = 15.seconds
+    setting backend_class : Cable::BackendCore.class = Cable::BackendRegistry, example: "Cable::RedisBackend"
+    setting backend_ping_interval : Time::Span = 15.seconds
     setting restart_error_allowance : Int32 = 20
     setting on_error : Proc(Exception, String, Nil) = ->(exception : Exception, message : String) do
       Cable::Logger.error(exception: exception) { message }

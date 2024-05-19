@@ -27,8 +27,8 @@ module Cable
     getter connections = {} of String => Cable::Connection
     getter errors = 0
     getter fiber_channel = ::Channel({String, String}).new
-    getter pinger : Cable::RedisPinger do
-      Cable::RedisPinger.new(self)
+    getter pinger : Cable::BackendPinger do
+      Cable::BackendPinger.new(self)
     end
     getter backend : Cable::BackendCore do
       Cable.settings.backend_class.new
@@ -112,7 +112,7 @@ module Cable
       end
     end
 
-    # redis only accepts strings, so we should be strict here
+    # Some backends only accept strings, so we should be strict here
     def publish(channel : String, message : String)
       backend.publish_message(channel, message)
     end
@@ -169,7 +169,7 @@ module Cable
         backend.close_publish_connection
       rescue e : IO::Error
         # the @writer IO is closed already
-        Cable::Logger.debug { "Cable::Server#shutdown Connection to redis was severed: #{e.message}" }
+        Cable::Logger.debug { "Cable::Server#shutdown Connection to backend was severed: #{e.message}" }
       end
       pinger.stop
       connections.each do |_k, v|

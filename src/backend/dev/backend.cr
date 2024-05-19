@@ -38,10 +38,10 @@ module Cable
       @@subscriptions.delete(stream_identifier)
     end
 
-    def ping_redis_subscribe
+    def ping_subscribe_connection
     end
 
-    def ping_redis_publish
+    def ping_publish_connection
     end
   end
 end
