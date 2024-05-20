@@ -8,19 +8,26 @@ It's like [ActionCable](https://guides.rubyonrails.org/action_cable_overview.htm
 
 1. Add the dependency to your `shard.yml`:
 
-> NOTE: You must explicitly add the Redis shard also.
-
 ```yaml
 dependencies:
   cable:
     github: cable-cr/cable
     branch: master # or use the latest version
-  redis:
-    github: jgaskins/redis
-    branch: master # lock down if needed
+  # Specify which backend you want to use
+  cable-redis:
+    github: cable-cr/cable-redis
+    branch: main
 ```
 
-> NOTE: You can only use a single Redis shard. We recommend https://github.com/jgaskins/redis. However, you can use the legacy shard https://github.com/stefanwille/crystal-redis.
+Cable supports multiple backends. The most common one is Redis, but there's a few to choose from with more being added:
+
+Since there are multiple different versions of Redis for Crystal, you can choose which one you want to use.
+* [jgaskins/redis](https://github.com/cable-cr/cable-redis)
+* [stefanwille/crystal-redis](https://github.com/cable-cr/cable-redis-legacy)
+
+Or if you don't want to use Redis, you can try one of these alternatives
+
+* [NATS](https://github.com/cable-cr/cable-nats)
 
 2. Run `shards install`
 
@@ -29,75 +36,13 @@ dependencies:
 Application code
 ```crystal
 require "cable"
-require "cable/backend/redis/backend"
+# Or whichever backend you chose
+require "cable-redis"
 ```
-
-## Backend setup
-
-At the moment, we only support a Redis backend.
-
-### Redis
-
-Due to some stability issues, we recently swapped the Redis shard.
-
-To offer backwards compatibility, we still provide the ability to use the previous legacy shard. However, this may change in the future.
-
-**Release 0.3**
-
-Moving forward, from this release, we are officially supporting this [Redis shard](https://github.com/jgaskins/redis).
-
-Prior to this release, we used this [Redis shard](https://github.com/stefanwille/crystal-redis).
-
-However, since we cannot use two conflicting shards, we only run tests against our officially supported shard.
-
-**Legacy Redis shard usage**
-
-You can still choose to continue to use the legacy Redis shards.
-
-```yaml
-dependencies:
-  cable:
-    github: cable-cr/cable
-  redis:
-    github: stefanwille/crystal-redis
-    version: ~> 2.8.0 # last tested version
-```
-
-Application code
-
-```crystal
-require "cable"
-require "cable/backend/redis/legacy/backend"
-```
-
-**Testing the legacy Redis shard**
-
-If you want to test the legacy shard locally, change these files;
-
-```crystal
-# spec/spec_helper.cr
-
-# require "../src/backend/redis/backend"
-require "../src/backend/redis/legacy/backend"
-```
-
-```yaml
-# shard.yml
-
-development_dependencies:
-  # redis:
-  #   github: jgaskins/redis
-  #   version: ~> 0.5.0
-  redis:
-    github: stefanwille/crystal-redis
-    version: ~> 2.8.0
-```
-
-Run `shards install`
 
 ## Lucky example
 
-To help better illustrate how the entire setup looks, we'll use the [lucky web framework](https://luckyframework.org), but this will work in any Crystal web framework.
+To help better illustrate how the entire setup looks, we'll use [Lucky](https://luckyframework.org), but this will work in any Crystal web framework.
 
 ### Load the shard
 
@@ -105,7 +50,7 @@ To help better illustrate how the entire setup looks, we'll use the [lucky web f
 # src/shards.cr
 
 require "cable"
-require "cable/backend/redis/backend"
+require "cable-redis"
 ```
 
 ### Mount the middleware
@@ -137,22 +82,20 @@ After that, you can configure your `Cable server`. The defaults are:
 Cable.configure do |settings|
   settings.route = "/cable"    # the URL your JS Client will connect
   settings.token = "token"     # The query string parameter used to get the token
-  settings.url = ENV.fetch("REDIS_URL", "redis://localhost:6379")
-
-  # See Vanilla JS example below for more info
-  settings.disable_sec_websocket_protocol_header = false
-
-  # stability settings
-  settings.redis_ping_interval = 15.seconds
+  settings.url = ENV.fetch("CABLE_BACKEND_URL", "redis://localhost:6379")
+  settings.backend_class = Cable::RedisBackend
+  settings.backend_ping_interval = 15.seconds
   settings.restart_error_allowance = 20
-
-  # DEPRECATED!
-  # only use if you are using stefanwille/crystal-redis
-  # AND you want to use the connection pool
-  # Use a single publish connection by default.
-  # settings.pool_redis_publish = false # set to `true` to enable a pooled connection on publish
-  # settings.redis_pool_size = 5
-  # settings.redis_pool_timeout = 5.0
+  settings.on_error = ->(error : Exception, message : String) do
+    # or whichever error reportings you're using
+    Bugsnag.report(error) do |event|
+      event.app.app_type = "lucky"
+      event.meta_data = {
+        "error_class" => JSON::Any.new(error.class.name),
+        "message"     => JSON::Any.new(message),
+      }
+    end
+  end
 end
 ```
 
@@ -332,94 +275,6 @@ class ChatChannel < ApplicationCable::Channel
   end
 end
 ```
-
-## Redis
-
-Redis is awesome, but it has complexities that need to be considered;
-
-1. Redis Pub/Sub works really well until you lose the connection...
-2. Redis connections can go stale without activity.
-3. Redis connection TCP issues can cause unstable connections.
-4. Redis DB's have a buffer related to the message sizes called [Output Buffer Limits](https://redis.io/docs/reference/clients/#output-buffer-limits). Exceeding this buffer will not disconnect the connection. It just yields it dead. You cannot know about this except by monitoring logs/metrics.
-
-Here are some ways this shard can help with this.
-
-### Restarting the server
-
-When the first connection is made, the cable server spawns a single pub/sub connection for all subscriptions.
-If the connection dies at any point, the server will continue to throw errors unless someone manually restarts the server...
-
-The cable server provides an automated failure rate monitoring/restart function to automate the restart process.
-
-When the server encounters (n) errors are trying to connect to the Redis connection, it restarts the server.
-The error rate allowance avoids a vicious cycle i.e. (n) clients attempting to connect vs server restarts while Redis is down.
-Generally, if the Redis connection is down, you'll exceed this error allowance quickly. So you may encounter severe back-to-back restarts if Redis is down for a substantial time.
-This is expected for any system which uses a Redis backed, and Redis goes down. However, once Redis covers, Cable will self-heal and re-establish all the socket connections.
-
-> NOTE: The automated restart process will also kill all the current client WS connections.
-> However, this trade-off allows a fault-tolerant system vs leaving a dead Redis connection hanging around with no pub/sub activity.
-
-**Restart allowance settings**
-
-You can change this setting. However, we advise not going below 20.
-
-```crystal
-Cable.configure do |settings|
-  settings.restart_error_allowance = 20 # default is 20. Use 0 to disable restarts
-end
-```
-
-> NOTE: An error log `Cable.restart` will be invoked whenever a restart happens. We highly advise you to monitor these logs.
-
-### Maintain Redis connection activity
-
-When the first connection is made, the cable server starts a Redis PING/PONG task, which runs every 15 seconds. This helps to keep the Redis connection from going stale.
-
-You can change this setting. However, we advise not going over 60 seconds.
-
-```crystal
-Cable.configure do |settings|
-  settings.redis_ping_interval = 15.seconds # default is 15.
-end
-```
-
-### Enable pooling and TCP keepalive
-
-The Redis officially supported shard allows us to create a connection pool and also enable TCP keepalive settings.
-
-**Recommended setup**
-
-Start simple with the following settings.
-The Redis shard has pretty good default settings for pooling and TCP keepalive.
-
-```crystal
-# .env
-
-REDIS_URL: <redis_connection_string>?keepalive=true
-```
-
-```crystal
-# config/cable.cr
-
-Cable.configure do |settings|
-  settings.url = ENV.fetch("REDIS_URL", "redis://localhost:6379")
-end
-```
-
-> NOTE: This is not enabled by default. You must pass this param to the connection string to ensure this is enabled.
-
-See the [full docs](https://github.com/jgaskins/redis#connection-pool) on the pooling and TCP keepalive capabilities.
-
-### Increase your Redis [Output Buffer Limits](https://redis.io/docs/reference/clients/#output-buffer-limits)
-
-> Technically, this shard cannot help with this.
-
-Exceeding this buffer should be avoided to ensure a stable pub/sub connection.
-
-Options;
-
-1. Double or triple this setting on your Redis DB. 32Mb is usually the default.
-2. Ensure you truncate the message sizes client side.
 
 ## Error handling
 
