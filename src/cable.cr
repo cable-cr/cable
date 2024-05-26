@@ -37,13 +37,6 @@ module Cable
     setting on_error : Proc(Exception, String, Nil) = ->(exception : Exception, message : String) do
       Cable::Logger.error(exception: exception) { message }
     end
-
-    # DEPRECATED
-    # only use if you are using stefanwille/crystal-redis
-    # AND you want to use the connection pool
-    setting pool_redis_publish : Bool = false
-    setting redis_pool_size : Int32 = 5
-    setting redis_pool_timeout : Float64 = 5.0
   end
 
   def self.message(event : Symbol)

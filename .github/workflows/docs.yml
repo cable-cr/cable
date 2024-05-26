@@ -8,9 +8,9 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     container:
-      image: crystallang/crystal:1.7.3
+      image: crystallang/crystal:latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           persist-credentials: false
       - name: "Install shards"
@@ -18,7 +18,7 @@ jobs:
       - name: "Generate docs"
         run: crystal docs
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./docs
