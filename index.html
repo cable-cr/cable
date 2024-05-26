@@ -511,41 +511,18 @@ log_levels <span class="o">=</span> {
 <p>Alternatively, you can ping Redis directly using the redis-cli as follows;</p>
 <pre><code class="language-bash">PUBLISH _internal debug</code></pre>
 <p>This will dump a debug status into the logs.</p>
-<h2><a id="todo" class="anchor" href="#todo">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>TODO</h2>
-<p>After reading the docs, I realized I'm using some weird naming for variables/methods, so</p>
-<ul>
-<li>[x] Need to make a connection use an identifier</li>
-<li>[x] Add <code>identified_by identifier</code> to <code><a href="Cable/Connection.html">Cable::Connection</a></code></li>
-<li>[x] Give better methods to reject a connection</li>
-<li>[x] Refactor, Connection class, is so bloated</li>
-<li>[ ] Allow tracing and observability hooks.</li>
-<li>[ ] Allow external bug tracking hooks.</li>
-<li>[ ] Allow custom JSON formatted logs.</li>
-<li>[ ] Clean up of naming to make it easier for others to contribute.</li>
-<li>[ ] Add an async/local adapter (make tests, development, and small deploys simpler)</li>
-<li>[ ] Add PostgreSQL backend</li>
-</ul>
-<h2><a id="first-class-citizen" class="anchor" href="#first-class-citizen">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>First Class Citizen</h2>
-<ul>
-<li>[ ] Better integrate with Lucky, maybe with generators or something else?</li>
-<li>[ ] Add support for Kemal</li>
-<li>[ ] Add support for Amber</li>
-</ul>
-<p>The idea is to create different modules, <code>Cable::Lucky</code>, <code>Cable::Kemal</code>, <code>Cable::Amber</code>, and make them easy to use with any crystal web framework.</p>
 <h2><a id="contributing" class="anchor" href="#contributing">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
 </a>Contributing</h2>
-<p>You know, fork-branch-push-pr 😉 don't be shy. Participate as you want!</p>
+<ol>
+<li>Fork it (<a href="https://github.com/cable-cr/cable/fork">https://github.com/cable-cr/cable/fork</a>)</li>
+<li>Create your feature branch (<code>git checkout -b my-new-feature</code>)</li>
+<li>Commit your changes (<code>git commit -am 'Add some feature'</code>)</li>
+<li>Push to the branch (<code>git push origin my-new-feature</code>)</li>
+<li>Create a new Pull Request</li>
+</ol>
 </div>
 </body>
 </html>
