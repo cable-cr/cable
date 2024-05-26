@@ -1,6 +1,6 @@
 require "spec"
 require "../src/cable"
-require "../src/backend/redis/backend"
+require "cable-redis"
 require "../src/backend/dev/backend"
 require "./support/fake_exception_service"
 require "./support/request_helpers"

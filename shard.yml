@@ -16,6 +16,9 @@ dependencies:
     version: ~> 0.4
 
 development_dependencies:
+  cable-redis:
+    github: cable-cr/cable-redis
+    branch: main
   ameba:
     github: crystal-ameba/ameba
     version: ~> 1.5.0
