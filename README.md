@@ -355,29 +355,10 @@ PUBLISH _internal debug
 
 This will dump a debug status into the logs.
 
-## TODO
-
-After reading the docs, I realized I'm using some weird naming for variables/methods, so
-
-- [x] Need to make a connection use an identifier
-- [x] Add `identified_by identifier` to `Cable::Connection`
-- [x] Give better methods to reject a connection
-- [x] Refactor, Connection class, is so bloated
-- [ ] Allow tracing and observability hooks.
-- [ ] Allow external bug tracking hooks.
-- [ ] Allow custom JSON formatted logs.
-- [ ] Clean up of naming to make it easier for others to contribute.
-- [ ] Add an async/local adapter (make tests, development, and small deploys simpler)
-- [ ] Add PostgreSQL backend
-
-## First Class Citizen
-
-- [ ] Better integrate with Lucky, maybe with generators or something else?
-- [ ] Add support for Kemal
-- [ ] Add support for Amber
-
-The idea is to create different modules, `Cable::Lucky`, `Cable::Kemal`, `Cable::Amber`, and make them easy to use with any crystal web framework.
-
 ## Contributing
 
-You know, fork-branch-push-pr 😉 don't be shy. Participate as you want!
+1. Fork it (<https://github.com/cable-cr/cable/fork>)
+2. Create your feature branch (`git checkout -b my-new-feature`)
+3. Commit your changes (`git commit -am 'Add some feature'`)
+4. Push to the branch (`git push origin my-new-feature`)
+5. Create a new Pull Request
