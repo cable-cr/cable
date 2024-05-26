@@ -3,7 +3,8 @@
 <head>
   <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="generator" content="Crystal Docs 1.6.2">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Crystal Docs 1.11.2">
 <meta name="crystal_docs.project_version" content="0.3.1">
 <meta name="crystal_docs.project_name" content="cable">
 
@@ -22,9 +23,14 @@
 
 <svg class="hidden">
   <symbol id="octicon-link" viewBox="0 0 16 16">
-    <path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path>
+    <path fill="currentColor" fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path>
   </symbol>
 </svg>
+<input type="checkbox" id="sidebar-btn">
+<label for="sidebar-btn" id="sidebar-btn-label">
+  <svg class="open" xmlns="http://www.w3.org/2000/svg" height="2em" width="2em" viewBox="0 0 512 512"><title>Open Sidebar</title><path fill="currentColor" d="M80 96v64h352V96H80zm0 112v64h352v-64H80zm0 112v64h352v-64H80z"></path></svg>
+  <svg class="close" xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 512 512"><title>Close Sidebar</title><path fill="currentColor" d="m118.6 73.4-45.2 45.2L210.7 256 73.4 393.4l45.2 45.2L256 301.3l137.4 137.3 45.2-45.2L301.3 256l137.3-137.4-45.2-45.2L256 210.7Z"></path></svg>
+</label>
 <div class="sidebar">
   <div class="sidebar-header">
     <div class="search-box">
@@ -146,11 +152,6 @@
       
     </li>
   
-  <li class=" " data-id="cable/Cable/RedisBackend" data-name="cable::redisbackend">
-      <a href="Cable/RedisBackend.html">RedisBackend</a>
-      
-    </li>
-  
   <li class=" " data-id="cable/Cable/RemoteConnections" data-name="cable::remoteconnections">
       <a href="Cable/RemoteConnections.html">RemoteConnections</a>
       
@@ -192,19 +193,24 @@
 <ol>
 <li>Add the dependency to your <code>shard.yml</code>:</li>
 </ol>
-<blockquote>
-<p><span class="flag purple">NOTE</span>  You must explicitly add the Redis shard also.</p>
-</blockquote>
 <pre><code class="language-yaml">dependencies:
   cable:
     github: cable-cr/cable
     branch: master # or use the latest version
-  redis:
-    github: jgaskins/redis
-    branch: master # lock down if needed</code></pre>
-<blockquote>
-<p><span class="flag purple">NOTE</span>  You can only use a single Redis shard. We recommend https://github.com/jgaskins/redis. However, you can use the legacy shard https://github.com/stefanwille/crystal-redis.</p>
-</blockquote>
+  # Specify which backend you want to use
+  cable-redis:
+    github: cable-cr/cable-redis
+    branch: main</code></pre>
+<p>Cable supports multiple backends. The most common one is Redis, but there's a few to choose from with more being added:</p>
+<p>Since there are multiple different versions of Redis for Crystal, you can choose which one you want to use.</p>
+<ul>
+<li><a href="https://github.com/cable-cr/cable-redis">jgaskins/redis</a></li>
+<li><a href="https://github.com/cable-cr/cable-redis-legacy">stefanwille/crystal-redis</a></li>
+</ul>
+<p>Or if you don't want to use Redis, you can try one of these alternatives</p>
+<ul>
+<li><a href="https://github.com/cable-cr/cable-nats">NATS</a></li>
+</ul>
 <ol start="2">
 <li>Run <code>shards install</code></li>
 </ol>
@@ -215,57 +221,14 @@
 </a>Usage</h2>
 <p>Application code</p>
 <pre><code class="language-crystal"><span class="k">require</span> <span class="s">&quot;cable&quot;</span>
-<span class="k">require</span> <span class="s">&quot;cable/backend/redis/backend&quot;</span></code></pre>
-<h2><a id="backend-setup" class="anchor" href="#backend-setup">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Backend setup</h2>
-<p>At the moment, we only support a Redis backend.</p>
-<h3><a id="redis" class="anchor" href="#redis">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Redis</h3>
-<p>Due to some stability issues, we recently swapped the Redis shard.</p>
-<p>To offer backwards compatibility, we still provide the ability to use the previous legacy shard. However, this may change in the future.</p>
-<p><strong>Release 0.3</strong></p>
-<p>Moving forward, from this release, we are officially supporting this <a href="https://github.com/jgaskins/redis">Redis shard</a>.</p>
-<p>Prior to this release, we used this <a href="https://github.com/stefanwille/crystal-redis">Redis shard</a>.</p>
-<p>However, since we cannot use two conflicting shards, we only run tests against our officially supported shard.</p>
-<p><strong>Legacy Redis shard usage</strong></p>
-<p>You can still choose to continue to use the legacy Redis shards.</p>
-<pre><code class="language-yaml">dependencies:
-  cable:
-    github: cable-cr/cable
-  redis:
-    github: stefanwille/crystal-redis
-    version: ~&gt; 2.8.0 # last tested version</code></pre>
-<p>Application code</p>
-<pre><code class="language-crystal"><span class="k">require</span> <span class="s">&quot;cable&quot;</span>
-<span class="k">require</span> <span class="s">&quot;cable/backend/redis/legacy/backend&quot;</span></code></pre>
-<p><strong>Testing the legacy Redis shard</strong></p>
-<p>If you want to test the legacy shard locally, change these files;</p>
-<pre><code class="language-crystal"><span class="c"># spec/spec_helper.cr</span>
-
-<span class="c"># require &quot;../src/backend/redis/backend&quot;</span>
-<span class="k">require</span> <span class="s">&quot;../src/backend/redis/legacy/backend&quot;</span></code></pre>
-<pre><code class="language-yaml"># shard.yml
-
-development_dependencies:
-  # redis:
-  #   github: jgaskins/redis
-  #   version: ~&gt; 0.5.0
-  redis:
-    github: stefanwille/crystal-redis
-    version: ~&gt; 2.8.0</code></pre>
-<p>Run <code>shards install</code></p>
+<span class="c"># Or whichever backend you chose</span>
+<span class="k">require</span> <span class="s">&quot;cable-redis&quot;</span></code></pre>
 <h2><a id="lucky-example" class="anchor" href="#lucky-example">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
 </a>Lucky example</h2>
-<p>To help better illustrate how the entire setup looks, we'll use the <a href="https://luckyframework.org">lucky web framework</a>, but this will work in any Crystal web framework.</p>
+<p>To help better illustrate how the entire setup looks, we'll use <a href="https://luckyframework.org">Lucky</a>, but this will work in any Crystal web framework.</p>
 <h3><a id="load-the-shard" class="anchor" href="#load-the-shard">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
@@ -274,7 +237,7 @@ development_dependencies:
 <pre><code class="language-crystal"><span class="c"># src/shards.cr</span>
 
 <span class="k">require</span> <span class="s">&quot;cable&quot;</span>
-<span class="k">require</span> <span class="s">&quot;cable/backend/redis/backend&quot;</span></code></pre>
+<span class="k">require</span> <span class="s">&quot;cable-redis&quot;</span></code></pre>
 <h3><a id="mount-the-middleware" class="anchor" href="#mount-the-middleware">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
@@ -304,22 +267,20 @@ development_dependencies:
 <span class="t">Cable</span>.configure <span class="k">do</span> <span class="o">|</span>settings<span class="o">|</span>
   settings.route <span class="o">=</span> <span class="s">&quot;/cable&quot;</span>    <span class="c"># the URL your JS Client will connect</span>
   settings.token <span class="o">=</span> <span class="s">&quot;token&quot;</span>     <span class="c"># The query string parameter used to get the token</span>
-  settings.url <span class="o">=</span> <span class="t">ENV</span>.fetch(<span class="s">&quot;REDIS_URL&quot;</span>, <span class="s">&quot;redis://localhost:6379&quot;</span>)
-
-  <span class="c"># See Vanilla JS example below for more info</span>
-  settings.disable_sec_websocket_protocol_header <span class="o">=</span> <span class="n">false</span>
-
-  <span class="c"># stability settings</span>
-  settings.redis_ping_interval <span class="o">=</span> <span class="n">15</span>.seconds
+  settings.url <span class="o">=</span> <span class="t">ENV</span>.fetch(<span class="s">&quot;CABLE_BACKEND_URL&quot;</span>, <span class="s">&quot;redis://localhost:6379&quot;</span>)
+  settings.backend_class <span class="o">=</span> <span class="t">Cable</span><span class="t">::</span><span class="t">RedisBackend</span>
+  settings.backend_ping_interval <span class="o">=</span> <span class="n">15</span>.seconds
   settings.restart_error_allowance <span class="o">=</span> <span class="n">20</span>
-
-  <span class="c"># DEPRECATED!</span>
-  <span class="c"># only use if you are using stefanwille/crystal-redis</span>
-  <span class="c"># AND you want to use the connection pool</span>
-  <span class="c"># Use a single publish connection by default.</span>
-  <span class="c"># settings.pool_redis_publish = false # set to `true` to enable a pooled connection on publish</span>
-  <span class="c"># settings.redis_pool_size = 5</span>
-  <span class="c"># settings.redis_pool_timeout = 5.0</span>
+  settings.on_error <span class="o">=</span> <span class="o">-&gt;</span>(error : <span class="t">Exception</span>, message : <span class="t">String</span>) <span class="k">do</span>
+    <span class="c"># or whichever error reportings you&#39;re using</span>
+    <span class="t">Bugsnag</span>.report(error) <span class="k">do</span> <span class="o">|</span>event<span class="o">|</span>
+      event.app.app_type <span class="o">=</span> <span class="s">&quot;lucky&quot;</span>
+      event.meta_data <span class="o">=</span> {
+        <span class="s">&quot;error_class&quot;</span> <span class="o">=&gt;</span> <span class="t">JSON</span><span class="t">::</span><span class="t">Any</span>.new(error.<span class="k">class</span>.name),
+        <span class="s">&quot;message&quot;</span>     <span class="o">=&gt;</span> <span class="t">JSON</span><span class="t">::</span><span class="t">Any</span>.new(message),
+      }
+    <span class="k">end</span>
+  <span class="k">end</span>
 <span class="k">end</span></code></pre>
 <h3><a id="configure-logging-level" class="anchor" href="#configure-logging-level">
   <svg class="octicon-link" aria-hidden="true">
@@ -475,88 +436,6 @@ log_levels <span class="o">=</span> {
     update_their_profile
   <span class="k">end</span>
 <span class="k">end</span></code></pre>
-<h2><a id="redis-1" class="anchor" href="#redis-1">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Redis</h2>
-<p>Redis is awesome, but it has complexities that need to be considered;</p>
-<ol>
-<li>Redis Pub/Sub works really well until you lose the connection...</li>
-<li>Redis connections can go stale without activity.</li>
-<li>Redis connection TCP issues can cause unstable connections.</li>
-<li>Redis DB's have a buffer related to the message sizes called <a href="https://redis.io/docs/reference/clients/#output-buffer-limits">Output Buffer Limits</a>. Exceeding this buffer will not disconnect the connection. It just yields it dead. You cannot know about this except by monitoring logs/metrics.</li>
-</ol>
-<p>Here are some ways this shard can help with this.</p>
-<h3><a id="restarting-the-server" class="anchor" href="#restarting-the-server">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Restarting the server</h3>
-<p>When the first connection is made, the cable server spawns a single pub/sub connection for all subscriptions.
-If the connection dies at any point, the server will continue to throw errors unless someone manually restarts the server...</p>
-<p>The cable server provides an automated failure rate monitoring/restart function to automate the restart process.</p>
-<p>When the server encounters (n) errors are trying to connect to the Redis connection, it restarts the server.
-The error rate allowance avoids a vicious cycle i.e. (n) clients attempting to connect vs server restarts while Redis is down.
-Generally, if the Redis connection is down, you'll exceed this error allowance quickly. So you may encounter severe back-to-back restarts if Redis is down for a substantial time.
-This is expected for any system which uses a Redis backed, and Redis goes down. However, once Redis covers, Cable will self-heal and re-establish all the socket connections.</p>
-<blockquote>
-<p><span class="flag purple">NOTE</span>  The automated restart process will also kill all the current client WS connections.
-However, this trade-off allows a fault-tolerant system vs leaving a dead Redis connection hanging around with no pub/sub activity.</p>
-</blockquote>
-<p><strong>Restart allowance settings</strong></p>
-<p>You can change this setting. However, we advise not going below 20.</p>
-<pre><code class="language-crystal"><span class="t">Cable</span>.configure <span class="k">do</span> <span class="o">|</span>settings<span class="o">|</span>
-  settings.restart_error_allowance <span class="o">=</span> <span class="n">20</span> <span class="c"># default is 20. Use 0 to disable restarts</span>
-<span class="k">end</span></code></pre>
-<blockquote>
-<p><span class="flag purple">NOTE</span>  An error log <code>Cable.restart</code> will be invoked whenever a restart happens. We highly advise you to monitor these logs.</p>
-</blockquote>
-<h3><a id="maintain-redis-connection-activity" class="anchor" href="#maintain-redis-connection-activity">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Maintain Redis connection activity</h3>
-<p>When the first connection is made, the cable server starts a Redis PING/PONG task, which runs every 15 seconds. This helps to keep the Redis connection from going stale.</p>
-<p>You can change this setting. However, we advise not going over 60 seconds.</p>
-<pre><code class="language-crystal"><span class="t">Cable</span>.configure <span class="k">do</span> <span class="o">|</span>settings<span class="o">|</span>
-  settings.redis_ping_interval <span class="o">=</span> <span class="n">15</span>.seconds <span class="c"># default is 15.</span>
-<span class="k">end</span></code></pre>
-<h3><a id="enable-pooling-and-tcp-keepalive" class="anchor" href="#enable-pooling-and-tcp-keepalive">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Enable pooling and TCP keepalive</h3>
-<p>The Redis officially supported shard allows us to create a connection pool and also enable TCP keepalive settings.</p>
-<p><strong>Recommended setup</strong></p>
-<p>Start simple with the following settings.
-The Redis shard has pretty good default settings for pooling and TCP keepalive.</p>
-<pre><code class="language-crystal"><span class="c"># .env</span>
-
-<span class="t">REDIS_URL</span>: <span class="o">&lt;</span>redis_connection_string<span class="o">&gt;</span>?keepalive<span class="o">=</span><span class="n">true</span></code></pre>
-<pre><code class="language-crystal"><span class="c"># config/cable.cr</span>
-
-<span class="t">Cable</span>.configure <span class="k">do</span> <span class="o">|</span>settings<span class="o">|</span>
-  settings.url <span class="o">=</span> <span class="t">ENV</span>.fetch(<span class="s">&quot;REDIS_URL&quot;</span>, <span class="s">&quot;redis://localhost:6379&quot;</span>)
-<span class="k">end</span></code></pre>
-<blockquote>
-<p><span class="flag purple">NOTE</span>  This is not enabled by default. You must pass this param to the connection string to ensure this is enabled.</p>
-</blockquote>
-<p>See the <a href="https://github.com/jgaskins/redis#connection-pool">full docs</a> on the pooling and TCP keepalive capabilities.</p>
-<h3><a id="increase-your-redis-output-buffer-limits" class="anchor" href="#increase-your-redis-output-buffer-limits">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Increase your Redis <a href="https://redis.io/docs/reference/clients/#output-buffer-limits">Output Buffer Limits</a></h3>
-<blockquote>
-<p>Technically, this shard cannot help with this.</p>
-</blockquote>
-<p>Exceeding this buffer should be avoided to ensure a stable pub/sub connection.</p>
-<p>Options;</p>
-<ol>
-<li>Double or triple this setting on your Redis DB. 32Mb is usually the default.</li>
-<li>Ensure you truncate the message sizes client side.</li>
-</ol>
 <h2><a id="error-handling" class="anchor" href="#error-handling">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
