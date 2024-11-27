@@ -151,11 +151,18 @@ module ApplicationCable
     # `owned_by` instruction
     owned_by current_user : User
 
+
     def connect
-      UserToken.decode_user_id(token.to_s).try do |user_id|
-        self.identifier = user_id.to_s
-        self.current_user =  UserQuery.find(user_id)
+      user_id : Int64? = UserToken.decode_user_id(token.to_s)
+
+      # We were unable to authenticate the user, we should raise an
+      # unauthorized exception
+      if !user_id
+          raise UnathorizedConnectionException.new
       end
+
+      self.identifier = user_id.to_s
+      self.current_user =  UserQuery.find(user_id)
     end
   end
 end
