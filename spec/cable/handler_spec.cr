@@ -185,7 +185,7 @@ describe Cable::Handler do
 
       # wait server subscribe to channel
       # how can we ensure it was subscribed and avoid this sleep?
-      sleep 0.2
+      sleep 200.milliseconds
 
       # App.cable.subscriptions.subscriptions[0].send({message: "test"})
       ws2.send({"command" => "message", "identifier" => {channel: "ChatChannel", room: "1"}.to_json, "data" => {message: "test"}.to_json}.to_json)
@@ -213,7 +213,7 @@ describe Cable::Handler do
         # before `ws2.close`
         if seq == 0
           # this is a sleep to avoid publishing before channel hasn't subscribed
-          sleep 0.2
+          sleep 200.milliseconds
           Cable.server.publish("chat_1", {"message" => "from Ruby!", "current_user" => "1"}.to_json)
         end
         str.should eq(messages[seq])
@@ -249,7 +249,7 @@ describe Cable::Handler do
 
       # wait server subscribe to channel
       # how can we ensure it was subscribed and avoid this sleep?
-      sleep 0.1
+      sleep 100.milliseconds
 
       # App.cable.subscriptions.subscriptions[0].perform("invite", {invite_id: "3"});
       ws2.send({command: "message", identifier: {channel: "ChatChannel", room: "1"}.to_json, data: {invite_id: "3", action: "invite"}.to_json}.to_json)
@@ -329,7 +329,7 @@ describe Cable::Handler do
       # subscribe
       ws2.send({"command" => "subscribe", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
 
-      sleep 0.2
+      sleep 200.milliseconds
 
       # send message
       ws2.send({"command" => "message", "identifier" => {channel: "ChatChannel", room: "1"}.to_json, "data" => {message: "test"}.to_json}.to_json)
@@ -365,7 +365,7 @@ describe Cable::Handler do
       # subscribe
       ws3.send({"command" => "subscribe", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
 
-      sleep 0.2
+      sleep 200.milliseconds
 
       # send message
       ws3.send({"command" => "message", "identifier" => {channel: "ChatChannel", room: "1"}.to_json, "data" => {message: "test"}.to_json}.to_json)
@@ -401,7 +401,7 @@ describe Cable::Handler do
       # subscribe
       ws4.send({"command" => "subscribe", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
 
-      sleep 0.2
+      sleep 200.milliseconds
 
       # send message
       ws4.send({"command" => "message", "identifier" => {channel: "ChatChannel", room: "1"}.to_json, "data" => {message: "test"}.to_json}.to_json)
@@ -410,7 +410,7 @@ describe Cable::Handler do
 
       ws4.run
 
-      sleep 0.2
+      sleep 200.milliseconds
 
       # we should have 1 connectoon ws5 open
       # but since the server restarted due to volume of errors

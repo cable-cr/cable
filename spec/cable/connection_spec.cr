@@ -25,7 +25,7 @@ describe Cable::Connection do
     it "ignores empty messages" do
       connect do |connection, socket|
         connection.receive("")
-        sleep 0.1
+        sleep 100.milliseconds
 
         socket.messages.size.should eq(0)
 
@@ -42,7 +42,7 @@ describe Cable::Connection do
           connection.receive([{command: "subscribe"}].to_json)
         end
 
-        sleep 0.1
+        sleep 100.milliseconds
 
         socket.messages.size.should eq(0)
 
@@ -56,7 +56,7 @@ describe Cable::Connection do
     it "accepts" do
       connect do |connection, socket|
         connection.receive({"command" => "subscribe", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
-        sleep 0.1
+        sleep 100.milliseconds
 
         socket.messages.should contain({"type" => "confirm_subscription", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
 
@@ -68,7 +68,7 @@ describe Cable::Connection do
     it "accepts without params hash key" do
       connect do |connection, socket|
         connection.receive({"command" => "subscribe", "identifier" => {channel: "AppearanceChannel"}.to_json}.to_json)
-        sleep 0.1
+        sleep 100.milliseconds
 
         socket.messages.should contain({"type" => "confirm_subscription", "identifier" => {channel: "AppearanceChannel"}.to_json}.to_json)
 
@@ -80,7 +80,7 @@ describe Cable::Connection do
     it "accepts with nested hash" do
       connect do |connection, socket|
         connection.receive({"command" => "subscribe", "identifier" => {channel: "ChatChannel", room: "1", person: {name: "Foo", age: 32, boom: "boom"}}.to_json}.to_json)
-        sleep 0.1
+        sleep 100.milliseconds
 
         socket.messages.should contain({"type" => "confirm_subscription", "identifier" => {channel: "ChatChannel", room: "1", person: {name: "Foo", age: 32, boom: "boom"}}.to_json}.to_json)
 
@@ -92,7 +92,7 @@ describe Cable::Connection do
     it "accepts without auth token" do
       connect(connection_class: ConnectionNoTokenTest, token: nil) do |connection, socket|
         connection.receive({"command" => "subscribe", "identifier" => {channel: "ChatChannel", room: "1", person: {name: "Celso", age: 32, boom: "boom"}}.to_json}.to_json)
-        sleep 0.1
+        sleep 100.milliseconds
 
         socket.messages.should contain({"type" => "confirm_subscription", "identifier" => {channel: "ChatChannel", room: "1", person: {name: "Celso", age: 32, boom: "boom"}}.to_json}.to_json)
 
@@ -104,9 +104,9 @@ describe Cable::Connection do
     it "blocks the same connection from subscribing to the same channel multiple times" do
       connect do |connection, socket|
         connection.receive({"command" => "subscribe", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
-        sleep 0.1
+        sleep 100.milliseconds
         connection.receive({"command" => "subscribe", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
-        sleep 0.1
+        sleep 100.milliseconds
         connection.receive({"command" => "subscribe", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
 
         # ensure we only allow subscribing to the same channel once from a connection
@@ -124,7 +124,7 @@ describe Cable::Connection do
       connect do |connection, socket|
         connection.receive({"command" => "subscribe", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
         connection.receive({"command" => "unsubscribe", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
-        sleep 0.1
+        sleep 100.milliseconds
 
         socket.messages.should contain({"type" => "confirm_subscription", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
         socket.messages.should contain({"type" => "confirm_unsubscription", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
@@ -177,7 +177,7 @@ describe Cable::Connection do
       connect do |connection, socket|
         connection.receive({"command" => "subscribe", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
         connection.receive({"command" => "message", "identifier" => {channel: "UnknownChannel", room: "1"}.to_json, "data" => {invite_id: "3", action: "invite"}.to_json}.to_json)
-        sleep 0.1
+        sleep 100.milliseconds
 
         socket.messages.should contain({"type" => "confirm_subscription", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
 
@@ -189,9 +189,9 @@ describe Cable::Connection do
     it "receives a message and send to Channel#receive" do
       connect do |connection, socket|
         connection.receive({"command" => "subscribe", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
-        sleep 0.1
+        sleep 100.milliseconds
         connection.receive({"command" => "message", "identifier" => {channel: "ChatChannel", room: "1"}.to_json, "data" => {message: "Hello"}.to_json}.to_json)
-        sleep 0.1
+        sleep 100.milliseconds
 
         socket.messages.should contain({"type" => "confirm_subscription", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
         socket.messages.should contain({"identifier" => {channel: "ChatChannel", room: "1"}.to_json, "message" => {message: "Hello", current_user: "98"}}.to_json)
@@ -204,9 +204,9 @@ describe Cable::Connection do
     it "receives a message with an action key and sends to Channel#Perform" do
       connect do |connection, socket|
         connection.receive({"command" => "subscribe", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
-        sleep 0.1
+        sleep 100.milliseconds
         connection.receive({"command" => "message", "identifier" => {channel: "ChatChannel", room: "1"}.to_json, "data" => {invite_id: "4", action: "invite"}.to_json}.to_json)
-        sleep 0.1
+        sleep 100.milliseconds
 
         socket.messages.should contain({"type" => "confirm_subscription", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
         socket.messages.should contain({"identifier" => {channel: "ChatChannel", room: "1"}.to_json, "message" => {"performed" => "invite", "params" => "4"}}.to_json)
@@ -221,7 +221,7 @@ describe Cable::Connection do
     it "sends the broadcasted message" do
       connect do |connection, socket|
         connection.receive({"command" => "subscribe", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
-        sleep 0.1
+        sleep 100.milliseconds
         connection.broadcast_to(ConnectionTest::CHANNELS[connection.connection_identifier][{channel: "ChatChannel", room: "1"}.to_json], {hello: "Broadcast!"}.to_json)
 
         socket.messages.should contain({"type" => "confirm_subscription", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
@@ -236,9 +236,9 @@ describe Cable::Connection do
     it "sends the broadcasted message" do
       connect do |connection, socket|
         connection.receive({"command" => "subscribe", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
-        sleep 0.1
+        sleep 100.milliseconds
         ConnectionTest.broadcast_to("chat_1", {hello: "Broadcast!"}.to_json)
-        sleep 0.1
+        sleep 100.milliseconds
 
         socket.messages.should contain({"type" => "confirm_subscription", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
         socket.messages.should contain({identifier: {channel: "ChatChannel", room: "1"}.to_json, message: {hello: "Broadcast!"}}.to_json)
@@ -254,9 +254,9 @@ describe Cable::Connection do
       it "receives correctly" do
         connect do |connection, socket|
           connection.receive({"command" => "subscribe", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
-          sleep 0.1
+          sleep 100.milliseconds
           ChatChannel.broadcast_to(channel: "chat_1", message: "<turbo-stream></turbo-stream>")
-          sleep 0.1
+          sleep 100.milliseconds
 
           socket.messages.should contain({"type" => "confirm_subscription", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
           socket.messages.should contain({"identifier" => {channel: "ChatChannel", room: "1"}.to_json, "message" => "<turbo-stream></turbo-stream>"}.to_json)
@@ -269,10 +269,10 @@ describe Cable::Connection do
       it "receives string json correctly" do
         connect do |connection, socket|
           connection.receive({"command" => "subscribe", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
-          sleep 0.1
+          sleep 100.milliseconds
           json_message = %({"foo": "bar"})
           ChatChannel.broadcast_to(channel: "chat_1", message: json_message)
-          sleep 0.1
+          sleep 100.milliseconds
 
           socket.messages.should contain({"type" => "confirm_subscription", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
           socket.messages.should contain({"identifier" => {channel: "ChatChannel", room: "1"}.to_json, "message" => JSON.parse(%({"foo": "bar"}))}.to_json)
@@ -287,9 +287,9 @@ describe Cable::Connection do
       it "receives correctly" do
         connect do |connection, socket|
           connection.receive({"command" => "subscribe", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
-          sleep 0.1
+          sleep 100.milliseconds
           ChatChannel.broadcast_to(channel: "chat_1", message: {"foo" => "bar"})
-          sleep 0.1
+          sleep 100.milliseconds
 
           socket.messages.should contain({"type" => "confirm_subscription", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
           socket.messages.should contain({"identifier" => {channel: "ChatChannel", room: "1"}.to_json, "message" => {"foo" => "bar"}}.to_json)
@@ -304,10 +304,10 @@ describe Cable::Connection do
       it "receives correctly" do
         connect do |connection, socket|
           connection.receive({"command" => "subscribe", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
-          sleep 0.1
+          sleep 100.milliseconds
           json_message = JSON.parse(%({"foo": "bar"}))
           ChatChannel.broadcast_to(channel: "chat_1", message: json_message)
-          sleep 0.1
+          sleep 100.milliseconds
 
           socket.messages.should contain({"type" => "confirm_subscription", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
           socket.messages.should contain({"identifier" => {channel: "ChatChannel", room: "1"}.to_json, "message" => {"foo" => "bar"}}.to_json)
@@ -324,9 +324,9 @@ describe Cable::Connection do
       it "receives correctly" do
         connect do |connection, socket|
           connection.receive({"command" => "subscribe", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
-          sleep 0.1
+          sleep 100.milliseconds
           Cable.server.publish(channel: "chat_1", message: "<turbo-stream></turbo-stream>")
-          sleep 0.1
+          sleep 100.milliseconds
 
           socket.messages.should contain({"type" => "confirm_subscription", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
           socket.messages.should contain({"identifier" => {channel: "ChatChannel", room: "1"}.to_json, "message" => "<turbo-stream></turbo-stream>"}.to_json)
@@ -339,10 +339,10 @@ describe Cable::Connection do
       it "receives string json correctly" do
         connect do |connection, socket|
           connection.receive({"command" => "subscribe", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
-          sleep 0.1
+          sleep 100.milliseconds
           json_message = %({"foo": "bar"})
           Cable.server.publish(channel: "chat_1", message: json_message)
-          sleep 0.1
+          sleep 100.milliseconds
 
           socket.messages.should contain({"type" => "confirm_subscription", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
           socket.messages.should contain({"identifier" => {channel: "ChatChannel", room: "1"}.to_json, "message" => JSON.parse(%({"foo": "bar"}))}.to_json)
@@ -357,9 +357,9 @@ describe Cable::Connection do
       it "receives correctly" do
         connect do |connection, socket|
           connection.receive({"command" => "subscribe", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
-          sleep 0.1
+          sleep 100.milliseconds
           Cable.server.publish(channel: "chat_1", message: %({"foo": "bar"}))
-          sleep 0.1
+          sleep 100.milliseconds
 
           socket.messages.should contain({"type" => "confirm_subscription", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
           socket.messages.should contain({"identifier" => {channel: "ChatChannel", room: "1"}.to_json, "message" => {"foo" => "bar"}}.to_json)
@@ -376,13 +376,13 @@ describe Cable::Connection do
       connect do |connection, socket|
         connection.receive({"command" => "subscribe", "identifier" => {channel: "ChatChannel", room: "1"}.to_json}.to_json)
         connection.receive({"command" => "subscribe", "identifier" => {channel: "RejectionChannel"}.to_json}.to_json)
-        sleep 0.1
+        sleep 100.milliseconds
         json_message = JSON.parse(%({"foo": "bar"}))
         ChatChannel.broadcast_to(channel: "chat_1", message: json_message)
 
         json_message = JSON.parse(%({"foo": "bar"}))
         RejectionChannel.broadcast_to(channel: "rejection", message: json_message)
-        sleep 0.1
+        sleep 100.milliseconds
 
         # Even after broadcasting to Rejection channel, we can check the socket didn't receive it
         socket.messages.size.should eq(3)
@@ -407,14 +407,14 @@ describe Cable::Connection do
       connection_2 = ConnectionTest.new(builds_request(token: "101"), socket_2)
 
       connection_1.receive({"command" => "subscribe", "identifier" => {channel: "CallbackTransmitChannel"}.to_json}.to_json)
-      sleep 0.1
+      sleep 100.milliseconds
       CallbackTransmitChannel.broadcast_to(channel: "callbacks_01", message: "<turbo-stream></turbo-stream>")
-      sleep 0.1
+      sleep 100.milliseconds
 
       connection_2.receive({"command" => "subscribe", "identifier" => {channel: "CallbackTransmitChannel"}.to_json}.to_json)
-      sleep 0.1
+      sleep 100.milliseconds
       CallbackTransmitChannel.broadcast_to(channel: "callbacks_01", message: "<turbo-stream>2nd</turbo-stream>")
-      sleep 0.1
+      sleep 100.milliseconds
 
       # since socket_1 was connected first
       # 1 x received the subscribe command message
@@ -465,14 +465,14 @@ describe Cable::Connection do
       connection_2 = ConnectionTest.new(builds_request(token: "101"), socket_2)
 
       connection_1.receive({"command" => "subscribe", "identifier" => {channel: "CallbackConnectionTransmitChannel"}.to_json}.to_json)
-      sleep 0.1
+      sleep 100.milliseconds
       CallbackConnectionTransmitChannel.broadcast_to(channel: "callbacks_02", message: "<turbo-stream></turbo-stream>")
-      sleep 0.1
+      sleep 100.milliseconds
 
       connection_2.receive({"command" => "subscribe", "identifier" => {channel: "CallbackConnectionTransmitChannel"}.to_json}.to_json)
-      sleep 0.1
+      sleep 100.milliseconds
       CallbackConnectionTransmitChannel.broadcast_to(channel: "callbacks_02", message: "<turbo-stream>2nd</turbo-stream>")
-      sleep 0.1
+      sleep 100.milliseconds
 
       # since socket_1 was connected first
       # 1 x received the subscribe command message
