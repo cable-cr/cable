@@ -1,3 +1,6 @@
+require "mutex"
+require "set"
+require "uuid"
 require "habitat"
 require "json"
 require "./cable/**"

@@ -1,6 +1,3 @@
-require "mutex"
-require "set"
-
 module Cable
   alias Channels = Set(Cable::Channel)
 
