@@ -24,7 +24,6 @@ module Cable
     include Debug
 
     # The String key is the `connection_identifier` value for `Cable::Connection`
-    getter connections = {} of String => Cable::Connection
     getter errors = 0
     getter fiber_channel = ::Channel({String, String}).new
     getter pinger : Cable::BackendPinger do
@@ -42,10 +41,14 @@ module Cable
 
     @channels : Hash(String, Channels)
     @channel_mutex : Mutex
+    @connections : Hash(String, Cable::Connection)
+    @connections_mutex : Mutex
 
     def initialize
       @channels = {} of String => Channels
       @channel_mutex = Mutex.new
+      @connections = {} of String => Cable::Connection
+      @connections_mutex = Mutex.new
 
       begin
         # load the connections
@@ -62,12 +65,24 @@ module Cable
       RemoteConnections.new(self)
     end
 
+    # Returns the current connections
+    def connections : Hash(String, Cable::Connection)
+      @connections_mutex.synchronize do
+        @connections.dup
+      end
+    end
+
     def add_connection(connection)
-      connections[connection.connection_identifier] = connection
+      @connections_mutex.synchronize do
+        @connections[connection.connection_identifier] = connection
+      end
     end
 
     def remove_connection(connection_id)
-      connections.delete(connection_id).try(&.close)
+      connection = @connections_mutex.synchronize do
+        @connections.delete(connection_id)
+      end
+      connection.try(&.close)
     end
 
     # You shouldn't rely on these following two methods
@@ -76,7 +91,9 @@ module Cable
 
     # Only returns connections opened on this instance.
     def active_connections_for(token : String) : Array(Connection)
-      connections.values.select { |connection| connection.token == token && !connection.closed? }
+      @connections_mutex.synchronize do
+        @connections.values.select { |connection| connection.token == token && !connection.closed? }
+      end
     end
 
     # Only returns channel subscriptions opened on this instance.
@@ -142,7 +159,10 @@ module Cable
     end
 
     def send_to_internal_connections(connection_identifier : String, message : String)
-      if internal_connection = connections[connection_identifier]?
+      internal_connection = @connections_mutex.synchronize do
+        @connections[connection_identifier]?
+      end
+      if internal_connection
         case message
         when Cable.message(:disconnect)
           Cable::Logger.info { "Removing connection (#{connection_identifier})" }
@@ -172,8 +192,11 @@ module Cable
         Cable::Logger.debug { "Cable::Server#shutdown Connection to backend was severed: #{e.message}" }
       end
       pinger.stop
-      connections.each do |_k, v|
-        v.close
+      connections_to_close = @connections_mutex.synchronize do
+        @connections.values.dup
+      end
+      connections_to_close.each do |connection|
+        connection.close
       end
     end
 
@@ -194,13 +217,19 @@ module Cable
           channel, message = received
           if channel.starts_with?("cable_internal")
             identifier = channel.split('/').last
-            connection_identifier = server.connections.keys.find!(&.starts_with?(identifier))
-            server.send_to_internal_connections(connection_identifier, message)
+            connection_identifier = server.find_connection_identifier(identifier)
+            server.send_to_internal_connections(connection_identifier, message) if connection_identifier
           else
             server.send_to_channels(channel, message)
           end
           Cable::Logger.debug { "Cable::Server#process_subscribed_messages channel:#{channel} message:#{message}" }
         end
+      end
+    end
+
+    protected def find_connection_identifier(identifier : String) : String?
+      @connections_mutex.synchronize do
+        @connections.keys.find(&.starts_with?(identifier))
       end
     end
 
