@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Crystal Docs 1.13.3">
+<meta name="generator" content="Crystal Docs 1.18.2">
 <meta name="crystal_docs.project_version" content="0.3.1">
 <meta name="crystal_docs.project_name" content="cable">
 
@@ -181,7 +181,9 @@
 <div class="main-content">
 <h1 class="type-name">
 
-  <span class="kind">module</span> Cable
+  <span class="kind">
+    module
+  </span> Cable
 
 </h1>
 
@@ -199,6 +201,8 @@
   </h2>
 
   <p><span class="flag orange">TODO</span>  Write documentation for <code><a href="Cable.html">Cable</a></code></p>
+
+
 
 
 
@@ -320,15 +324,31 @@
     
       <dt class="entry-const" id="HABITAT_SETTINGS">
         <strong>HABITAT_SETTINGS</strong> = <code>[{decl: route : <span class="t">String</span> <span class="o">=</span> <span class="t">Cable</span>.message(<span class="n">:default_mount_path</span>), example: <span class="s">&quot;/cable&quot;</span>, validation: <span class="n">nil</span>}, {decl: token : <span class="t">String</span> <span class="o">=</span> <span class="s">&quot;token&quot;</span>, example: <span class="s">&quot;token&quot;</span>, validation: <span class="n">nil</span>}, {decl: url : <span class="t">String</span> <span class="o">=</span> <span class="t">ENV</span>[<span class="s">&quot;CABLE_BACKEND_URL&quot;</span>], example: <span class="s">&quot;redis://localhost:6379&quot;</span>, validation: <span class="n">nil</span>}, {decl: disable_sec_websocket_protocol_header : <span class="t">Bool</span> <span class="o">=</span> <span class="n">false</span>, example: <span class="n">nil</span>, validation: <span class="n">nil</span>}, {decl: backend_class : <span class="t">Cable</span><span class="t">::</span><span class="t">BackendCore</span>.<span class="k">class</span> <span class="o">=</span> <span class="t">Cable</span><span class="t">::</span><span class="t">BackendRegistry</span>, example: <span class="s">&quot;Cable::RedisBackend&quot;</span>, validation: <span class="n">nil</span>}, {decl: backend_ping_interval : <span class="t">Time</span><span class="t">::</span><span class="t">Span</span> <span class="o">=</span> <span class="n">15</span>.seconds, example: <span class="n">nil</span>, validation: <span class="n">nil</span>}, {decl: restart_error_allowance : <span class="t">Int32</span> <span class="o">=</span> <span class="n">20</span>, example: <span class="n">nil</span>, validation: <span class="n">nil</span>}, {decl: on_error : <span class="t">Proc</span>(<span class="t">Exception</span>, <span class="t">String</span>, <span class="t">Nil</span>) <span class="o">=</span> <span class="o">-&gt;</span>(exception : <span class="t">Exception</span>, message : <span class="t">String</span>) <span class="k">do</span>
-  <span class="t">Cable</span><span class="t">::</span><span class="t">Logger</span>.error(exception: exception) <span class="k">do</span>
-    message
-  <span class="k">end</span>
+  <span class="t">Cable</span><span class="t">::</span><span class="t">Logger</span>.error(exception: exception) <span class="k">do</span> message <span class="k">end</span>
 <span class="k">end</span>, example: <span class="n">nil</span>, validation: <span class="n">nil</span>}] <span class="k">of</span> <span class="t">Nil</span></code>
       </dt>
       
     
       <dt class="entry-const" id="INTERNAL">
-        <strong>INTERNAL</strong> = <code>{message_types: {welcome: <span class="s">&quot;welcome&quot;</span>, disconnect: <span class="s">&quot;disconnect&quot;</span>, ping: <span class="s">&quot;ping&quot;</span>, confirmation: <span class="s">&quot;confirm_subscription&quot;</span>, rejection: <span class="s">&quot;reject_subscription&quot;</span>, unsubscribe: <span class="s">&quot;confirm_unsubscription&quot;</span>}, channel: <span class="s">&quot;_internal&quot;</span>, disconnect_reasons: {unauthorized: <span class="s">&quot;unauthorized&quot;</span>, invalid_request: <span class="s">&quot;invalid_request&quot;</span>, server_restart: <span class="s">&quot;server_restart&quot;</span>, remote: <span class="s">&quot;remote&quot;</span>}, default_mount_path: <span class="s">&quot;/cable&quot;</span>, protocols: [<span class="s">&quot;actioncable-v1-json&quot;</span>, <span class="s">&quot;actioncable-unsupported&quot;</span>]}</code>
+        <strong>INTERNAL</strong> = <code>{
+  message_types: {
+    welcome: <span class="s">&quot;welcome&quot;</span>,
+    disconnect: <span class="s">&quot;disconnect&quot;</span>,
+    ping: <span class="s">&quot;ping&quot;</span>,
+    confirmation: <span class="s">&quot;confirm_subscription&quot;</span>,
+    rejection: <span class="s">&quot;reject_subscription&quot;</span>,
+    unsubscribe: <span class="s">&quot;confirm_unsubscription&quot;</span>,
+  },
+  channel: <span class="s">&quot;_internal&quot;</span>,
+  disconnect_reasons: {
+    unauthorized: <span class="s">&quot;unauthorized&quot;</span>,
+    invalid_request: <span class="s">&quot;invalid_request&quot;</span>,
+    server_restart: <span class="s">&quot;server_restart&quot;</span>,
+    remote: <span class="s">&quot;remote&quot;</span>,
+  },
+  default_mount_path: <span class="s">&quot;/cable&quot;</span>,
+  protocols: [<span class="s">&quot;actioncable-v1-json&quot;</span>, <span class="s">&quot;actioncable-unsupported&quot;</span>],
+}</code>
       </dt>
       
     
@@ -346,8 +366,9 @@
 
 
 
+  
 
-
+  
   <h2>
     <a id="class-method-summary" class="anchor" href="#class-method-summary">
   <svg class="octicon-link" aria-hidden="true">
@@ -391,9 +412,9 @@
   </ul>
 
 
+  
 
-
-
+  
   <h2>
     <a id="instance-method-summary" class="anchor" href="#instance-method-summary">
   <svg class="octicon-link" aria-hidden="true">
@@ -413,39 +434,39 @@
 
 
 
-<div class="methods-inherited">
+  <div class="methods-inherited">
+    
+      
+
+
+      
+
+
+      
+
+
+      
+
+
+    
+      
+
+
+      
+
+
+      
+
+
+      
+
+
+    
+  </div>
+
   
-    
-
-
-    
-
-
-    
-
-
-    
-
 
   
-    
-
-
-    
-
-
-    
-
-
-    
-
-
-  
-</div>
-
-
-
-
   <h2>
     <a id="class-method-detail" class="anchor" href="#class-method-detail">
   <svg class="octicon-link" aria-hidden="true">
@@ -541,9 +562,9 @@
   
 
 
+  
 
-
-
+  
   <h2>
     <a id="instance-method-detail" class="anchor" href="#instance-method-detail">
   <svg class="octicon-link" aria-hidden="true">
@@ -567,6 +588,7 @@
       </div>
     </div>
   
+
 
 
 </div>
