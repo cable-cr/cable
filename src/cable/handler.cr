@@ -16,6 +16,9 @@ module Cable
       end
 
       ws = HTTP::WebSocketHandler.new do |socket, ws_ctx|
+        connection_id : String? = nil
+        ws_pinger : Cable::WebsocketPinger? = nil
+
         connection = T.new(ws_ctx.request, socket)
 
         next if connection.closed? || connection.connection_rejected?
@@ -76,6 +79,11 @@ module Cable
           Cable::Logger.info { "Finished \"#{path}\" [WebSocket] for #{remote_address} at #{Time.utc}" }
         end
       rescue e : Exception
+        # Cleanup everything after the exception to prevent memory leak
+        ws_pinger.try(&.stop)
+        if conn_id = connection_id
+          Cable.server.remove_connection(conn_id)
+        end
         Cable.settings.on_error.call(e, "Cable::Handler#call -> HTTP::WebSocketHandler")
         raise e
       end
