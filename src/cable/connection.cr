@@ -1,5 +1,3 @@
-require "uuid"
-
 module Cable
   abstract class Connection
     class UnauthorizedConnectionException < Exception; end
@@ -12,7 +10,8 @@ module Cable
     getter socket
     getter started_at : Time = Time.utc
 
-    CHANNELS = {} of String => Hash(String, Cable::Channel)
+    CHANNELS       = {} of String => Hash(String, Cable::Channel)
+    CHANNELS_MUTEX = Mutex.new
 
     def identifier
       internal_identifier
@@ -53,8 +52,10 @@ module Cable
     end
 
     def channels : Array(Cable::Channel)
-      return Array(Cable::Channel).new unless Connection::CHANNELS.has_key?(connection_identifier)
-      Connection::CHANNELS.[connection_identifier].values
+      CHANNELS_MUTEX.synchronize do
+        return Array(Cable::Channel).new unless CHANNELS.has_key?(connection_identifier)
+        CHANNELS[connection_identifier].values
+      end
     end
 
     def closed? : Bool
@@ -62,16 +63,22 @@ module Cable
     end
 
     def close
-      if Connection::CHANNELS.has_key?(connection_identifier)
-        Connection::CHANNELS[connection_identifier].each do |identifier, channel|
-          # the ordering here is important
-          Connection::CHANNELS[connection_identifier].delete(identifier)
+      channels_to_close = CHANNELS_MUTEX.synchronize do
+        if CHANNELS.has_key?(connection_identifier)
+          channels_copy = CHANNELS[connection_identifier].dup
+          CHANNELS.delete(connection_identifier)
+          channels_copy
+        else
+          nil
+        end
+      end
+
+      if channels_to_close
+        channels_to_close.each do |identifier, channel|
           channel.close
         rescue e : IO::Error
           Cable.settings.on_error.call(e, "IO::Error: #{e.message} -> #{self.class.name}#close")
         end
-
-        Connection::CHANNELS.delete(connection_identifier)
         unsubscribe_from_internal_channel
       end
 
@@ -111,8 +118,10 @@ module Cable
         identifier: payload.identifier.key,
         params: payload.channel_params
       )
-      Connection::CHANNELS[connection_identifier] ||= {} of String => Cable::Channel
-      Connection::CHANNELS[connection_identifier][payload.identifier.key] = channel
+      CHANNELS_MUTEX.synchronize do
+        CHANNELS[connection_identifier] ||= {} of String => Cable::Channel
+        CHANNELS[connection_identifier][payload.identifier.key] = channel
+      end
       channel.subscribed
 
       if channel.subscription_rejected?
@@ -133,13 +142,19 @@ module Cable
 
     # ensure we only allow subscribing to the same channel once from a connection
     def connection_requesting_duplicate_channel_subscription?(payload)
-      return unless connection_key = Connection::CHANNELS.dig?(connection_identifier, payload.identifier.key)
+      connection_key = CHANNELS_MUTEX.synchronize do
+        CHANNELS.dig?(connection_identifier, payload.identifier.key)
+      end
+      return unless connection_key
 
       connection_key.class.to_s == payload.channel
     end
 
     def unsubscribe(payload : Cable::Payload)
-      if channel = Connection::CHANNELS[connection_identifier].delete(payload.identifier.key)
+      channel = CHANNELS_MUTEX.synchronize do
+        CHANNELS[connection_identifier]?.try(&.delete(payload.identifier.key))
+      end
+      if channel
         channel.close
         Cable::Logger.info { "#{payload.channel} is transmitting the unsubscribe confirmation" }
         send_message({type: Cable.message(:unsubscribe), identifier: payload.identifier.key}.to_json)
@@ -147,7 +162,10 @@ module Cable
     end
 
     def reject(payload : Cable::Payload)
-      if channel = Connection::CHANNELS[connection_identifier].delete(payload.identifier.key)
+      channel = CHANNELS_MUTEX.synchronize do
+        CHANNELS[connection_identifier]?.try(&.delete(payload.identifier.key))
+      end
+      if channel
         channel.unsubscribed
         Cable::Logger.info { "#{channel.class} is transmitting the subscription rejection" }
         send_message({type: Cable.message(:rejection), identifier: payload.identifier.key}.to_json)
@@ -155,7 +173,10 @@ module Cable
     end
 
     def message(payload : Cable::Payload)
-      if channel = Connection::CHANNELS.dig?(connection_identifier, payload.identifier.key)
+      channel = CHANNELS_MUTEX.synchronize do
+        CHANNELS.dig?(connection_identifier, payload.identifier.key)
+      end
+      if channel
         if payload.action?
           Cable::Logger.info { "#{channel.class}#perform(\"#{payload.action}\", #{payload.data})" }
           channel.perform(payload.action, payload.data)
