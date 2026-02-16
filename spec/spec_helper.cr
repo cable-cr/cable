@@ -16,8 +16,8 @@ Cable.configure do |settings|
   settings.backend_class = Cable::RedisBackend
   settings.backend_ping_interval = 2.seconds
   settings.restart_error_allowance = 2
-  settings.on_error = ->(exception : Exception, message : String) do
-    FakeExceptionService.notify(exception, message: message)
+  settings.on_error = ->(exception : Exception, message : String, connection : Cable::Connection?) do
+    FakeExceptionService.notify(exception, message: message, connection: connection)
   end
 end
 

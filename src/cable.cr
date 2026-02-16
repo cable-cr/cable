@@ -37,7 +37,8 @@ module Cable
     setting backend_class : Cable::BackendCore.class = Cable::BackendRegistry, example: "Cable::RedisBackend"
     setting backend_ping_interval : Time::Span = 15.seconds
     setting restart_error_allowance : Int32 = 20
-    setting on_error : Proc(Exception, String, Nil) = ->(exception : Exception, message : String) do
+    # ameba:disable Lint/UnusedArgument
+    setting on_error : Proc(Exception, String, Cable::Connection?, Nil) = ->(exception : Exception, message : String, connection : Cable::Connection?) do
       Cable::Logger.error(exception: exception) { message }
     end
   end

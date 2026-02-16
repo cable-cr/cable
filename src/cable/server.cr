@@ -53,7 +53,7 @@ module Cable
         subscribe
         process_subscribed_messages
       rescue e
-        Cable.settings.on_error.call(e, "Cable::Server.initialize")
+        Cable.settings.on_error.call(e, "Cable::Server.initialize", nil)
         raise e
       end
     end
@@ -151,7 +151,7 @@ module Cable
           end
         end
       rescue e : IO::Error
-        Cable.settings.on_error.call(e, "IO::Error Exception: #{e.message}: #{parsed_message} -> Cable::Server#send_to_channels(channel, message)")
+        Cable.settings.on_error.call(e, "IO::Error Exception: #{e.message}: #{parsed_message} -> Cable::Server#send_to_channels(channel, message)", nil)
       end
     end
 

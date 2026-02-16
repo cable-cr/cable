@@ -77,7 +77,7 @@ module Cable
         channels_to_close.each do |identifier, channel|
           channel.close
         rescue e : IO::Error
-          Cable.settings.on_error.call(e, "IO::Error: #{e.message} -> #{self.class.name}#close")
+          Cable.settings.on_error.call(e, "IO::Error: #{e.message} -> #{self.class.name}#close", self)
         end
         unsubscribe_from_internal_channel
       end
@@ -185,7 +185,7 @@ module Cable
             Cable::Logger.info { "#{channel.class}#receive(#{payload.data})" }
             channel.receive(payload.data)
           rescue e : TypeCastError
-            Cable.settings.on_error.call(e, "Exception: #{e.message} -> #{self.class.name}#message(payload) { #{payload.inspect} }")
+            Cable.settings.on_error.call(e, "Exception: #{e.message} -> #{self.class.name}#message(payload) { #{payload.inspect} }", self)
           end
         end
       end
