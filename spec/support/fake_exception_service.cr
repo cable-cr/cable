@@ -1,8 +1,9 @@
 class FakeExceptionService
-  @@exceptions : Array(Hash(String, Exception)) = [] of Hash(String, Exception)
+  record Report, exception : Exception, message : String, connection : Cable::Connection?
+  @@exceptions : Array(Report) = [] of Report
 
   def self.clear
-    @@exceptions = [] of Hash(String, Exception)
+    @@exceptions = [] of Report
   end
 
   def self.size
@@ -13,7 +14,7 @@ class FakeExceptionService
     @@exceptions
   end
 
-  def self.notify(exception, message)
-    @@exceptions << {message => exception}
+  def self.notify(exception, message, connection = nil)
+    @@exceptions << Report.new(exception: exception, message: message, connection: connection)
   end
 end

@@ -86,13 +86,14 @@ Cable.configure do |settings|
   settings.backend_class = Cable::RedisBackend
   settings.backend_ping_interval = 15.seconds
   settings.restart_error_allowance = 20
-  settings.on_error = ->(error : Exception, message : String) do
+  settings.on_error = ->(error : Exception, message : String, connection : Cable::Connection?) do
     # or whichever error reportings you're using
     Bugsnag.report(error) do |event|
       event.app.app_type = "lucky"
       event.meta_data = {
         "error_class" => JSON::Any.new(error.class.name),
         "message"     => JSON::Any.new(message),
+        "token"       => JSON::Any.new(connection.try(&.token).to_s),
       }
     end
   end
@@ -283,7 +284,7 @@ You can setup a hook to report errors to any 3rd party service you choose.
 ```crystal
 # config/cable.cr
 Cable.configure do |settings|
-  settings.on_error = ->(exception : Exception, message : String) do
+  settings.on_error = ->(exception : Exception, message : String, connection : Cable::Connection?) do
     # new 3rd part service handler
     ExceptionService.notify(exception, message: message)
     # default logic
@@ -295,13 +296,13 @@ end
 
 ```crystal
 Habitat.create do
-  setting on_error : Proc(Exception, String, Nil) = ->(exception : Exception, message : String) do
+  setting on_error : Proc(Exception, String, Cable::Connection?, Nil) = ->(exception : Exception, message : String, connection : Cable::Connection?) do
     Cable::Logger.error(exception: exception) { message }
   end
 end
 ```
 
-> NOTE: The message field will contain details regarding which class/method raised the error
+> NOTE: The message field will contain details regarding which class/method raised the error. The connection parameter provides access to the `Cable::Connection` instance (when available), including the `token`, `connection_identifier`, and any fields defined via `identified_by` or `owned_by`.
 
 ## Client-Side
 

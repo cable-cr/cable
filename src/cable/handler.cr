@@ -51,7 +51,7 @@ module Cable
             ws_pinger.stop
             socket.close(HTTP::WebSocket::CloseCode::InvalidFramePayloadData, "Invalid message")
             Cable.server.remove_connection(connection_id)
-            Cable.settings.on_error.call(e, "Cable::Handler#socket.on_message")
+            Cable.settings.on_error.call(e, "Cable::Handler#socket.on_message -> #{message}", connection)
           rescue e : Cable::Connection::UnauthorizedConnectionException
             # handle unauthorized connections
             # no need to log them
@@ -69,7 +69,7 @@ module Cable
             # handle restart
             Cable.server.count_error!
             Cable.restart if Cable.server.restart?
-            Cable.settings.on_error.call(e, "Cable::Handler#socket.on_message")
+            Cable.settings.on_error.call(e, "Cable::Handler#socket.on_message -> #{message}", connection)
           end
         end
 
@@ -84,7 +84,7 @@ module Cable
         if conn_id = connection_id
           Cable.server.remove_connection(conn_id)
         end
-        Cable.settings.on_error.call(e, "Cable::Handler#call -> HTTP::WebSocketHandler")
+        Cable.settings.on_error.call(e, "Cable::Handler#call -> HTTP::WebSocketHandler", connection)
         raise e
       end
 

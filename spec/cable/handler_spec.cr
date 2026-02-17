@@ -132,8 +132,10 @@ describe Cable::Handler do
       end
 
       FakeExceptionService.size.should eq(1)
-      FakeExceptionService.exceptions.first.keys.first.should eq("Cable::Handler#socket.on_message")
-      FakeExceptionService.exceptions.first.values.first.class.should eq(JSON::SerializableError)
+      exception = FakeExceptionService.exceptions.first
+      exception.message.should contain("Cable::Handler#socket.on_message")
+      exception.exception.class.should eq(JSON::SerializableError)
+      exception.connection.as(Cable::Connection).token.should eq("1")
     end
 
     it "rejected" do
