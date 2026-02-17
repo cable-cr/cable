@@ -271,13 +271,14 @@
   settings.backend_class <span class="o">=</span> <span class="t">Cable</span><span class="t">::</span><span class="t">RedisBackend</span>
   settings.backend_ping_interval <span class="o">=</span> <span class="n">15</span>.seconds
   settings.restart_error_allowance <span class="o">=</span> <span class="n">20</span>
-  settings.on_error <span class="o">=</span> <span class="o">-&gt;</span>(error : <span class="t">Exception</span>, message : <span class="t">String</span>) <span class="k">do</span>
+  settings.on_error <span class="o">=</span> <span class="o">-&gt;</span>(error : <span class="t">Exception</span>, message : <span class="t">String</span>, connection : <span class="t">Cable</span><span class="t">::</span><span class="t">Connection</span>?) <span class="k">do</span>
     <span class="c"># or whichever error reportings you&#39;re using</span>
     <span class="t">Bugsnag</span>.report(error) <span class="k">do</span> <span class="o">|</span>event<span class="o">|</span>
       event.app.app_type <span class="o">=</span> <span class="s">&quot;lucky&quot;</span>
       event.meta_data <span class="o">=</span> {
         <span class="s">&quot;error_class&quot;</span> <span class="o">=&gt;</span> <span class="t">JSON</span><span class="t">::</span><span class="t">Any</span>.new(error.<span class="k">class</span>.name),
         <span class="s">&quot;message&quot;</span>     <span class="o">=&gt;</span> <span class="t">JSON</span><span class="t">::</span><span class="t">Any</span>.new(message),
+        <span class="s">&quot;token&quot;</span>       <span class="o">=&gt;</span> <span class="t">JSON</span><span class="t">::</span><span class="t">Any</span>.new(connection.try(<span class="o">&amp;</span>.token).to_s),
       }
     <span class="k">end</span>
   <span class="k">end</span>
@@ -444,7 +445,7 @@ log_levels <span class="o">=</span> {
 <p>You can setup a hook to report errors to any 3rd party service you choose.</p>
 <pre><code class="language-crystal"><span class="c"># config/cable.cr</span>
 <span class="t">Cable</span>.configure <span class="k">do</span> <span class="o">|</span>settings<span class="o">|</span>
-  settings.on_error <span class="o">=</span> <span class="o">-&gt;</span>(exception : <span class="t">Exception</span>, message : <span class="t">String</span>) <span class="k">do</span>
+  settings.on_error <span class="o">=</span> <span class="o">-&gt;</span>(exception : <span class="t">Exception</span>, message : <span class="t">String</span>, connection : <span class="t">Cable</span><span class="t">::</span><span class="t">Connection</span>?) <span class="k">do</span>
     <span class="c"># new 3rd part service handler</span>
     <span class="t">ExceptionService</span>.notify(exception, message: message)
     <span class="c"># default logic</span>
@@ -453,12 +454,12 @@ log_levels <span class="o">=</span> {
 <span class="k">end</span></code></pre>
 <p><strong>Default Handler</strong></p>
 <pre><code class="language-crystal"><span class="t">Habitat</span>.create <span class="k">do</span>
-  setting on_error : <span class="t">Proc</span>(<span class="t">Exception</span>, <span class="t">String</span>, <span class="t">Nil</span>) <span class="o">=</span> <span class="o">-&gt;</span>(exception : <span class="t">Exception</span>, message : <span class="t">String</span>) <span class="k">do</span>
+  setting on_error : <span class="t">Proc</span>(<span class="t">Exception</span>, <span class="t">String</span>, <span class="t">Cable</span><span class="t">::</span><span class="t">Connection</span>?, <span class="t">Nil</span>) <span class="o">=</span> <span class="o">-&gt;</span>(exception : <span class="t">Exception</span>, message : <span class="t">String</span>, connection : <span class="t">Cable</span><span class="t">::</span><span class="t">Connection</span>?) <span class="k">do</span>
     <span class="t">Cable</span><span class="t">::</span><span class="t">Logger</span>.error(exception: exception) { message }
   <span class="k">end</span>
 <span class="k">end</span></code></pre>
 <blockquote>
-<p><span class="flag purple">NOTE</span>  The message field will contain details regarding which class/method raised the error</p>
+<p><span class="flag purple">NOTE</span>  The message field will contain details regarding which class/method raised the error. The connection parameter provides access to the <code><a href="Cable/Connection.html">Cable::Connection</a></code> instance (when available), including the <code>token</code>, <code>connection_identifier</code>, and any fields defined via <code>identified_by</code> or <code>owned_by</code>.</p>
 </blockquote>
 <h2><a id="client-side" class="anchor" href="#client-side">
   <svg class="octicon-link" aria-hidden="true">
