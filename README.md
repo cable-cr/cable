@@ -27,7 +27,12 @@ Since there are multiple different versions of Redis for Crystal, you can choose
 
 Or if you don't want to use Redis, you can try one of these alternatives
 
+> [!NOTE]
+> These alternate extensions may need some work before using in production
+
 * [NATS](https://github.com/cable-cr/cable-nats)
+* [Postgres](https://github.com/cable-cr/cable-postgres)
+* [AMQP](https://github.com/cable-cr/cable-amqp)
 
 2. Run `shards install`
 
