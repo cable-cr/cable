@@ -42,6 +42,24 @@ module Cable
         unsubscribe_from_internal_channel
         socket.close(HTTP::WebSocket::CloseCode::NormalClosure, "Farewell")
         Cable::Logger.info { ("An unauthorized connection attempt was rejected") }
+      rescue e : Exception
+        # Anything else (e.g. a dead Redis backend causing IO::Error during
+        # subscribe_to_internal_channel) would otherwise escape to the
+        # WebSocketHandler and tear down the TCP socket with no close frame
+        # (client sees 1006). Convert it to a clean InternalServerError (1011)
+        # close so clients have a meaningful signal, and report via on_error.
+        reject_connection!
+        begin
+          unsubscribe_from_internal_channel
+        rescue
+          # backend is likely the source of the error — don't mask it
+        end
+        begin
+          socket.close(HTTP::WebSocket::CloseCode::InternalServerError, "Internal Server Error") unless socket.closed?
+        rescue
+          # socket may already be torn down; nothing more we can do here
+        end
+        Cable.settings.on_error.call(e, "Exception: #{e.message} -> #{self.class.name}#initialize", self)
       end
     end
 
