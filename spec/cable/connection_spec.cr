@@ -172,6 +172,32 @@ describe Cable::Connection do
     end
   end
 
+  describe "when the backend fails during initialize" do
+    it "closes the socket cleanly and reports via on_error instead of leaking the exception" do
+      Cable.reset_server
+      Cable.temp_config(backend_class: FailingSubscribeBackend) do
+        # Force the server to materialize so the failing backend is wired up
+        Cable.server
+
+        socket = DummySocket.new(IO::Memory.new)
+        connection = ConnectionTest.new(builds_request(token: "98"), socket)
+
+        # The rescue should mark the connection as rejected and close the socket
+        # rather than letting IO::Error escape to the WebSocketHandler (which would
+        # cause a 1006 abrupt close on the client).
+        connection.connection_rejected?.should be_true
+        socket.closed?.should be_true
+
+        # The error is surfaced via on_error so operators can see it.
+        FakeExceptionService.exceptions.any? do |report|
+          report.exception.is_a?(IO::Error) &&
+            report.message.includes?("ConnectionTest#initialize")
+        end.should be_true
+      end
+      Cable.reset_server
+    end
+  end
+
   describe "#message" do
     it "ignore a message for a non valid channel" do
       connect do |connection, socket|
@@ -575,6 +601,15 @@ end
 private class UnauthorizedConnectionTest < Cable::Connection
   def connect
     reject_unauthorized_connection
+  end
+end
+
+# Simulates the failure mode in issue #105: the backend's underlying connection
+# is dead, so any subscribe call (including the one done during Connection#initialize)
+# raises IO::Error.
+private class FailingSubscribeBackend < Cable::DevBackend
+  def subscribe(stream_identifier : String)
+    raise IO::Error.new("Broken pipe")
   end
 end
 
