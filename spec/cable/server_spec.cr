@@ -1,4 +1,5 @@
 require "../spec_helper"
+require "log/spec"
 
 include RequestHelpers
 
@@ -44,6 +45,34 @@ describe Cable::Server do
 
         Cable.server.active_connections_for("def456").size.should eq(0)
       end
+    end
+  end
+
+  describe "#send_to_channels" do
+    it "logs a single line per broadcast regardless of the number of subscribers" do
+      Cable.reset_server
+      Cable.temp_config(backend_class: Cable::DevBackend) do
+        connection_1 = creates_new_connection("aa")
+        connection_2 = creates_new_connection("bb")
+
+        Cable.server.add_connection(connection_1)
+        Cable.server.add_connection(connection_2)
+
+        # Both connections stream from the same identifier ("chat_room_a")
+        connection_1.subscribe(subscribe_payload("room_a"))
+        connection_2.subscribe(subscribe_payload("room_a"))
+
+        logs = Log.capture("cable") do
+          Cable.server.send_to_channels("chat_room_a", {"message" => "hi"}.to_json)
+        end
+
+        logs.check(:info, /Transmitting .* to 2 subscribers \(via streamed from chat_room_a\)/)
+        logs.empty
+
+        connection_1.close
+        connection_2.close
+      end
+      Cable.reset_server
     end
   end
 
