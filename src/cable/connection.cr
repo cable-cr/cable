@@ -97,7 +97,21 @@ module Cable
         rescue e : IO::Error
           Cable.settings.on_error.call(e, "IO::Error: #{e.message} -> #{self.class.name}#close", self)
         end
+      end
+
+      # Always tear down the internal channel subscription. It is set up
+      # unconditionally in #initialize (via subscribe_to_internal_channel), so
+      # it must be torn down unconditionally here too. Otherwise a connection
+      # that never subscribed to a user channel (so channels_to_close is nil)
+      # would leave its `cable_internal/<id>` subscription dangling on the
+      # backend after disconnect. Fixes #109.
+      begin
         unsubscribe_from_internal_channel
+      rescue e : IO::Error
+        # The backend connection may already be gone (e.g. the server is
+        # shutting down / restarting, which closes the backend before closing
+        # each connection). Don't let that escape #close.
+        Cable.settings.on_error.call(e, "IO::Error: #{e.message} -> #{self.class.name}#close", self)
       end
 
       return true if closed?
