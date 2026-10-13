@@ -135,6 +135,7 @@ module Cable
       return unless @channels.has_key?(channel_identifier)
 
       parsed_message = safe_decode_message(message)
+      transmitted = 0
 
       begin
         @channels[channel_identifier].each do |channel|
@@ -143,12 +144,18 @@ module Cable
           if channel.connection.closed?
             channel.close
           else
-            Cable::Logger.info { "#{channel.class} transmitting #{parsed_message} (via streamed from #{channel.stream_identifier})" }
             channel.connection.socket.send({
               identifier: channel.identifier,
               message:    parsed_message,
             }.to_json)
+            transmitted += 1
           end
+        end
+
+        # Log once per broadcast event rather than once per subscriber, so a
+        # message fanned out to N connections produces a single log line.
+        if transmitted > 0
+          Cable::Logger.info { "Transmitting #{parsed_message} to #{transmitted} subscriber#{"s" if transmitted > 1} (via streamed from #{channel_identifier})" }
         end
       rescue e : IO::Error
         Cable.settings.on_error.call(e, "IO::Error Exception: #{e.message}: #{parsed_message} -> Cable::Server#send_to_channels(channel, message)", nil)
