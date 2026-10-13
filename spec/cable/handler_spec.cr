@@ -454,6 +454,7 @@ end
 
 private def headers
   HTTP::Headers{
+    "Host"                   => "cable.cr",
     "Upgrade"                => "websocket",
     "Connection"             => "Upgrade",
     "Sec-WebSocket-Key"      => "OqColdEJm3i9e/EqMxnxZw==",
@@ -464,6 +465,7 @@ end
 
 private def headers_without_sec_websocket_protocol
   HTTP::Headers{
+    "Host"                  => "cable.cr",
     "Upgrade"               => "websocket",
     "Connection"            => "Upgrade",
     "Sec-WebSocket-Key"     => "OqColdEJm3i9e/EqMxnxZw==",
