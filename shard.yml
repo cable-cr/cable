@@ -10,7 +10,7 @@ crystal: ">= 1.10.0"
 dependencies:
   tasker:
     github: spider-gazelle/tasker
-    version: ~> 2.1
+    version: ~> 3.1
   habitat:
     github: luckyframework/habitat
     version: ~> 0.4
