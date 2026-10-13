@@ -214,8 +214,9 @@ module Cable
           channel, message = received
           if channel.starts_with?("cable_internal")
             identifier = channel.split('/').last
-            connection_identifier = server.find_connection_identifier(identifier)
-            server.send_to_internal_connections(connection_identifier, message) if connection_identifier
+            server.find_connection_identifiers(identifier).each do |connection_identifier|
+              server.send_to_internal_connections(connection_identifier, message)
+            end
           else
             server.send_to_channels(channel, message)
           end
@@ -224,9 +225,10 @@ module Cable
       end
     end
 
-    protected def find_connection_identifier(identifier : String) : String?
+    # Connection ids are "<identifier>-<uuid>", so match the separator too ("1" must not match "12-...")
+    protected def find_connection_identifiers(identifier : String) : Array(String)
       @connections_mutex.synchronize do
-        @connections.keys.find(&.starts_with?(identifier))
+        @connections.keys.select { |key| key == identifier || key.starts_with?("#{identifier}-") }
       end
     end
 
