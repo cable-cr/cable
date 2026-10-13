@@ -92,8 +92,8 @@ module Cable
       if channels_to_close
         channels_to_close.each do |identifier, channel|
           channel.close
-        rescue e : IO::Error
-          Cable.settings.on_error.call(e, "IO::Error: #{e.message} -> #{self.class.name}#close", self)
+        rescue e : Exception
+          Cable.settings.on_error.call(e, "Exception: #{e.message} -> #{self.class.name}#close", self)
         end
       end
 
