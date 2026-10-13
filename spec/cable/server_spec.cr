@@ -18,7 +18,7 @@ describe Cable::Server do
       end
     end
   end
-  
+
   describe "#shutdown" do
     it "closes the fiber_channel so the subscribed messages fiber doesn't leak" do
       Cable.reset_server

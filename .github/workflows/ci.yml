@@ -16,7 +16,7 @@ jobs:
         shard_file:
           - shard.yml
         crystal_version:
-          - 1.10.0
+          - 1.18.0
           - latest
         experimental:
           - false
@@ -38,9 +38,9 @@ jobs:
           --health-timeout 5s
           --health-retries 5
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Cache Crystal
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: ~/.cache/crystal
           key: ${{ runner.os }}-crystal
@@ -48,7 +48,7 @@ jobs:
         run: shards install
       - name: Format
         run: crystal tool format --check
-      - name: Lint
-        run: ./bin/ameba
+      - name: Run Ameba Linter
+        uses: crystal-ameba/github-action@v1
       - name: Run tests
         run: crystal spec
