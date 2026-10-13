@@ -36,6 +36,44 @@ describe Cable::Server do
       end
       Cable.reset_server
     end
+
+    it "keeps closing the remaining connections when one raises on close" do
+      Cable.reset_server
+      Cable.temp_config(backend_class: Cable::DevBackend) do
+        server = Cable.server
+        exploding = ExplodingConnection.new(builds_request(token: "boom"), DummySocket.new(IO::Memory.new))
+        healthy = creates_new_connection("fine")
+        server.add_connection(exploding)
+        server.add_connection(healthy)
+
+        server.shutdown
+
+        healthy.closed?.should be_true
+        server.fiber_channel.closed?.should be_true
+        FakeExceptionService.exceptions.any? do |report|
+          report.exception.message == "socket exploded" &&
+            report.message.includes?("Cable::Server#shutdown(connection.close)") &&
+            report.connection == exploding
+        end.should be_true
+      end
+      Cable.reset_server
+    end
+
+    it "lets Cable.restart swap in a new server when a connection raises on close" do
+      Cable.reset_server
+      Cable.temp_config(backend_class: Cable::DevBackend) do
+        old_server = Cable.server
+        exploding = ExplodingConnection.new(builds_request(token: "boom"), DummySocket.new(IO::Memory.new))
+        old_server.add_connection(exploding)
+
+        Cable.restart
+
+        Cable.server.should_not eq(old_server)
+        old_server.fiber_channel.closed?.should be_true
+        FakeExceptionService.size.should eq(1)
+      end
+      Cable.reset_server
+    end
   end
 
   describe "remote disconnects" do
@@ -183,6 +221,12 @@ describe Cable::Server do
       end
       Cable.reset_server
     end
+  end
+end
+
+class ExplodingConnection < ApplicationCable::Connection
+  def close
+    raise "socket exploded"
   end
 end
 
