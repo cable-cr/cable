@@ -18,6 +18,25 @@ describe Cable::Server do
       end
     end
   end
+  
+  describe "#shutdown" do
+    it "closes the fiber_channel so the subscribed messages fiber doesn't leak" do
+      Cable.reset_server
+      Cable.temp_config(backend_class: Cable::DevBackend) do
+        server = Cable.server
+        server.fiber_channel.closed?.should be_false
+
+        server.shutdown
+
+        server.fiber_channel.closed?.should be_true
+        # Sending to the closed channel must raise rather than silently leak.
+        expect_raises(::Channel::ClosedError) do
+          server.fiber_channel.send({"foo", "bar"})
+        end
+      end
+      Cable.reset_server
+    end
+  end
 
   describe "remote disconnects" do
     it "disconnects all connections of an identifier but not one sharing its prefix" do

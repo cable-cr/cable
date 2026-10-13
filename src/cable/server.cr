@@ -202,6 +202,9 @@ module Cable
       connections_to_close.each do |connection|
         connection.close
       end
+      # Close the channel so the `process_subscribed_messages` fiber stops
+      # blocking on `receive` and exits cleanly instead of leaking across restarts.
+      fiber_channel.close
     end
 
     def restart?
@@ -217,7 +220,7 @@ module Cable
     private def process_subscribed_messages
       server = self
       spawn(name: "Cable::Server - process_subscribed_messages") do
-        while received = fiber_channel.receive
+        while received = fiber_channel.receive?
           channel, message = received
           if channel.starts_with?("cable_internal")
             identifier = channel.split('/').last
