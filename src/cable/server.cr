@@ -201,10 +201,16 @@ module Cable
       end
       connections_to_close.each do |connection|
         connection.close
+      rescue e : Exception
+        Cable.settings.on_error.call(e, "Exception: #{e.message} -> Cable::Server#shutdown(connection.close)", connection)
       end
       # Close the channel so the `process_subscribed_messages` fiber stops
       # blocking on `receive` and exits cleanly instead of leaking across restarts.
-      fiber_channel.close
+      begin
+        fiber_channel.close
+      rescue e : Exception
+        Cable.settings.on_error.call(e, "Exception: #{e.message} -> Cable::Server#shutdown(fiber_channel.close)", nil)
+      end
     end
 
     def restart?
