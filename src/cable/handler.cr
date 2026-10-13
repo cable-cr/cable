@@ -44,6 +44,7 @@ module Cable
         # the socket.on_close blocked is not called 100% of the time
         # so we need to do it manually
         socket.on_message do |message|
+          # ameba:disable Style/RedundantBegin
           begin
             connection.receive(message)
           rescue e : KeyError | JSON::ParseException | JSON::SerializableError
@@ -52,7 +53,7 @@ module Cable
             socket.close(HTTP::WebSocket::CloseCode::InvalidFramePayloadData, "Invalid message")
             Cable.server.remove_connection(connection_id)
             Cable.settings.on_error.call(e, "Cable::Handler#socket.on_message -> #{message}", connection)
-          rescue e : Cable::Connection::UnauthorizedConnectionException
+          rescue Cable::Connection::UnauthorizedConnectionException
             # handle unauthorized connections
             # no need to log them
             ws_pinger.stop

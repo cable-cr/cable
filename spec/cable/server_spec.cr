@@ -18,7 +18,7 @@ describe Cable::Server do
       end
     end
   end
-  
+
   describe "#shutdown" do
     it "closes the fiber_channel so the subscribed messages fiber doesn't leak" do
       Cable.reset_server
@@ -186,7 +186,7 @@ describe Cable::Server do
   end
 end
 
-def creates_new_connection(token : String | Nil) : ApplicationCable::Connection
+def creates_new_connection(token : String?) : ApplicationCable::Connection
   ApplicationCable::Connection.new(builds_request(token: token), DummySocket.new(IO::Memory.new))
 end
 

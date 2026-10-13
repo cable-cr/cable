@@ -307,10 +307,10 @@ describe Cable::Handler do
       Cable.server.connections.size.should eq(4)
 
       connections = Cable.server.connections.keys
-      connections.any?(&.starts_with?("ws2")).should eq(true)
-      connections.any?(&.starts_with?("ws3")).should eq(true)
-      connections.any?(&.starts_with?("ws4")).should eq(true)
-      connections.any?(&.starts_with?("ws5")).should eq(true)
+      connections.any?(&.starts_with?("ws2")).should be_true
+      connections.any?(&.starts_with?("ws3")).should be_true
+      connections.any?(&.starts_with?("ws4")).should be_true
+      connections.any?(&.starts_with?("ws5")).should be_true
 
       messages = [
         {type: "welcome"}.to_json,
@@ -346,7 +346,7 @@ describe Cable::Handler do
       # connection 1 will be disconnected due to error
       Cable.server.connections.size.should eq(3)
       connections = Cable.server.connections.keys
-      connections.any?(&.starts_with?("ws2")).should eq(false)
+      connections.any?(&.starts_with?("ws2")).should be_false
 
       messages = [
         {type: "welcome"}.to_json,
@@ -382,7 +382,7 @@ describe Cable::Handler do
       # connection 1 will be disconnected due to error
       Cable.server.connections.size.should eq(2)
       connections = Cable.server.connections.keys
-      connections.any?(&.starts_with?("ws3")).should eq(false)
+      connections.any?(&.starts_with?("ws3")).should be_false
 
       messages = [
         {type: "welcome"}.to_json,
@@ -454,6 +454,7 @@ end
 
 private def headers
   HTTP::Headers{
+    "Host"                   => "cable.cr",
     "Upgrade"                => "websocket",
     "Connection"             => "Upgrade",
     "Sec-WebSocket-Key"      => "OqColdEJm3i9e/EqMxnxZw==",
@@ -464,6 +465,7 @@ end
 
 private def headers_without_sec_websocket_protocol
   HTTP::Headers{
+    "Host"                  => "cable.cr",
     "Upgrade"               => "websocket",
     "Connection"            => "Upgrade",
     "Sec-WebSocket-Key"     => "OqColdEJm3i9e/EqMxnxZw==",

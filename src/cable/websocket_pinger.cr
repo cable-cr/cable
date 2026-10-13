@@ -13,8 +13,8 @@ module Cable
       @@seconds = 3
     end
 
-    def self.build(socket : HTTP::WebSocket)
-      self.new(socket)
+    def self.build(socket : HTTP::WebSocket) : Cable::WebsocketPinger
+      new(socket)
     end
 
     def self.seconds

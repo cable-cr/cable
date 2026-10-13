@@ -14,7 +14,7 @@ module Cable
     macro after_subscribed(*callbacks)
       def run_after_subscribed_callbacks
         {% for callback in callbacks %}
-          {{callback.id}}
+          {{ callback.id }}
         {% end %}
       end
     end
