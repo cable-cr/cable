@@ -30,14 +30,52 @@ module Cable
       property key : String = ""
     end
 
-    @[JSON::Field]
-    getter command : String
+    # The cable wire protocol uses lowercase keys (command/identifier/data), but
+    # some clients send them cased differently. These stay as regular mapped
+    # fields, so a correctly-cased message is matched directly by
+    # JSON::Serializable in a single streaming pass — the happy path does no
+    # extra work. A mis-cased key isn't matched, so it falls through to
+    # #on_unknown_json_attribute (below) and is captured there in that same pass,
+    # without re-parsing the message. They're nilable so a mis-cased-only key
+    # doesn't trip the "Missing JSON attribute" check before we can capture it;
+    # the accessors re-enforce presence. See issue #108.
+    @command : String?
 
     @[JSON::Field(converter: Cable::Payload::IdentifierConverter)]
-    getter identifier : Indentifier
+    @identifier : Indentifier?
 
     @[JSON::Field(ignore: true)]
     getter action : String = ""
+
+    def command : String
+      @command || raise_missing_attribute("command")
+    end
+
+    def identifier : Indentifier
+      @identifier || raise_missing_attribute("identifier")
+    end
+
+    # Mis-cased protocol keys land here (correctly-cased ones were already
+    # matched directly). `String#compare(case_insensitive: true)` matches without
+    # allocating a downcased copy of the key, so this stays cheap on the hot
+    # path. Anything genuinely unknown is handed back to
+    # JSON::Serializable::Unmapped.
+    protected def on_unknown_json_attribute(pull, key, key_location)
+      case
+      when key.compare("command", case_insensitive: true).zero?
+        @command = pull.read_string
+      when key.compare("identifier", case_insensitive: true).zero?
+        @identifier = Cable::Payload::IdentifierConverter.from_json(pull)
+      when key.compare("data", case_insensitive: true).zero?
+        json_unmapped["data"] = JSON::Any.new(pull)
+      else
+        super
+      end
+    end
+
+    private def raise_missing_attribute(attribute : String) : NoReturn
+      raise JSON::SerializableError.new("Missing JSON attribute: #{attribute}", self.class.to_s, attribute, 0, 0, nil)
+    end
 
     # After the Payload is deserialized, parse the data.
     # This will ensure we know if it's an action.

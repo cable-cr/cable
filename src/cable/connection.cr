@@ -137,9 +137,16 @@ module Cable
       return unless message.presence
       payload = Cable::Payload.from_json(message)
 
-      return subscribe(payload) if payload.command == "subscribe"
-      return unsubscribe(payload) if payload.command == "unsubscribe"
-      return message(payload) if payload.command == "message"
+      # Match the command case-insensitively (see issue #108) without allocating
+      # a downcased copy of it on this hot path.
+      command = payload.command
+      if command.compare("subscribe", case_insensitive: true).zero?
+        subscribe(payload)
+      elsif command.compare("unsubscribe", case_insensitive: true).zero?
+        unsubscribe(payload)
+      elsif command.compare("message", case_insensitive: true).zero?
+        message(payload)
+      end
     end
 
     def subscribe(payload : Cable::Payload)

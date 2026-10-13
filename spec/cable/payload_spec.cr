@@ -36,6 +36,20 @@ describe Cable::Payload do
     payload.action.should eq("invite")
   end
 
+  it "parses case-insensitive top-level keys (issue #108)" do
+    payload_json = {
+      "Command"    => "message",
+      "Identifier" => {channel: "ChatChannel"}.to_json,
+      "DATA"       => {invite_id: 3, action: "invite"}.to_json,
+    }.to_json
+
+    payload = Cable::Payload.from_json(payload_json)
+    payload.command.should eq("message")
+    payload.channel.should eq("ChatChannel")
+    payload.data.should eq({"invite_id" => 3})
+    payload.action.should eq("invite")
+  end
+
   it "raises a SerializableError when the identifier is not a string" do
     payload_json = {
       command:    "subscribe",
@@ -48,6 +62,14 @@ describe Cable::Payload do
 
     expect_raises(JSON::SerializableError) do
       Cable::Payload.from_json(payload_json)
+    end
+  end
+
+  it "still raises a SerializableError for a missing command (issue #108)" do
+    payload_json = {identifier: {channel: "ChatChannel"}.to_json}.to_json
+
+    expect_raises(JSON::SerializableError, "Missing JSON attribute: command") do
+      Cable::Payload.from_json(payload_json).command
     end
   end
 end
