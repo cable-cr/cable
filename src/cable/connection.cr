@@ -228,9 +228,12 @@ module Cable
     end
 
     private def unsubscribe_from_internal_channel
-      if internal_identifier.presence
-        Cable.server.backend.unsubscribe(internal_channel)
-      end
+      return unless internal_identifier.presence
+      # Other connections with the same identifier still need this subscription
+      prefix = "#{internal_identifier}-"
+      return if Cable.server.connections.any? { |id, connection| connection != self && id.starts_with?(prefix) }
+
+      Cable.server.backend.unsubscribe(internal_channel)
     end
   end
 end

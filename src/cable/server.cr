@@ -135,6 +135,7 @@ module Cable
       return unless @channels.has_key?(channel_identifier)
 
       parsed_message = safe_decode_message(message)
+      transmitted = 0
 
       begin
         @channels[channel_identifier].each do |channel|
@@ -143,12 +144,18 @@ module Cable
           if channel.connection.closed?
             channel.close
           else
-            Cable::Logger.info { "#{channel.class} transmitting #{parsed_message} (via streamed from #{channel.stream_identifier})" }
             channel.connection.socket.send({
               identifier: channel.identifier,
               message:    parsed_message,
             }.to_json)
+            transmitted += 1
           end
+        end
+
+        # Log once per broadcast event rather than once per subscriber, so a
+        # message fanned out to N connections produces a single log line.
+        if transmitted > 0
+          Cable::Logger.info { "Transmitting #{parsed_message} to #{transmitted} subscriber#{"s" if transmitted > 1} (via streamed from #{channel_identifier})" }
         end
       rescue e : IO::Error
         Cable.settings.on_error.call(e, "IO::Error Exception: #{e.message}: #{parsed_message} -> Cable::Server#send_to_channels(channel, message)", nil)
@@ -217,8 +224,9 @@ module Cable
           channel, message = received
           if channel.starts_with?("cable_internal")
             identifier = channel.split('/').last
-            connection_identifier = server.find_connection_identifier(identifier)
-            server.send_to_internal_connections(connection_identifier, message) if connection_identifier
+            server.find_connection_identifiers(identifier).each do |connection_identifier|
+              server.send_to_internal_connections(connection_identifier, message)
+            end
           else
             server.send_to_channels(channel, message)
           end
@@ -227,9 +235,10 @@ module Cable
       end
     end
 
-    protected def find_connection_identifier(identifier : String) : String?
+    # Connection ids are "<identifier>-<uuid>", so match the separator too ("1" must not match "12-...")
+    protected def find_connection_identifiers(identifier : String) : Array(String)
       @connections_mutex.synchronize do
-        @connections.keys.find(&.starts_with?(identifier))
+        @connections.keys.select { |key| key == identifier || key.starts_with?("#{identifier}-") }
       end
     end
 
