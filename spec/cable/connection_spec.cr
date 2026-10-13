@@ -18,9 +18,9 @@ describe Cable::Connection do
         spy.internal_subscribes.should eq(["cable_internal/98"])
         spy.internal_unsubscribes.should be_empty
 
-        connection.closed?.should eq(false)
+        connection.closed?.should be_false
         connection.close
-        connection.closed?.should eq(true)
+        connection.closed?.should be_true
 
         # close must tear that subscription down to avoid leaking it on the backend
         spy.internal_unsubscribes.should eq(["cable_internal/98"])
