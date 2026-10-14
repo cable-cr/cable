@@ -186,6 +186,103 @@ describe Cable::Server do
       end
       Cable.reset_server
     end
+
+    it "keeps delivering to the rest of the stream when one socket is dead" do
+      Cable.reset_server
+      Cable.temp_config(backend_class: Cable::DevBackend) do
+        dead = creates_new_connection("dead", BrokenSocket.new(IO::Memory.new))
+        live = creates_new_connection("live")
+
+        # Registration order is delivery order, so the dead socket goes first
+        streams_from(ChatChannel.new(dead, dead.identifier, no_params), "probe")
+        streams_from(ChatChannel.new(live, live.identifier, no_params), "probe")
+
+        Cable.server.send_to_channels("probe", {"hello" => "world"}.to_json)
+
+        live.socket.as(DummySocket).messages.size.should eq(1)
+        FakeExceptionService.size.should eq(1)
+        FakeExceptionService.exceptions.first.connection.should eq(dead)
+        live.close
+      end
+      Cable.reset_server
+    end
+
+    it "delivers to every channel on the stream" do
+      Cable.reset_server
+      Cable.temp_config(backend_class: Cable::DevBackend) do
+        first = creates_new_connection("first")
+        second = creates_new_connection("second")
+
+        streams_from(ChatChannel.new(first, first.identifier, no_params), "probe")
+        streams_from(ChatChannel.new(second, second.identifier, no_params), "probe")
+
+        Cable.server.send_to_channels("probe", {"hello" => "world"}.to_json)
+
+        first.socket.as(DummySocket).messages.size.should eq(1)
+        second.socket.as(DummySocket).messages.size.should eq(1)
+        first.close
+        second.close
+      end
+      Cable.reset_server
+    end
+
+    it "evicts a channel whose socket failed, so later broadcasts skip it" do
+      Cable.reset_server
+      Cable.temp_config(backend_class: Cable::DevBackend) do
+        broken_socket = BrokenSocket.new(IO::Memory.new)
+        dead = creates_new_connection("dead", broken_socket)
+        live = creates_new_connection("live")
+
+        streams_from(ChatChannel.new(dead, dead.identifier, no_params), "probe")
+        streams_from(ChatChannel.new(live, live.identifier, no_params), "probe")
+
+        3.times { Cable.server.send_to_channels("probe", {"hello" => "world"}.to_json) }
+
+        broken_socket.attempts.should eq(1)
+        live.socket.as(DummySocket).messages.size.should eq(3)
+        live.close
+      end
+      Cable.reset_server
+    end
+
+    it "evicts a closed connection without dropping the channels after it" do
+      Cable.reset_server
+      Cable.temp_config(backend_class: Cable::DevBackend) do
+        closed = creates_new_connection("closed")
+        live = creates_new_connection("live")
+
+        streams_from(ChatChannel.new(closed, closed.identifier, no_params), "probe")
+        streams_from(ChatChannel.new(live, live.identifier, no_params), "probe")
+        closed.socket.close
+
+        2.times { Cable.server.send_to_channels("probe", {"hello" => "world"}.to_json) }
+
+        closed.socket.as(DummySocket).messages.should be_empty
+        live.socket.as(DummySocket).messages.size.should eq(2)
+        live.close
+      end
+      Cable.reset_server
+    end
+
+    it "runs an evicted channel's unsubscribed once and contains its failure" do
+      Cable.reset_server
+      Cable.temp_config(backend_class: Cable::DevBackend) do
+        LeavingChannel.unsubscribed_calls = 0
+        dead = creates_new_connection("dead", BrokenSocket.new(IO::Memory.new))
+        live = creates_new_connection("live")
+
+        streams_from(LeavingChannel.new(dead, dead.identifier, no_params), "probe")
+        streams_from(ChatChannel.new(live, live.identifier, no_params), "probe")
+
+        2.times { Cable.server.send_to_channels("probe", {"hello" => "world"}.to_json) }
+        wait_until { LeavingChannel.unsubscribed_calls > 0 }
+
+        LeavingChannel.unsubscribed_calls.should eq(1)
+        live.socket.as(DummySocket).messages.size.should eq(2)
+        live.close
+      end
+      Cable.reset_server
+    end
   end
 
   describe "#subscribed_channels_for" do
@@ -230,8 +327,37 @@ class ExplodingConnection < ApplicationCable::Connection
   end
 end
 
-def creates_new_connection(token : String?) : ApplicationCable::Connection
-  ApplicationCable::Connection.new(builds_request(token: token), DummySocket.new(IO::Memory.new))
+# Fails the way a client that went away fails
+class BrokenSocket < DummySocket
+  getter attempts = 0
+
+  def send(message)
+    @attempts += 1
+    raise IO::Error.new("Broken pipe")
+  end
+end
+
+# Raises from the app-level teardown hook, the way a channel whose
+# `unsubscribed` touches a database can
+class LeavingChannel < ApplicationCable::Channel
+  class_property unsubscribed_calls = 0
+
+  def unsubscribed
+    LeavingChannel.unsubscribed_calls += 1
+    raise "simulated teardown failure"
+  end
+end
+
+def creates_new_connection(token : String?, socket : HTTP::WebSocket = DummySocket.new(IO::Memory.new)) : ApplicationCable::Connection
+  ApplicationCable::Connection.new(builds_request(token: token), socket)
+end
+
+def streams_from(channel : Cable::Channel, stream : String)
+  Cable.server.subscribe_channel(channel: channel, identifier: stream)
+end
+
+def no_params : Hash(String, Cable::Payload::RESULT)
+  {} of String => Cable::Payload::RESULT
 end
 
 def subscribe_payload(room : String) : Cable::Payload

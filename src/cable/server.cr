@@ -135,31 +135,31 @@ module Cable
       return unless @channels.has_key?(channel_identifier)
 
       parsed_message = safe_decode_message(message)
+      stale = [] of Cable::Channel
       transmitted = 0
 
-      begin
-        @channels[channel_identifier].each do |channel|
-          # TODO: would be nice to have a test where we open two connections
-          # close one, and make sure the other one receives the message
-          if channel.connection.closed?
-            channel.close
-          else
-            channel.connection.socket.send({
-              identifier: channel.identifier,
-              message:    parsed_message,
-            }.to_json)
-            transmitted += 1
-          end
+      @channels[channel_identifier].each do |channel|
+        if channel.connection.closed?
+          stale << channel
+        else
+          channel.connection.socket.send({
+            identifier: channel.identifier,
+            message:    parsed_message,
+          }.to_json)
+          transmitted += 1
         end
-
-        # Log once per broadcast event rather than once per subscriber, so a
-        # message fanned out to N connections produces a single log line.
-        if transmitted > 0
-          Cable::Logger.info { "Transmitting #{parsed_message} to #{transmitted} subscriber#{"s" if transmitted > 1} (via streamed from #{channel_identifier})" }
-        end
-      rescue e : IO::Error
-        Cable.settings.on_error.call(e, "IO::Error Exception: #{e.message}: #{parsed_message} -> Cable::Server#send_to_channels(channel, message)", nil)
+      rescue e : Exception
+        stale << channel if e.is_a?(IO::Error)
+        Cable.settings.on_error.call(e, "#{e.class} Exception: #{e.message}: #{parsed_message} -> Cable::Server#send_to_channels(channel, message)", channel.connection)
       end
+
+      # Log once per broadcast event rather than once per subscriber, so a
+      # message fanned out to N connections produces a single log line.
+      if transmitted > 0
+        Cable::Logger.info { "Transmitting #{parsed_message} to #{transmitted} subscriber#{"s" if transmitted > 1} (via streamed from #{channel_identifier})" }
+      end
+
+      evict_stale_channels(stale, channel_identifier) unless stale.empty?
     end
 
     def send_to_internal_connections(connection_identifier : String, message : String)
@@ -220,6 +220,26 @@ module Cable
     def count_error!
       @channel_mutex.synchronize do
         @errors += 1
+      end
+    end
+
+    # These are channels that were already closed or raised some exception. Clear them out
+    private def evict_stale_channels(stale : Array(Cable::Channel), channel_identifier : String)
+      stale.each do |channel|
+        unsubscribe_channel(channel: channel, identifier: channel_identifier)
+        Cable::Logger.info { "#{channel.class.name} stopped streaming from #{channel.identifier}" }
+      rescue e : Exception
+        Cable.settings.on_error.call(e, "Exception: #{e.message} -> Cable::Server#send_to_channels(stale channel unsubscribe)", channel.connection)
+      end
+
+      # Run this asynchronously in case there's DB calls or anything blocking in `unsubscribed`.
+      # Using Tasker allows us to test this in a spec.
+      Tasker.in(0.seconds) do
+        stale.each do |channel|
+          channel.unsubscribed
+        rescue e : Exception
+          Cable.settings.on_error.call(e, "Exception: #{e.message} -> Cable::Server#send_to_channels(stale channel unsubscribed)", channel.connection)
+        end
       end
     end
 
