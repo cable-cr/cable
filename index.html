@@ -112,6 +112,26 @@
       
     </li>
   
+  <li class="parent " data-id="cable/Cable/Expectations" data-name="cable::expectations">
+      <a href="Cable/Expectations.html">Expectations</a>
+      
+        <ul>
+  
+  <li class=" " data-id="cable/Cable/Expectations/BroadcastToExpectation" data-name="cable::expectations::broadcasttoexpectation">
+      <a href="Cable/Expectations/BroadcastToExpectation.html">BroadcastToExpectation</a>
+      
+    </li>
+  
+  <li class=" " data-id="cable/Cable/Expectations/Payload" data-name="cable::expectations::payload">
+      <a href="Cable/Expectations/Payload.html">Payload</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
   <li class=" " data-id="cable/Cable/HabitatSettings" data-name="cable::habitatsettings">
       <a href="Cable/HabitatSettings.html">HabitatSettings</a>
       
@@ -518,6 +538,44 @@ log_levels <span class="o">=</span> {
 <p>Alternatively, you can ping Redis directly using the redis-cli as follows;</p>
 <pre><code class="language-bash">PUBLISH _internal debug</code></pre>
 <p>This will dump a debug status into the logs.</p>
+<h2><a id="testing" class="anchor" href="#testing">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Testing</h2>
+<p>Cable ships with a <code><a href="Cable/DevBackend.html">Cable::DevBackend</a></code> that records broadcasts in memory instead of publishing them,
+so your specs don't need a running Redis (or other backend). Require it, point your config at it,
+and reset it between examples.</p>
+<pre><code class="language-crystal"><span class="c"># spec/spec_helper.cr</span>
+
+<span class="k">require</span> <span class="s">&quot;cable/backend/dev/backend&quot;</span>
+
+<span class="t">Cable</span>.configure <span class="k">do</span> <span class="o">|</span>settings<span class="o">|</span>
+  settings.backend_class <span class="o">=</span> <span class="t">Cable</span><span class="t">::</span><span class="t">DevBackend</span>
+<span class="k">end</span>
+
+<span class="t">Spec</span>.before_each <span class="k">do</span>
+  <span class="t">Cable</span><span class="t">::</span><span class="t">DevBackend</span>.reset
+<span class="k">end</span></code></pre>
+<p>To assert on what was broadcast, include <code><a href="Cable/Expectations.html">Cable::Expectations</a></code> in your <code>spec_helper.cr</code>. This gives you a
+<code>broadcast_to</code> expectation that you can use with <code>should</code> and <code>should_not</code> on <code>Cable::DevBackend.published_messages</code>.</p>
+<pre><code class="language-crystal"><span class="c"># spec/spec_helper.cr</span>
+
+<span class="k">include</span> <span class="t">Cable</span><span class="t">::</span><span class="t">Expectations</span></code></pre>
+<pre><code class="language-crystal"><span class="c"># spec/requests/messages/create_spec.cr</span>
+
+it <span class="s">&quot;broadcasts the new message to the room&quot;</span> <span class="k">do</span>
+  <span class="t">ChatChannel</span>.broadcast_to(<span class="s">&quot;chat_room:1&quot;</span>, {<span class="s">&quot;message&quot;</span> <span class="o">=&gt;</span> <span class="s">&quot;Hello&quot;</span>})
+
+  <span class="t">Cable</span><span class="t">::</span><span class="t">DevBackend</span>.published_messages.should broadcast_to(<span class="s">&quot;chat_room:1&quot;</span>)
+  <span class="t">Cable</span><span class="t">::</span><span class="t">DevBackend</span>.published_messages.should_not broadcast_to(<span class="s">&quot;chat_room:2&quot;</span>)
+<span class="k">end</span></code></pre>
+<p>You can optionally pass the payload as a second argument. A <code>String</code> must match the published message exactly,
+while a <code>Hash</code> or <code>JSON::Any</code> is compared as JSON, so key order doesn't matter.</p>
+<pre><code class="language-crystal"><span class="t">Cable</span><span class="t">::</span><span class="t">DevBackend</span>.published_messages.should broadcast_to(<span class="s">&quot;chat_room:1&quot;</span>, {<span class="s">&quot;message&quot;</span> <span class="o">=&gt;</span> <span class="s">&quot;Hello&quot;</span>})
+<span class="t">Cable</span><span class="t">::</span><span class="t">DevBackend</span>.published_messages.should broadcast_to(<span class="s">&quot;chat_room:1&quot;</span>, <span class="s">%({&quot;message&quot;:&quot;Hello&quot;})</span>)</code></pre>
+<p>Note that broadcasts are only recorded by stream identifier. Which channel class called <code>broadcast_to</code> is not
+part of the assertion.</p>
 <h2><a id="contributing" class="anchor" href="#contributing">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
