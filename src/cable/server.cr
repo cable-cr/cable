@@ -141,7 +141,7 @@ module Cable
       @channels[channel_identifier].each do |channel|
         if channel.connection.closed?
           stale << channel
-        else
+        elsif channel.deliver?(parsed_message)
           channel.connection.socket.send({
             identifier: channel.identifier,
             message:    parsed_message,

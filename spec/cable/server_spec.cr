@@ -283,6 +283,62 @@ describe Cable::Server do
       end
       Cable.reset_server
     end
+    it "skips a channel whose deliver? returns false and still delivers to the rest" do
+      Cable.reset_server
+      Cable.temp_config(backend_class: Cable::DevBackend) do
+        filtered = creates_new_connection("filtered")
+        live = creates_new_connection("live")
+
+        streams_from(FilteringChannel.new(filtered, filtered.identifier, no_params), "probe")
+        streams_from(ChatChannel.new(live, live.identifier, no_params), "probe")
+
+        Cable.server.send_to_channels("probe", {"secret" => true}.to_json)
+
+        filtered.socket.as(DummySocket).messages.should be_empty
+        live.socket.as(DummySocket).messages.size.should eq(1)
+        filtered.close
+        live.close
+      end
+      Cable.reset_server
+    end
+
+    it "delivers to a filtering channel when deliver? returns true for the message" do
+      Cable.reset_server
+      Cable.temp_config(backend_class: Cable::DevBackend) do
+        filtered = creates_new_connection("filtered")
+
+        streams_from(FilteringChannel.new(filtered, filtered.identifier, no_params), "probe")
+
+        Cable.server.send_to_channels("probe", {"secret" => true}.to_json)
+        Cable.server.send_to_channels("probe", {"hello" => "world"}.to_json)
+
+        filtered.socket.as(DummySocket).messages.size.should eq(1)
+        filtered.socket.as(DummySocket).messages.first.should contain("world")
+        filtered.close
+      end
+      Cable.reset_server
+    end
+
+    it "only counts channels that were actually delivered to in the broadcast log" do
+      Cable.reset_server
+      Cable.temp_config(backend_class: Cable::DevBackend) do
+        filtered = creates_new_connection("filtered")
+        live = creates_new_connection("live")
+
+        streams_from(FilteringChannel.new(filtered, filtered.identifier, no_params), "probe")
+        streams_from(ChatChannel.new(live, live.identifier, no_params), "probe")
+
+        logs = Log.capture("cable") do
+          Cable.server.send_to_channels("probe", {"secret" => true}.to_json)
+        end
+
+        logs.check(:info, /Transmitting .* to 1 subscriber \(via streamed from probe\)/)
+        logs.empty
+        filtered.close
+        live.close
+      end
+      Cable.reset_server
+    end
   end
 
   describe "#subscribed_channels_for" do
@@ -345,6 +401,14 @@ class LeavingChannel < ApplicationCable::Channel
   def unsubscribed
     LeavingChannel.unsubscribed_calls += 1
     raise "simulated teardown failure"
+  end
+end
+
+# Drops any message flagged as secret, the way an app channel filters
+# what reaches a particular subscriber
+class FilteringChannel < ApplicationCable::Channel
+  def deliver?(message) : Bool
+    !(message.is_a?(JSON::Any) && message["secret"]?.try(&.as_bool?))
   end
 end
 
