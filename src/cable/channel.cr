@@ -35,6 +35,12 @@ module Cable
     def subscribed
     end
 
+    # Override to use logic preventing this channel from delivering `message`.
+    # By default allow all messages to be delivered.
+    def deliver?(_message) : Bool
+      true
+    end
+
     def close
       if stream_id = stream_identifier.presence
         Cable.server.unsubscribe_channel(channel: self, identifier: stream_id)
