@@ -361,6 +361,57 @@ PUBLISH _internal debug
 
 This will dump a debug status into the logs.
 
+## Testing
+
+Cable ships with a `Cable::DevBackend` that records broadcasts in memory instead of publishing them,
+so your specs don't need a running Redis (or other backend). Require it, point your config at it,
+and reset it between examples.
+
+```crystal
+# spec/spec_helper.cr
+
+require "cable/backend/dev/backend"
+
+Cable.configure do |settings|
+  settings.backend_class = Cable::DevBackend
+end
+
+Spec.before_each do
+  Cable::DevBackend.reset
+end
+```
+
+To assert on what was broadcast, include `Cable::Expectations` in your `spec_helper.cr`. This gives you a
+`broadcast_to` expectation that you can use with `should` and `should_not` on `Cable::DevBackend.published_messages`.
+
+```crystal
+# spec/spec_helper.cr
+
+include Cable::Expectations
+```
+
+```crystal
+# spec/requests/messages/create_spec.cr
+
+it "broadcasts the new message to the room" do
+  ChatChannel.broadcast_to("chat_room:1", {"message" => "Hello"})
+
+  Cable::DevBackend.published_messages.should broadcast_to("chat_room:1")
+  Cable::DevBackend.published_messages.should_not broadcast_to("chat_room:2")
+end
+```
+
+You can optionally pass the payload as a second argument. A `String` must match the published message exactly,
+while a `Hash` or `JSON::Any` is compared as JSON, so key order doesn't matter.
+
+```crystal
+Cable::DevBackend.published_messages.should broadcast_to("chat_room:1", {"message" => "Hello"})
+Cable::DevBackend.published_messages.should broadcast_to("chat_room:1", %({"message":"Hello"}))
+```
+
+Note that broadcasts are only recorded by stream identifier. Which channel class called `broadcast_to` is not
+part of the assertion.
+
 ## Contributing
 
 1. Fork it (<https://github.com/cable-cr/cable/fork>)
