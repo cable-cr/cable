@@ -9,6 +9,8 @@ require "./support/application_cable/connection"
 require "./support/application_cable/channel"
 require "./support/channels/*"
 
+include Cable::Expectations
+
 Cable.configure do |settings|
   settings.route = "/updates"
   settings.token = "test_token"
